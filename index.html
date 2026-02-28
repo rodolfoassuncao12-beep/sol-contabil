@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sol Contábil LTDA | Contabilidade em Limeira SP</title>
+  <meta name="description" content="Sol Contábil LTDA – Escritório de contabilidade em Limeira/SP. Serviços de escrituração contábil, imposto de renda, folha de pagamento, planejamento tributário e abertura de empresas. Contador em Limeira SP com CRC/SP." />
+  <meta name="keywords" content="contabilidade Limeira, contador Limeira SP, imposto de renda Limeira, escritório contabilidade Limeira, abertura empresa Limeira, planejamento tributário Limeira SP, MEI Limeira, folha pagamento Limeira" />
+  <meta name="author" content="Sol Contábil LTDA" />
+  <meta property="og:title" content="Sol Contábil LTDA | Contabilidade em Limeira SP" />
+  <meta property="og:description" content="Contabilidade de alto padrão com transparência e tecnologia em Limeira/SP. CRC/SP 1SP353033/O-5." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/logo-sol-contabil.png" />
+  <link rel="canonical" href="https://solcontabil.com.br/" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'sol-dark': '#0A2540',
+            'sol-blue': '#00A6FB',
+            'sol-mid': '#1a3a5c',
+            'sol-light': '#e8f4fd',
+          },
+          fontFamily: {
+            sans: ['Inter', 'Montserrat', 'sans-serif'],
+          },
+          animation: {
+            'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+            'fade-in': 'fadeIn 0.8s ease-out forwards',
+            'float': 'float 3s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+          },
+        },
+      },
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== GLOBAL ===== */
+    * { box-sizing: border-box; }
+    html { font-family: 'Inter', 'Montserrat', sans-serif; }
+    body { overflow-x: hidden; }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== HEADER ===== */
+    #header { transition: background 0.3s, box-shadow 0.3s; }
+    #header.scrolled { background: rgba(10,37,64,0.97) !important; box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+
+    /* ===== HERO ===== */
+    .hero-bg {
+      background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 50%, #0d2e50 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 50%, rgba(0,166,251,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-logo-bg {
+      position: absolute;
+      right: -5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 55%;
+      max-width: 680px;
+      opacity: 0.08;
+      pointer-events: none;
+      filter: grayscale(100%) brightness(2);
+    }
+
+    /* ===== CARDS ===== */
+    .service-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,166,251,0.15);
+    }
+
+    /* ===== NAV LINK ACTIVE ===== */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 2px;
+      background: #00A6FB;
+      transition: width 0.3s;
+    }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+    /* ===== MOBILE MENU ===== */
+    #mobile-menu { transition: max-height 0.35s ease, opacity 0.35s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    #mobile-menu.open { max-height: 400px; opacity: 1; }
+
+    /* ===== DARK MODE ===== */
+    .dark body { background: #0f172a; color: #e2e8f0; }
+    .dark .bg-white { background: #1e293b !important; }
+    .dark .text-gray-700 { color: #cbd5e1 !important; }
+    .dark .text-gray-600 { color: #94a3b8 !important; }
+    .dark .bg-gray-50 { background: #0f172a !important; }
+    .dark .bg-gray-100 { background: #1e293b !important; }
+    .dark .border-gray-200 { border-color: #334155 !important; }
+
+    /* ===== WHATSAPP FLOAT ===== */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      z-index: 9999;
+      animation: float 3s ease-in-out infinite;
+    }
+    .whatsapp-float a {
+      display: flex; align-items: center; justify-content: center;
+      width: 60px; height: 60px;
+      background: #25D366;
+      border-radius: 50%;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .whatsapp-float a:hover {
+      transform: scale(1.12);
+      box-shadow: 0 6px 28px rgba(37,211,102,0.6);
+    }
+
+    /* ===== BLOG CARD ===== */
+    .blog-card { transition: transform 0.3s, box-shadow 0.3s; }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(0,0,0,0.12); }
+
+    /* ===== FORM INPUT ===== */
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: white;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #00A6FB;
+      box-shadow: 0 0 0 3px rgba(0,166,251,0.15);
+    }
+    .dark .form-input { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title { position: relative; display: inline-block; }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px; left: 0;
+      width: 48px; height: 3px;
+      background: #00A6FB;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+
+<body class="bg-white text-gray-800 font-sans">
+
+<!-- ============================================================
+     WHATSAPP FLOATING BUTTON
+     ============================================================ -->
+<div class="whatsapp-float">
+  <a href="https://wa.me/55XXXXXXXXXXX?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento!" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+</div>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header id="header" class="fixed top-0 left-0 right-0 z-50 bg-sol-dark/95 backdrop-blur-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-20">
+
+      <!-- Logo -->
+      <a href="#inicio" class="flex items-center gap-3 flex-shrink-0">
+        <img src="assets/logo-sol-contabil.png" alt="Logo Sol Contábil LTDA – Contabilidade em Limeira SP" class="h-10 lg:h-12 w-auto" />
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden lg:flex items-center gap-8">
+        <a href="#inicio"   class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Início</a>
+        <a href="#servicos" class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Serviços</a>
+        <a href="#sobre"    class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Sobre</a>
+        <a href="#equipe"   class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Equipe</a>
+        <a href="#blog"     class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Blog</a>
+        <a href="#contato"  class="nav-link text-white/90 hover:text-white text-sm font-medium transition-colors">Contato</a>
+      </nav>
+
+      <!-- Right actions -->
+      <div class="flex items-center gap-3">
+        <!-- Dark mode toggle -->
+        <button id="dark-toggle" aria-label="Alternar modo escuro" class="hidden lg:flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white">
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+        <!-- CTA -->
+        <a href="#contato" class="hidden lg:inline-flex items-center px-5 py-2.5 bg-sol-blue hover:bg-blue-400 text-white text-sm font-semibold rounded-full transition-colors shadow-lg shadow-sol-blue/30">
+          Solicitar Orçamento
+        </a>
+        <!-- Mobile hamburger -->
+        <button id="menu-btn" aria-label="Abrir menu" class="lg:hidden flex flex-col gap-1.5 p-2">
+          <span class="block w-6 h-0.5 bg-white transition-all" id="bar1"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all" id="bar2"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all" id="bar3"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="lg:hidden bg-sol-dark border-t border-white/10">
+      <nav class="flex flex-col py-4 gap-1">
+        <a href="#inicio"   class="mobile-nav px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Início</a>
+        <a href="#servicos" class="mobile-nav px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Serviços</a>
+        <a href="#sobre"    class="mobile-nav px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Sobre</a>
+        <a href="#equipe"   class="mobile-nav px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Equipe</a>
+        <a href="#blog"     class="mobile-nav px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Blog</a>
+        <a href="#contato"  class="mobile-nav px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Contato</a>
+        <div class="px-4 pt-2">
+          <a href="#contato" class="block text-center px-5 py-3 bg-sol-blue text-white font-semibold rounded-full">Solicitar Orçamento</a>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO SECTION
+     ============================================================ -->
+<section id="inicio" class="hero-bg min-h-screen flex items-center pt-16 lg:pt-20">
+  <!-- Background logo watermark -->
+  <img src="assets/logo-sol-contabil.png" alt="" class="hero-logo-bg" aria-hidden="true" />
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 relative z-10">
+    <div class="max-w-2xl">
+      <span class="inline-block px-4 py-1.5 bg-sol-blue/20 text-sol-blue text-sm font-semibold rounded-full mb-6 border border-sol-blue/30 reveal">
+        CRC/SP 1SP353033/O-5 · Limeira, SP
+      </span>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 reveal">
+        Contabilidade precisa, estratégica e
+        <span class="text-sol-blue"> 100% digital</span>
+        em Limeira
+      </h1>
+      <p class="text-lg sm:text-xl text-white/75 mb-10 leading-relaxed reveal">
+        Escrituração, impostos, folha de pagamento e planejamento tributário com responsabilidade técnica CRC/SP. Tecnologia e transparência para o seu negócio crescer.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 reveal">
+        <a href="#contato" class="inline-flex items-center justify-center px-8 py-4 bg-sol-blue hover:bg-blue-400 text-white font-bold text-lg rounded-full transition-all shadow-xl shadow-sol-blue/30 hover:shadow-sol-blue/50 hover:-translate-y-0.5">
+          Solicitar Orçamento
+          <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        <a href="https://wa.me/55XXXXXXXXXXX?text=Olá,%20gostaria%20de%20falar%20com%20a%20Sol%20Contábil!" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold text-lg rounded-full border border-white/30 transition-all hover:-translate-y-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Falar no WhatsApp
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-16 grid grid-cols-3 gap-6 reveal">
+        <div class="text-center">
+          <div class="text-3xl font-extrabold text-sol-blue">100%</div>
+          <div class="text-white/60 text-sm mt-1">Digital</div>
+        </div>
+        <div class="text-center border-x border-white/15">
+          <div class="text-3xl font-extrabold text-sol-blue">CRC/SP</div>
+          <div class="text-white/60 text-sm mt-1">Registrado</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-extrabold text-sol-blue">6+</div>
+          <div class="text-white/60 text-sm mt-1">Serviços</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wave divider -->
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-12 lg:h-16">
+      <path d="M0 60L60 50C120 40 240 20 360 15C480 10 600 20 720 25C840 30 960 30 1080 25C1200 20 1320 10 1380 5L1440 0V60H1380C1320 60 1200 60 1080 60C960 60 840 60 720 60C600 60 480 60 360 60C240 60 120 60 60 60H0Z" fill="white" class="dark:fill-gray-900"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVIÇOS
+     ============================================================ -->
+<section id="servicos" class="py-20 lg:py-28 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="text-sol-blue font-semibold text-sm uppercase tracking-widest">O que fazemos</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-sol-dark dark:text-white mt-3 mb-4">Nossos Serviços</h2>
+      <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">Soluções contábeis completas para empresas e pessoas físicas em Limeira e região.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- Card 1 -->
+      <div class="service-card bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-sol-blue/30 reveal">
+        <div class="w-14 h-14 bg-sol-blue/10 rounded-xl flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-sol-dark dark:text-white mb-3">Escrituração Contábil Completa</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Registro sistemático de todas as operações financeiras da sua empresa com precisão e conformidade legal.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="service-card bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-sol-blue/30 reveal">
+        <div class="w-14 h-14 bg-sol-blue/10 rounded-xl flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-sol-dark dark:text-white mb-3">Consultoria Fiscal e Planejamento Tributário</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Reduza a carga tributária de forma legal com estratégias personalizadas de planejamento fiscal para o seu negócio.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="service-card bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-sol-blue/30 reveal">
+        <div class="w-14 h-14 bg-sol-blue/10 rounded-xl flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-sol-dark dark:text-white mb-3">Folha de Pagamento e Departamento Pessoal</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Gestão completa de colaboradores: admissão, demissão, férias, 13º salário, eSocial e FGTS.</p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="service-card bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-sol-blue/30 reveal">
+        <div class="w-14 h-14 bg-sol-blue/10 rounded-xl flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-sol-dark dark:text-white mb-3">Declaração de Imposto de Renda PF e PJ</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Declaração do IR com máxima restituição e conformidade. Atendemos pessoa física e jurídica em Limeira/SP.</p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="service-card bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-sol-blue/30 reveal">
+        <div class="w-14 h-14 bg-sol-blue/10 rounded-xl flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-sol-dark dark:text-white mb-3">Abertura, Alteração e Regularização de Empresas</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Abertura de MEI, ME, EPP e LTDA. Alterações contratuais, regularizações e baixas com agilidade.</p>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="service-card bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-sol-blue/30 reveal">
+        <div class="w-14 h-14 bg-sol-blue/10 rounded-xl flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-sol-dark dark:text-white mb-3">Perícia Contábil, Auditoria e Demonstrações</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">Laudos periciais, auditorias independentes e demonstrações contábeis completas para todos os portes.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SOBRE NÓS
+     ============================================================ -->
+<section id="sobre" class="py-20 lg:py-28 bg-gray-50 dark:bg-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Text -->
+      <div class="reveal">
+        <span class="text-sol-blue font-semibold text-sm uppercase tracking-widest">Nossa história</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-sol-dark dark:text-white mt-3 mb-6 section-title">Sobre a Sol Contábil</h2>
+        <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-6">
+          Fundada em 2026, a Sol Contábil LTDA nasceu para entregar contabilidade de alto padrão com transparência e tecnologia. Contamos com responsabilidade técnica do contador <strong class="text-sol-dark dark:text-white">Rodolfo Assunção (CRC/SP 1SP353033/O-5)</strong> e administração da sócia <strong class="text-sol-dark dark:text-white">Roberta Nívea Assunção</strong>.
+        </p>
+        <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-8">
+          Atuamos com escrituração contábil, fiscal e trabalhista, apuração de tributos, demonstrações contábeis, obrigações acessórias, consultoria contábil, perícia contábil e auditoria — tudo de forma 100% digital, ágil e segura para clientes em Limeira/SP e região.
+        </p>
+        <a href="#contato" class="inline-flex items-center px-7 py-3.5 bg-sol-dark hover:bg-sol-mid text-white font-semibold rounded-full transition-colors shadow-lg">
+          Fale Conosco
+          <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+
+      <!-- Image / Logo card -->
+      <div class="reveal flex justify-center">
+        <div class="relative">
+          <div class="bg-sol-dark rounded-3xl p-10 shadow-2xl flex items-center justify-center" style="min-width:320px; min-height:280px;">
+            <img src="assets/logo-sol-contabil.png" alt="Logo Sol Contábil LTDA" class="w-72 h-auto" />
+          </div>
+          <!-- Badge -->
+          <div class="absolute -bottom-5 -right-5 bg-sol-blue text-white rounded-2xl px-5 py-3 shadow-xl text-sm font-bold">
+            CRC/SP Registrado
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     POR QUE ESCOLHER
+     ============================================================ -->
+<section class="py-20 lg:py-28 bg-sol-dark">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="text-sol-blue font-semibold text-sm uppercase tracking-widest">Nossos diferenciais</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-3">Por que escolher a Sol Contábil?</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <div class="text-center reveal">
+        <div class="w-16 h-16 bg-sol-blue/20 rounded-2xl flex items-center justify-center mx-auto mb-5 border border-sol-blue/30">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">Tecnologia Digital</h3>
+        <p class="text-white/60 text-sm leading-relaxed">Processos 100% digitais, acesso remoto e comunicação ágil via plataformas modernas.</p>
+      </div>
+
+      <div class="text-center reveal">
+        <div class="w-16 h-16 bg-sol-blue/20 rounded-2xl flex items-center justify-center mx-auto mb-5 border border-sol-blue/30">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">Responsabilidade Técnica</h3>
+        <p class="text-white/60 text-sm leading-relaxed">Contador registrado no CRC/SP com plena responsabilidade técnica sobre todos os serviços.</p>
+      </div>
+
+      <div class="text-center reveal">
+        <div class="w-16 h-16 bg-sol-blue/20 rounded-2xl flex items-center justify-center mx-auto mb-5 border border-sol-blue/30">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">Economia Tributária</h3>
+        <p class="text-white/60 text-sm leading-relaxed">Planejamento tributário estratégico para reduzir legalmente a carga de impostos da sua empresa.</p>
+      </div>
+
+      <div class="text-center reveal">
+        <div class="w-16 h-16 bg-sol-blue/20 rounded-2xl flex items-center justify-center mx-auto mb-5 border border-sol-blue/30">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-lg mb-2">Atendimento Personalizado</h3>
+        <p class="text-white/60 text-sm leading-relaxed">Suporte dedicado e comunicação direta com o contador responsável pelo seu negócio.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EQUIPE
+     ============================================================ -->
+<section id="equipe" class="py-20 lg:py-28 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="text-sol-blue font-semibold text-sm uppercase tracking-widest">Quem somos</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-sol-dark dark:text-white mt-3">Nossa Equipe</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 max-w-3xl mx-auto">
+
+      <!-- Rodolfo -->
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700 reveal">
+        <div class="w-24 h-24 bg-sol-dark rounded-full flex items-center justify-center mx-auto mb-5 text-4xl font-extrabold text-sol-blue shadow-lg">
+          RA
+        </div>
+        <h3 class="text-xl font-bold text-sol-dark dark:text-white mb-1">Rodolfo Assunção</h3>
+        <p class="text-sol-blue font-semibold text-sm mb-2">Responsável Técnico</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">CRC/SP 1SP353033/O-5</p>
+        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">Contador registrado no CRC/SP, responsável técnico por todos os serviços contábeis, fiscais e trabalhistas da Sol Contábil.</p>
+      </div>
+
+      <!-- Roberta -->
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700 reveal">
+        <div class="w-24 h-24 bg-sol-dark rounded-full flex items-center justify-center mx-auto mb-5 text-4xl font-extrabold text-sol-blue shadow-lg">
+          RN
+        </div>
+        <h3 class="text-xl font-bold text-sol-dark dark:text-white mb-1">Roberta Nívea Assunção</h3>
+        <p class="text-sol-blue font-semibold text-sm mb-2">Sócia-Administradora</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Gestão & Relacionamento</p>
+        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">Responsável pela gestão administrativa e pelo relacionamento com clientes, garantindo excelência no atendimento e na experiência do cliente.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BLOG / DICAS
+     ============================================================ -->
+<section id="blog" class="py-20 lg:py-28 bg-gray-50 dark:bg-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="text-sol-blue font-semibold text-sm uppercase tracking-widest">Conteúdo gratuito</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-sol-dark dark:text-white mt-3 mb-4">Blog & Dicas Contábeis</h2>
+      <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Fique por dentro das novidades fiscais e tributárias que impactam o seu negócio.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- Post 1 -->
+      <article class="blog-card bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm reveal">
+        <div class="bg-gradient-to-br from-sol-dark to-sol-mid h-44 flex items-center justify-center p-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-sol-blue/60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        </div>
+        <div class="p-6">
+          <span class="inline-block px-3 py-1 bg-sol-blue/10 text-sol-blue text-xs font-semibold rounded-full mb-3">Imposto de Renda</span>
+          <h3 class="text-lg font-bold text-sol-dark dark:text-white mb-2">IR 2026: Tudo o que você precisa saber para declarar sem erros</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">Prazo, documentos necessários, deduções permitidas e como maximizar sua restituição no Imposto de Renda 2026.</p>
+          <a href="#contato" class="text-sol-blue font-semibold text-sm hover:underline inline-flex items-center gap-1">
+            Ler mais
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Post 2 -->
+      <article class="blog-card bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm reveal">
+        <div class="bg-gradient-to-br from-sol-dark to-sol-mid h-44 flex items-center justify-center p-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-sol-blue/60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </div>
+        <div class="p-6">
+          <span class="inline-block px-3 py-1 bg-sol-blue/10 text-sol-blue text-xs font-semibold rounded-full mb-3">MEI</span>
+          <h3 class="text-lg font-bold text-sol-dark dark:text-white mb-2">MEI em 2026: Limite de faturamento, obrigações e quando migrar para ME</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">Entenda as regras atualizadas do MEI, o novo limite de faturamento e quando vale a pena migrar para Microempresa.</p>
+          <a href="#contato" class="text-sol-blue font-semibold text-sm hover:underline inline-flex items-center gap-1">
+            Ler mais
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Post 3 -->
+      <article class="blog-card bg-white dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm reveal">
+        <div class="bg-gradient-to-br from-sol-dark to-sol-mid h-44 flex items-center justify-center p-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-sol-blue/60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </div>
+        <div class="p-6">
+          <span class="inline-block px-3 py-1 bg-sol-blue/10 text-sol-blue text-xs font-semibold rounded-full mb-3">Planejamento Tributário</span>
+          <h3 class="text-lg font-bold text-sol-dark dark:text-white mb-2">Simples Nacional, Lucro Presumido ou Real: qual o melhor regime para sua empresa?</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">Comparativo completo dos regimes tributários para ajudar você a escolher o mais vantajoso para o seu negócio em 2026.</p>
+          <a href="#contato" class="text-sol-blue font-semibold text-sm hover:underline inline-flex items-center gap-1">
+            Ler mais
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTATO
+     ============================================================ -->
+<section id="contato" class="py-20 lg:py-28 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16 reveal">
+      <span class="text-sol-blue font-semibold text-sm uppercase tracking-widest">Fale conosco</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-sol-dark dark:text-white mt-3 mb-4">Entre em Contato</h2>
+      <p class="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">Solicite seu orçamento gratuito. Respondemos em até 24 horas úteis.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+      <!-- Form -->
+      <div class="reveal">
+        <form id="contact-form" class="space-y-5" novalidate>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5" for="nome">Nome completo *</label>
+              <input type="text" id="nome" name="nome" required placeholder="Seu nome" class="form-input" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5" for="empresa">Empresa</label>
+              <input type="text" id="empresa" name="empresa" placeholder="Nome da empresa" class="form-input" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5" for="email">E-mail *</label>
+              <input type="email" id="email" name="email" required placeholder="seu@email.com" class="form-input" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5" for="telefone">WhatsApp / Telefone *</label>
+              <input type="tel" id="telefone" name="telefone" required placeholder="(19) 9 9999-9999" class="form-input" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5" for="servico">Serviço de interesse</label>
+            <select id="servico" name="servico" class="form-input">
+              <option value="">Selecione um serviço...</option>
+              <option>Escrituração Contábil Completa</option>
+              <option>Consultoria Fiscal e Planejamento Tributário</option>
+              <option>Folha de Pagamento e Departamento Pessoal</option>
+              <option>Declaração de Imposto de Renda PF e PJ</option>
+              <option>Abertura, Alteração e Regularização de Empresas</option>
+              <option>Perícia Contábil, Auditoria e Demonstrações</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5" for="mensagem">Mensagem *</label>
+            <textarea id="mensagem" name="mensagem" required rows="4" placeholder="Descreva sua necessidade..." class="form-input resize-none"></textarea>
+          </div>
+          <button type="submit" class="w-full py-4 bg-sol-blue hover:bg-blue-400 text-white font-bold text-lg rounded-full transition-all shadow-lg shadow-sol-blue/30 hover:shadow-sol-blue/50 hover:-translate-y-0.5">
+            Enviar Mensagem
+          </button>
+          <p id="form-msg" class="text-center text-sm font-medium hidden"></p>
+        </form>
+      </div>
+
+      <!-- Info + Map -->
+      <div class="space-y-8 reveal">
+
+        <!-- Contact cards -->
+        <div class="grid grid-cols-1 gap-4">
+          <div class="flex items-start gap-4 p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+            <div class="w-10 h-10 bg-sol-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sol-dark dark:text-white text-sm">Endereço</p>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mt-0.5">Limeira, SP — Brasil<br/><span class="text-gray-400 text-xs">[Endereço completo — preencher]</span></p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+            <div class="w-10 h-10 bg-sol-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sol-dark dark:text-white text-sm">Telefone / WhatsApp</p>
+              <a href="tel:+55XXXXXXXXXXX" class="text-sol-blue hover:underline text-sm mt-0.5 block">(XX) X XXXX-XXXX — preencher</a>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+            <div class="w-10 h-10 bg-sol-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sol-dark dark:text-white text-sm">E-mail</p>
+              <a href="mailto:contato@solcontabil.com.br" class="text-sol-blue hover:underline text-sm mt-0.5 block">contato@solcontabil.com.br — preencher</a>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+            <div class="w-10 h-10 bg-sol-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-sol-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sol-dark dark:text-white text-sm">CNPJ</p>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mt-0.5">XX.XXX.XXX/XXXX-XX — preencher</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Maps embed -->
+        <div class="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
+          <iframe
+            title="Localização Sol Contábil – Limeira SP"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59361.25!2d-47.4017!3d-22.5649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8a8a1e7c1e1e1%3A0x1234567890abcdef!2sLimeira%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1700000000000"
+            width="100%"
+            height="220"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="bg-sol-dark text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+      <!-- Brand -->
+      <div class="lg:col-span-2">
+        <img src="assets/logo-sol-contabil.png" alt="Logo Sol Contábil LTDA" class="h-16 w-auto mb-5" />
+        <p class="text-white/60 text-sm leading-relaxed max-w-sm">
+          Escritório de contabilidade em Limeira/SP. Contabilidade de alto padrão com transparência, tecnologia e responsabilidade técnica CRC/SP.
+        </p>
+        <p class="text-white/40 text-xs mt-4">
+          Responsável Técnico: Rodolfo Assunção<br/>
+          CRC/SP 1SP353033/O-5<br/>
+          Sócia-Administradora: Roberta Nívea Assunção
+        </p>
+      </div>
+
+      <!-- Links rápidos -->
+      <div>
+        <h4 class="text-white font-bold mb-5 text-sm uppercase tracking-widest">Links Rápidos</h4>
+        <ul class="space-y-3">
+          <li><a href="#inicio"   class="text-white/60 hover:text-sol-blue text-sm transition-colors">Início</a></li>
+          <li><a href="#servicos" class="text-white/60 hover:text-sol-blue text-sm transition-colors">Serviços</a></li>
+          <li><a href="#sobre"    class="text-white/60 hover:text-sol-blue text-sm transition-colors">Sobre Nós</a></li>
+          <li><a href="#equipe"   class="text-white/60 hover:text-sol-blue text-sm transition-colors">Equipe</a></li>
+          <li><a href="#blog"     class="text-white/60 hover:text-sol-blue text-sm transition-colors">Blog</a></li>
+          <li><a href="#contato"  class="text-white/60 hover:text-sol-blue text-sm transition-colors">Contato</a></li>
+        </ul>
+      </div>
+
+      <!-- Serviços -->
+      <div>
+        <h4 class="text-white font-bold mb-5 text-sm uppercase tracking-widest">Serviços</h4>
+        <ul class="space-y-3">
+          <li><a href="#servicos" class="text-white/60 hover:text-sol-blue text-sm transition-colors">Escrituração Contábil</a></li>
+          <li><a href="#servicos" class="text-white/60 hover:text-sol-blue text-sm transition-colors">Planejamento Tributário</a></li>
+          <li><a href="#servicos" class="text-white/60 hover:text-sol-blue text-sm transition-colors">Folha de Pagamento</a></li>
+          <li><a href="#servicos" class="text-white/60 hover:text-sol-blue text-sm transition-colors">Imposto de Renda</a></li>
+          <li><a href="#servicos" class="text-white/60 hover:text-sol-blue text-sm transition-colors">Abertura de Empresas</a></li>
+          <li><a href="#servicos" class="text-white/60 hover:text-sol-blue text-sm transition-colors">Perícia e Auditoria</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-white/40 text-sm text-center sm:text-left">
+        © 2026 Sol Contábil LTDA · CNPJ: XX.XXX.XXX/XXXX-XX · Limeira/SP
+      </p>
+      <p class="text-white/30 text-xs">
+        Contabilidade em Limeira SP · Contador Limeira SP · Imposto de Renda Limeira
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+  // ===== MOBILE MENU =====
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const bar1 = document.getElementById('bar1');
+  const bar2 = document.getElementById('bar2');
+  const bar3 = document.getElementById('bar3');
+  let menuOpen = false;
+
+  menuBtn.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    mobileMenu.classList.toggle('open', menuOpen);
+    bar1.style.transform = menuOpen ? 'translateY(8px) rotate(45deg)' : '';
+    bar2.style.opacity = menuOpen ? '0' : '1';
+    bar3.style.transform = menuOpen ? 'translateY(-8px) rotate(-45deg)' : '';
+  });
+
+  document.querySelectorAll('.mobile-nav').forEach(link => {
+    link.addEventListener('click', () => {
+      menuOpen = false;
+      mobileMenu.classList.remove('open');
+      bar1.style.transform = '';
+      bar2.style.opacity = '1';
+      bar3.style.transform = '';
+    });
+  });
+
+  // ===== HEADER SCROLL =====
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ===== ACTIVE NAV =====
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => observer.observe(s));
+
+  // ===== SCROLL REVEAL =====
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ===== DARK MODE =====
+  const darkToggle = document.getElementById('dark-toggle');
+  const iconMoon = document.getElementById('icon-moon');
+  const iconSun = document.getElementById('icon-sun');
+  let dark = localStorage.getItem('darkMode') === 'true';
+
+  function applyDark() {
+    document.documentElement.classList.toggle('dark', dark);
+    iconMoon.classList.toggle('hidden', dark);
+    iconSun.classList.toggle('hidden', !dark);
+  }
+  applyDark();
+
+  darkToggle.addEventListener('click', () => {
+    dark = !dark;
+    localStorage.setItem('darkMode', dark);
+    applyDark();
+  });
+
+  // ===== CONTACT FORM =====
+  const form = document.getElementById('contact-form');
+  const formMsg = document.getElementById('form-msg');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nome = form.nome.value.trim();
+    const email = form.email.value.trim();
+    const telefone = form.telefone.value.trim();
+    const mensagem = form.mensagem.value.trim();
+
+    if (!nome || !email || !telefone || !mensagem) {
+      formMsg.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+      formMsg.className = 'text-center text-sm font-medium text-red-500';
+      formMsg.classList.remove('hidden');
+      return;
+    }
+
+    // Simulate send (replace with actual backend/EmailJS/Formspree)
+    const btn = form.querySelector('button[type="submit"]');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      formMsg.textContent = '✓ Mensagem enviada com sucesso! Entraremos em contato em breve.';
+      formMsg.className = 'text-center text-sm font-medium text-green-600';
+      formMsg.classList.remove('hidden');
+      form.reset();
+      btn.textContent = 'Enviar Mensagem';
+      btn.disabled = false;
+    }, 1200);
+  });
+
+  // ===== SMOOTH SCROLL =====
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const offset = 80;
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
