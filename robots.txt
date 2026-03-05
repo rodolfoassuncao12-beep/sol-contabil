@@ -1,0 +1,22 @@
+# Robots.txt para Sol Contábil LTDA
+# Otimizado para SEO local em Limeira-SP
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /temp/
+Disallow: /cache/
+
+# Permitir acesso ao sitemap
+Sitemap: https://solcontabil.com.br/sitemap.xml
+
+# Crawl delay para respeitar recursos do servidor
+Crawl-delay: 1
+
+# Regras específicas para Googlebot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
