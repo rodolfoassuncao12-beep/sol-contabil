@@ -48,6 +48,10 @@
       "destination": "/contabilidade-estrategica.html"
     },
     {
+      "source": "/politica-de-privacidade",
+      "destination": "/politica-de-privacidade.html"
+    },
+    {
       "source": "/blog",
       "destination": "/blog/index.html"
     },

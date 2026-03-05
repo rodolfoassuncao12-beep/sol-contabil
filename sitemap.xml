@@ -10,6 +10,14 @@
     <priority>1.0</priority>
   </url>
 
+  <!-- Legal Pages -->
+  <url>
+    <loc>https://solcontabil.com.br/politica-de-privacidade</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
   <!-- SEO Local Pages -->
   <url>
     <loc>https://solcontabil.com.br/contador-em-limeira</loc>
