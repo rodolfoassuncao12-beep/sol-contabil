@@ -44,6 +44,10 @@
       "destination": "/contabilidade-para-mei.html"
     },
     {
+      "source": "/contabilidade-estrategica",
+      "destination": "/contabilidade-estrategica.html"
+    },
+    {
       "source": "/blog",
       "destination": "/blog/index.html"
     },
