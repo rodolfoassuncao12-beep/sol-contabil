@@ -46,4 +46,89 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Blog Articles -->
+  <url>
+    <loc>https://solcontabil.com.br/blog/abrir-empresa-em-limeira</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/quanto-custa-abrir-empresa-em-limeira</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/mei-precisa-de-contador</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/como-trocar-de-contador-em-limeira</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/melhor-regime-tributario-pequenas-empresas</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/impostos-simples-nacional</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/contabilidade-para-medicos-em-limeira</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/contabilidade-para-advogados-em-limeira</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/quando-sair-do-mei-e-virar-microempresa</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/erros-fiscais-pequenas-empresas</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/como-pagar-menos-impostos-legalmente</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://solcontabil.com.br/blog/checklist-contabil-novas-empresas</loc>
+    <lastmod>2026-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
 </urlset>

@@ -42,6 +42,58 @@
     {
       "source": "/contabilidade-para-mei",
       "destination": "/contabilidade-para-mei.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog/index.html"
+    },
+    {
+      "source": "/blog/abrir-empresa-em-limeira",
+      "destination": "/blog/abrir-empresa-em-limeira.html"
+    },
+    {
+      "source": "/blog/quanto-custa-abrir-empresa-em-limeira",
+      "destination": "/blog/quanto-custa-abrir-empresa-em-limeira.html"
+    },
+    {
+      "source": "/blog/mei-precisa-de-contador",
+      "destination": "/blog/mei-precisa-de-contador.html"
+    },
+    {
+      "source": "/blog/como-trocar-de-contador-em-limeira",
+      "destination": "/blog/como-trocar-de-contador-em-limeira.html"
+    },
+    {
+      "source": "/blog/melhor-regime-tributario-pequenas-empresas",
+      "destination": "/blog/melhor-regime-tributario-pequenas-empresas.html"
+    },
+    {
+      "source": "/blog/impostos-simples-nacional",
+      "destination": "/blog/impostos-simples-nacional.html"
+    },
+    {
+      "source": "/blog/contabilidade-para-medicos-em-limeira",
+      "destination": "/blog/contabilidade-para-medicos-em-limeira.html"
+    },
+    {
+      "source": "/blog/contabilidade-para-advogados-em-limeira",
+      "destination": "/blog/contabilidade-para-advogados-em-limeira.html"
+    },
+    {
+      "source": "/blog/quando-sair-do-mei-e-virar-microempresa",
+      "destination": "/blog/quando-sair-do-mei-e-virar-microempresa.html"
+    },
+    {
+      "source": "/blog/erros-fiscais-pequenas-empresas",
+      "destination": "/blog/erros-fiscais-pequenas-empresas.html"
+    },
+    {
+      "source": "/blog/como-pagar-menos-impostos-legalmente",
+      "destination": "/blog/como-pagar-menos-impostos-legalmente.html"
+    },
+    {
+      "source": "/blog/checklist-contabil-novas-empresas",
+      "destination": "/blog/checklist-contabil-novas-empresas.html"
     }
   ]
 }
