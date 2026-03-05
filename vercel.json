@@ -94,6 +94,30 @@
     {
       "source": "/blog/checklist-contabil-novas-empresas",
       "destination": "/blog/checklist-contabil-novas-empresas.html"
+    },
+    {
+      "source": "/servicos/escrituracao-contabil",
+      "destination": "/servicos/escrituracao-contabil.html"
+    },
+    {
+      "source": "/servicos/planejamento-tributario",
+      "destination": "/servicos/planejamento-tributario.html"
+    },
+    {
+      "source": "/servicos/folha-de-pagamento",
+      "destination": "/servicos/folha-de-pagamento.html"
+    },
+    {
+      "source": "/servicos/imposto-de-renda",
+      "destination": "/servicos/imposto-de-renda.html"
+    },
+    {
+      "source": "/servicos/abertura-de-empresa",
+      "destination": "/servicos/abertura-de-empresa.html"
+    },
+    {
+      "source": "/servicos/pericia-contabil",
+      "destination": "/servicos/pericia-contabil.html"
     }
   ]
 }
