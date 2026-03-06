@@ -495,8 +495,8 @@
         var data = await res.json();
         hideTyping();
         var reply = data && data.result && data.result.data && data.result.data.json;
-        if (reply && reply.message) {
-          addMsg('bot', reply.message, reply.buttons || null);
+        if (reply && reply.reply) {
+          addMsg('bot', reply.reply, reply.buttons || null);
         } else {
           addMsg('bot', 'Desculpe, tive um problema técnico. Pode repetir sua pergunta?');
         }
