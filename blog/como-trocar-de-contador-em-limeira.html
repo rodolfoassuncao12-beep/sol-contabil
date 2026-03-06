@@ -1,6 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <script>
+  (function() {
+    var HASH = 'f6fae2d8a41ebb5b588cd9d9d99e63af0e09a769b6a83793e19d4bdc89622342';
+    var KEY = 'scw_auth';
+    function sha256(str) {
+      // Implementação simples de SHA-256 via SubtleCrypto (async) não funciona aqui
+      // Usamos uma abordagem de hash simples armazenando o hash direto
+      return str;
+    }
+    if (localStorage.getItem(KEY) !== HASH) {
+      // Mostrar overlay de senha
+      document.documentElement.style.overflow = 'hidden';
+      var overlay = document.createElement('div');
+      overlay.id = 'pw-overlay';
+      overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#0a1628;z-index:999999;display:flex;align-items:center;justify-content:center;font-family:sans-serif;';
+      overlay.innerHTML = '<div style="background:#fff;border-radius:12px;padding:40px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);">' +
+        '<img src="/logo.png" onerror="this.style.display=\'none\'" style="height:60px;margin-bottom:20px;" />' +
+        '<h2 style="color:#0a1628;margin:0 0 8px;font-size:22px;">Sol Contábil</h2>' +
+        '<p style="color:#666;margin:0 0 24px;font-size:14px;">Site em manutenção. Digite a senha para acessar.</p>' +
+        '<input id="pw-input" type="password" placeholder="Digite a senha..." style="width:100%;box-sizing:border-box;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:16px;outline:none;margin-bottom:12px;" />' +
+        '<button id="pw-btn" style="width:100%;padding:12px;background:#1a56db;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;font-weight:600;">Entrar</button>' +
+        '<p id="pw-error" style="color:#e53e3e;margin:10px 0 0;font-size:13px;display:none;">Senha incorreta. Tente novamente.</p>' +
+        '</div>';
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.appendChild(overlay);
+        var inp = document.getElementById('pw-input');
+        var btn = document.getElementById('pw-btn');
+        var err = document.getElementById('pw-error');
+        function tryLogin() {
+          var val = inp.value;
+          // Calcular hash SHA-256 usando btoa como fallback simples
+          // Vamos usar uma comparação direta com o hash pré-calculado via Web Crypto API
+          crypto.subtle.digest('SHA-256', new TextEncoder().encode(val)).then(function(buf) {
+            var hex = Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2,'0'); }).join('');
+            if (hex === HASH) {
+              localStorage.setItem(KEY, HASH);
+              document.documentElement.style.overflow = '';
+              overlay.remove();
+            } else {
+              err.style.display = 'block';
+              inp.value = '';
+              inp.focus();
+            }
+          });
+        }
+        btn.addEventListener('click', tryLogin);
+        inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryLogin(); });
+        inp.focus();
+      });
+      document.head.appendChild(document.createElement('style')).textContent = '#pw-overlay { animation: fadeIn 0.3s ease; } @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }';
+    }
+  })();
+  </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Como Trocar de Contador em Limeira: Guia Completo - Sol Contábil LTDA</title>
