@@ -275,5 +275,318 @@
   </div>
 </footer>
 
+
+  <!-- ASSISTENTE TRIBUTARIO - SOL CONTABIL v5 -->
+  <style>
+    /* Mobile: WhatsApp vai para esquerda, chatbot fica na direita */
+    @media (max-width: 600px) {
+      .whatsapp-float { left: 16px !important; bottom: 16px !important; }
+    }
+    #scw-toggle {
+      position: fixed; bottom: 100px; right: 28px; z-index: 99999;
+      width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #1a2a4a 0%, #0ea5e9 100%);
+      box-shadow: 0 4px 20px rgba(14,165,233,0.5); transition: transform 0.2s;
+      display: flex; align-items: center; justify-content: center; padding: 0;
+    }
+    #scw-toggle:hover { transform: scale(1.1); }
+    #scw-badge {
+      position: absolute; top: -4px; right: -4px; width: 20px; height: 20px;
+      background: #ef4444; border-radius: 50%; display: none;
+      align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: white; pointer-events: none;
+    }
+    #scw-tooltip {
+      position: fixed; bottom: 168px; right: 28px; z-index: 99998;
+      background: white; border-radius: 12px; padding: 10px 14px;
+      font-size: 13px; color: #374151; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      white-space: nowrap; border: 1px solid #e5e7eb; display: none;
+      font-family: sans-serif; pointer-events: none;
+    }
+    #scw-tooltip::after {
+      content: ''; position: absolute; bottom: -6px; right: 20px;
+      width: 12px; height: 12px; background: white;
+      border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb;
+      transform: rotate(45deg);
+    }
+    #scw-window {
+      position: fixed; bottom: 168px; right: 28px; z-index: 99999;
+      width: 360px; height: 520px; max-height: 80vh; background: white;
+      border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      display: none; flex-direction: column; overflow: hidden;
+      border: 1px solid #e5e7eb; font-family: 'Inter', -apple-system, sans-serif;
+    }
+    @media (max-width: 600px) {
+      #scw-window { width: calc(100vw - 16px); right: 8px; bottom: 160px; height: 70vh; }
+      #scw-toggle { bottom: 90px; right: 16px; }
+      #scw-tooltip { bottom: 160px; right: 8px; }
+    }
+    #scw-header {
+      background: linear-gradient(135deg, #1a2a4a 0%, #0ea5e9 100%);
+      padding: 12px 16px; display: flex; align-items: center;
+      justify-content: space-between; flex-shrink: 0;
+    }
+    #scw-header-info { display: flex; align-items: center; gap: 10px; }
+    #scw-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #scw-header h4 { color: white; font-size: 14px; font-weight: 700; margin: 0; }
+    #scw-header p { color: rgba(255,255,255,0.75); font-size: 11px; margin: 0; }
+    #scw-close {
+      background: rgba(255,255,255,0.15); border: none; cursor: pointer;
+      width: 28px; height: 28px; border-radius: 50%; color: white;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; font-size: 16px; line-height: 1;
+    }
+    #scw-close:hover { background: rgba(255,255,255,0.3); }
+    #scw-msgs {
+      flex: 1; overflow-y: auto; padding: 16px; background: #f9fafb;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .scw-msg { display: flex; flex-direction: column; max-width: 85%; }
+    .scw-msg.user { align-self: flex-end; align-items: flex-end; }
+    .scw-msg.bot { align-self: flex-start; align-items: flex-start; }
+    .scw-bubble {
+      padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.5;
+      word-break: break-word; white-space: pre-wrap;
+    }
+    .scw-msg.user .scw-bubble { background: #0ea5e9; color: white; border-bottom-right-radius: 4px; }
+    .scw-msg.bot .scw-bubble { background: white; color: #374151; border: 1px solid #e5e7eb; border-bottom-left-radius: 4px; }
+    .scw-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .scw-btn {
+      padding: 6px 12px; border-radius: 20px; border: 1.5px solid #0ea5e9;
+      background: white; color: #0ea5e9; font-size: 12px; cursor: pointer;
+      transition: all 0.2s; font-weight: 500;
+    }
+    .scw-btn:hover { background: #0ea5e9; color: white; }
+    #scw-typing { display: none; align-self: flex-start; }
+    #scw-typing .scw-bubble { display: flex; gap: 4px; align-items: center; padding: 12px 16px; }
+    .scw-dot {
+      width: 7px; height: 7px; background: #9ca3af; border-radius: 50%;
+      animation: scwBounce 1.2s infinite;
+    }
+    .scw-dot:nth-child(2) { animation-delay: 0.2s; }
+    .scw-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes scwBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+    #scw-lead-form {
+      padding: 12px 16px; background: #eff6ff;
+      border-top: 1px solid #bfdbfe; flex-shrink: 0; display: none;
+    }
+    #scw-lead-form p { font-size: 12px; font-weight: 600; color: #1e40af; margin: 0 0 8px; }
+    #scw-lead-form input {
+      width: 100%; padding: 8px 12px; font-size: 13px;
+      border: 1px solid #bfdbfe; border-radius: 8px; margin-bottom: 6px;
+      outline: none; background: white; box-sizing: border-box;
+    }
+    #scw-lead-form input:focus { border-color: #0ea5e9; }
+    #scw-lead-submit {
+      width: 100%; padding: 8px; background: #0ea5e9; color: white;
+      border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    #scw-input-area {
+      padding: 12px 16px; background: white;
+      border-top: 1px solid #f3f4f6; flex-shrink: 0;
+    }
+    #scw-input-row { display: flex; align-items: center; gap: 8px; }
+    #scw-input {
+      flex: 1; padding: 8px 14px; font-size: 13px;
+      background: #f3f4f6; border: none; border-radius: 20px; outline: none;
+    }
+    #scw-lead-btn {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      cursor: pointer; background: transparent; color: #9ca3af;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    #scw-lead-btn:hover { color: #0ea5e9; }
+    #scw-send-btn {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      cursor: pointer; background: #0ea5e9; color: white;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+  </style>
+
+  <button id="scw-toggle" aria-label="Abrir assistente virtual">
+    <span id="scw-badge">1</span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  </button>
+
+  <div id="scw-tooltip">💬 Tire sua dúvida com nosso assistente!</div>
+
+  <div id="scw-window">
+    <div id="scw-header">
+      <div id="scw-header-info">
+        <div id="scw-avatar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        </div>
+        <div>
+          <h4>Assistente Tributário</h4>
+          <p>Sol Contábil · Online agora</p>
+        </div>
+      </div>
+      <button id="scw-close">✕</button>
+    </div>
+    <div id="scw-msgs">
+      <div id="scw-typing" class="scw-msg bot">
+        <div class="scw-bubble">
+          <span class="scw-dot"></span><span class="scw-dot"></span><span class="scw-dot"></span>
+        </div>
+      </div>
+    </div>
+    <div id="scw-lead-form">
+      <p>📋 Deixe seu contato para falarmos:</p>
+      <input id="scw-lead-name" type="text" placeholder="Seu nome" />
+      <input id="scw-lead-phone" type="tel" placeholder="WhatsApp (ex: 19 99999-9999)" />
+      <input id="scw-lead-email" type="email" placeholder="E-mail (opcional)" />
+      <button id="scw-lead-submit">Enviar contato</button>
+    </div>
+    <div id="scw-input-area">
+      <div id="scw-input-row">
+        <button id="scw-lead-btn" title="Deixar contato">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </button>
+        <input id="scw-input" type="text" placeholder="Digite sua mensagem..." />
+        <button id="scw-send-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    var API_URL = 'https://solchatbot-8tvma4yi.manus.space';
+    var sessionId = 'scw_' + Math.random().toString(36).substr(2,9) + '_' + Date.now();
+    var isOpen = false, hasWelcomed = false;
+    var toggle = document.getElementById('scw-toggle');
+    var win = document.getElementById('scw-window');
+    var badge = document.getElementById('scw-badge');
+    var tooltip = document.getElementById('scw-tooltip');
+    var msgs = document.getElementById('scw-msgs');
+    var typing = document.getElementById('scw-typing');
+    var inp = document.getElementById('scw-input');
+    var sendBtn = document.getElementById('scw-send-btn');
+    var closeBtn = document.getElementById('scw-close');
+    var leadBtn = document.getElementById('scw-lead-btn');
+    var leadForm = document.getElementById('scw-lead-form');
+    var leadSubmit = document.getElementById('scw-lead-submit');
+
+    setTimeout(function() {
+      if (!isOpen) {
+        tooltip.style.display = 'block';
+        badge.style.display = 'flex';
+        setTimeout(function() { tooltip.style.display = 'none'; }, 5000);
+      }
+    }, 3000);
+
+    function openChat() {
+      isOpen = true;
+      win.style.display = 'flex';
+      badge.style.display = 'none';
+      tooltip.style.display = 'none';
+      inp.focus();
+      if (!hasWelcomed) {
+        hasWelcomed = true;
+        setTimeout(function() {
+          addMsg('bot', 'Olá! Eu sou o Assistente Tributário da Sol Contábil.
+Posso te ajudar a abrir empresa, pagar menos impostos ou tirar dúvidas contábeis.', [
+            {label: '🏢 Abrir empresa', value: 'Quero abrir uma empresa'},
+            {label: '🔄 Trocar de contador', value: 'Quero trocar de contador'},
+            {label: '💰 Pagar menos imposto', value: 'Quero pagar menos imposto'},
+            {label: '❓ Tirar dúvidas', value: 'Tenho dúvidas contábeis'}
+          ]);
+        }, 500);
+      }
+    }
+
+    function closeChat() { isOpen = false; win.style.display = 'none'; }
+
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      isOpen ? closeChat() : openChat();
+    });
+    closeBtn.addEventListener('click', closeChat);
+    leadBtn.addEventListener('click', function() {
+      leadForm.style.display = leadForm.style.display === 'block' ? 'none' : 'block';
+    });
+
+    function addMsg(role, text, buttons) {
+      var d = document.createElement('div');
+      d.className = 'scw-msg ' + (role === 'user' ? 'user' : 'bot');
+      var b = document.createElement('div');
+      b.className = 'scw-bubble';
+      b.textContent = text;
+      d.appendChild(b);
+      if (buttons && buttons.length) {
+        var btns = document.createElement('div');
+        btns.className = 'scw-btns';
+        buttons.forEach(function(btn) {
+          var el = document.createElement('button');
+          el.className = 'scw-btn';
+          el.textContent = btn.label;
+          el.addEventListener('click', function() { sendMsg(btn.value); });
+          btns.appendChild(el);
+        });
+        d.appendChild(btns);
+      }
+      msgs.insertBefore(d, typing);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping() { typing.style.display = 'flex'; msgs.scrollTop = msgs.scrollHeight; }
+    function hideTyping() { typing.style.display = 'none'; }
+
+    async function sendMsg(text) {
+      var msg = text || inp.value.trim();
+      if (!msg) return;
+      inp.value = '';
+      addMsg('user', msg);
+      showTyping();
+      try {
+        var res = await fetch(API_URL + '/api/trpc/chat.sendMessage', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({json: {sessionId: sessionId, message: msg}})
+        });
+        var data = await res.json();
+        hideTyping();
+        var reply = data && data.result && data.result.data && data.result.data.json;
+        if (reply && reply.message) {
+          addMsg('bot', reply.message, reply.buttons || null);
+        } else {
+          addMsg('bot', 'Desculpe, tive um problema técnico. Pode repetir sua pergunta?');
+        }
+      } catch(e) {
+        hideTyping();
+        addMsg('bot', 'Desculpe, não consegui me conectar. Tente novamente em instantes.');
+      }
+    }
+
+    leadSubmit.addEventListener('click', async function() {
+      var name = document.getElementById('scw-lead-name').value.trim();
+      var phone = document.getElementById('scw-lead-phone').value.trim();
+      var email = document.getElementById('scw-lead-email').value.trim();
+      if (!name || !phone) { alert('Por favor, preencha nome e WhatsApp.'); return; }
+      try {
+        await fetch(API_URL + '/api/trpc/chat.saveLead', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({json: {sessionId: sessionId, name: name, phone: phone, email: email}})
+        });
+      } catch(e) {}
+      leadForm.style.display = 'none';
+      addMsg('bot', 'Obrigado, ' + name + '! Em breve um contador da Sol Contábil entrará em contato. 😊');
+    });
+
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+    });
+    sendBtn.addEventListener('click', function() { sendMsg(); });
+  })();
+  </script>
+  <!-- FIM DO ASSISTENTE TRIBUTARIO - SOL CONTABIL -->
+
+
 </body>
 </html>
