@@ -195,7 +195,7 @@
     /* ===== WHATSAPP FLOAT ===== */
     .whatsapp-float {
       position: fixed;
-      bottom: 28px; right: 28px;
+      bottom: 28px; left: 28px;
       z-index: 9999;
       animation: float 3s ease-in-out infinite;
     }
@@ -214,7 +214,7 @@
 
     
     @media (max-width: 480px) {
-      .whatsapp-float { right: auto !important; left: 16px !important; bottom: 16px !important; }
+      .whatsapp-float { left: 16px !important; bottom: 16px !important; }
     }
     /* ===== BLOG CARD ===== */
     .blog-card { transition: transform 0.3s, box-shadow 0.3s; }
@@ -892,7 +892,7 @@
   <style>
     /* Mobile: WhatsApp vai para esquerda, chatbot fica na direita */
     @media (max-width: 600px) {
-      .whatsapp-float { right: auto !important; left: 16px !important; bottom: 16px !important; }
+      .whatsapp-float { left: 16px !important; bottom: 16px !important; }
     }
     #scw-toggle {
       position: fixed; bottom: 100px; right: 28px; z-index: 99999;
