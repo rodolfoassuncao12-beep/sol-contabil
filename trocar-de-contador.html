@@ -245,5 +245,156 @@
   </div>
 </footer>
 
+
+  <!-- ASSISTENTE TRIBUTARIO - SOL CONTABIL -->
+  <style>
+    #sol-chat-widget * { box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
+    #sol-chat-toggle { position: fixed; bottom: 24px; right: 24px; z-index: 9998; width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer; background: linear-gradient(135deg, #1a2a4a 0%, #0ea5e9 100%); box-shadow: 0 4px 20px rgba(14,165,233,0.4); transition: transform 0.2s; display: flex; align-items: center; justify-content: center; }
+    #sol-chat-toggle:hover { transform: scale(1.1); }
+    #sol-chat-badge { position: absolute; top: -4px; right: -4px; width: 20px; height: 20px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; display: none; }
+    #sol-chat-tooltip { position: fixed; bottom: 90px; right: 24px; z-index: 9997; background: white; border-radius: 12px; padding: 10px 14px; font-size: 13px; color: #374151; box-shadow: 0 4px 20px rgba(0,0,0,0.15); white-space: nowrap; border: 1px solid #e5e7eb; display: none; }
+    #sol-chat-tooltip::after { content: ''; position: absolute; bottom: -6px; right: 20px; width: 12px; height: 12px; background: white; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; transform: rotate(45deg); }
+    #sol-chat-window { position: fixed; bottom: 90px; right: 24px; z-index: 9999; width: 360px; height: 520px; max-height: 80vh; background: white; border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); display: none; flex-direction: column; overflow: hidden; border: 1px solid #e5e7eb; }
+    @media (max-width: 480px) { #sol-chat-window { width: calc(100vw - 16px); right: 8px; bottom: 80px; height: 70vh; } #sol-chat-toggle { bottom: 16px; right: 16px; } }
+    #sol-chat-header { background: linear-gradient(135deg, #1a2a4a 0%, #0ea5e9 100%); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    #sol-chat-header-info { display: flex; align-items: center; gap: 10px; }
+    #sol-chat-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; }
+    #sol-chat-header h4 { color: white; font-size: 14px; font-weight: 700; margin: 0; }
+    #sol-chat-header p { color: rgba(255,255,255,0.7); font-size: 11px; margin: 0; }
+    #sol-chat-close { background: rgba(255,255,255,0.15); border: none; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    #sol-chat-close:hover { background: rgba(255,255,255,0.25); }
+    #sol-chat-messages { flex: 1; overflow-y: auto; padding: 16px; background: #f9fafb; display: flex; flex-direction: column; gap: 12px; }
+    .sol-msg { display: flex; flex-direction: column; max-width: 85%; }
+    .sol-msg.user { align-self: flex-end; }
+    .sol-msg.assistant { align-self: flex-start; }
+    .sol-msg-bubble { padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; }
+    .sol-msg.user .sol-msg-bubble { background: linear-gradient(135deg, #1a2a4a, #0ea5e9); color: white; border-bottom-right-radius: 4px; }
+    .sol-msg.assistant .sol-msg-bubble { background: white; color: #1f2937; border: 1px solid #e5e7eb; border-bottom-left-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .sol-msg-buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .sol-msg-btn { padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 20px; border: 2px solid #0ea5e9; color: #0ea5e9; background: transparent; cursor: pointer; transition: all 0.2s; }
+    .sol-msg-btn:hover { background: #0ea5e9; color: white; }
+    #sol-typing { display: none; align-self: flex-start; }
+    #sol-typing .sol-msg-bubble { display: flex; gap: 4px; align-items: center; padding: 12px 16px; }
+    .sol-dot { width: 8px; height: 8px; border-radius: 50%; background: #0ea5e9; animation: sol-bounce 1.2s infinite; }
+    .sol-dot:nth-child(2) { animation-delay: 0.15s; }
+    .sol-dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes sol-bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+    #sol-chat-lead-form { padding: 12px 16px; background: #eff6ff; border-top: 1px solid #bfdbfe; flex-shrink: 0; display: none; }
+    #sol-chat-lead-form p { font-size: 12px; font-weight: 600; color: #1e40af; margin: 0 0 8px; }
+    #sol-chat-lead-form input { width: 100%; padding: 8px 12px; font-size: 13px; border: 1px solid #bfdbfe; border-radius: 8px; margin-bottom: 6px; outline: none; background: white; }
+    #sol-chat-lead-form input:focus { border-color: #0ea5e9; }
+    #sol-lead-submit { width: 100%; padding: 8px; font-size: 13px; font-weight: 600; color: white; background: #0ea5e9; border: none; border-radius: 8px; cursor: pointer; }
+    #sol-chat-input-area { padding: 12px 16px; background: white; border-top: 1px solid #f3f4f6; flex-shrink: 0; }
+    #sol-chat-input-row { display: flex; align-items: center; gap: 8px; }
+    #sol-lead-btn { width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer; background: transparent; color: #9ca3af; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+    #sol-lead-btn:hover { background: #eff6ff; color: #0ea5e9; }
+    #sol-chat-input { flex: 1; padding: 8px 14px; font-size: 13px; background: #f3f4f6; border: none; border-radius: 20px; outline: none; }
+    #sol-send-btn { width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer; background: #0ea5e9; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    #sol-send-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+    #sol-chat-footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 6px; }
+    #sol-chat-footer span { color: #0ea5e9; }
+  </style>
+  <div id="sol-chat-widget">
+    <div id="sol-chat-tooltip">&#128172; Tire sua duvida com nosso assistente!</div>
+    <button id="sol-chat-toggle" aria-label="Abrir assistente virtual">
+      <div id="sol-chat-badge">1</div>
+      <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    </button>
+    <div id="sol-chat-window">
+      <div id="sol-chat-header">
+        <div id="sol-chat-header-info">
+          <div id="sol-chat-avatar"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <div><h4>Assistente Tributario</h4><p>Sol Contabil &#8226; Online agora</p></div>
+        </div>
+        <button id="sol-chat-close"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      </div>
+      <div id="sol-chat-messages">
+        <div id="sol-typing" class="sol-msg assistant"><div class="sol-msg-bubble"><div class="sol-dot"></div><div class="sol-dot"></div><div class="sol-dot"></div></div></div>
+      </div>
+      <div id="sol-chat-lead-form">
+        <p>&#128203; Deixe seus dados para contato:</p>
+        <input id="sol-lead-name" type="text" placeholder="Seu nome *" />
+        <input id="sol-lead-whatsapp" type="tel" placeholder="WhatsApp * ex: (19) 99999-9999" />
+        <input id="sol-lead-email" type="email" placeholder="Email (opcional)" />
+        <button id="sol-lead-submit">Enviar dados</button>
+      </div>
+      <div id="sol-chat-input-area">
+        <div id="sol-chat-input-row">
+          <button id="sol-lead-btn" title="Deixar contato"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></button>
+          <input id="sol-chat-input" type="text" placeholder="Digite sua mensagem..." autocomplete="off" />
+          <button id="sol-send-btn"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></button>
+        </div>
+        <div id="sol-chat-footer">Assistente Tributario da <span>Sol Contabil</span></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function() {
+    var API_URL = 'https://solchatbot-8tvma4yi.manus.space';
+    var sessionId = sessionStorage.getItem('sol_chat_session');
+    if (!sessionId) { sessionId = Math.random().toString(36).substr(2,9) + Date.now().toString(36); sessionStorage.setItem('sol_chat_session', sessionId); }
+    var isOpen = false, isLoading = false, leadData = {}, hasWelcomed = false;
+    var toggle = document.getElementById('sol-chat-toggle');
+    var win = document.getElementById('sol-chat-window');
+    var closeBtn = document.getElementById('sol-chat-close');
+    var msgs = document.getElementById('sol-chat-messages');
+    var typing = document.getElementById('sol-typing');
+    var inp = document.getElementById('sol-chat-input');
+    var sendBtn = document.getElementById('sol-send-btn');
+    var leadBtn = document.getElementById('sol-lead-btn');
+    var leadForm = document.getElementById('sol-chat-lead-form');
+    var leadSubmit = document.getElementById('sol-lead-submit');
+    var badge = document.getElementById('sol-chat-badge');
+    var tooltip = document.getElementById('sol-chat-tooltip');
+    setTimeout(function() { if (!isOpen) { tooltip.style.display='block'; badge.style.display='flex'; setTimeout(function(){tooltip.style.display='none';}, 5000); } }, 3000);
+    function openChat() { isOpen=true; win.style.display='flex'; badge.style.display='none'; tooltip.style.display='none'; inp.focus(); if (!hasWelcomed) { hasWelcomed=true; setTimeout(function() { addMsg('assistant','Ola! Eu sou o Assistente Tributario da Sol Contabil.
+
+Posso te ajudar a abrir empresa, pagar menos impostos ou tirar duvidas contabeis.
+
+Como posso te ajudar hoje?',[{label:'Abrir empresa',value:'Quero abrir uma empresa'},{label:'Trocar de contador',value:'Quero trocar de contador'},{label:'Pagar menos imposto',value:'Como posso pagar menos imposto?'},{label:'Tirar duvidas',value:'Tenho duvidas sobre contabilidade'}]); }, 400); } }
+    function closeChat() { isOpen=false; win.style.display='none'; }
+    toggle.addEventListener('click', function() { isOpen ? closeChat() : openChat(); });
+    closeBtn.addEventListener('click', closeChat);
+    leadBtn.addEventListener('click', function() { leadForm.style.display = leadForm.style.display==='block'?'none':'block'; });
+    function addMsg(role, content, buttons) {
+      var d=document.createElement('div'); d.className='sol-msg '+role;
+      var b=document.createElement('div'); b.className='sol-msg-bubble'; b.textContent=content; d.appendChild(b);
+      if (buttons && buttons.length) { var btns=document.createElement('div'); btns.className='sol-msg-buttons'; buttons.forEach(function(btn) { var el=document.createElement('button'); el.className='sol-msg-btn'; el.textContent=btn.label; el.addEventListener('click',function(){sendMsg(btn.value);}); btns.appendChild(el); }); d.appendChild(btns); }
+      msgs.insertBefore(d, typing); msgs.scrollTop=msgs.scrollHeight;
+    }
+    function showTyping() { typing.style.display='flex'; msgs.scrollTop=msgs.scrollHeight; }
+    function hideTyping() { typing.style.display='none'; }
+    async function sendMsg(text) {
+      var msg=text||inp.value.trim(); if (!msg||isLoading) return;
+      inp.value=''; isLoading=true; sendBtn.disabled=true;
+      addMsg('user', msg); showTyping();
+      try {
+        var res=await fetch(API_URL+'/api/trpc/chat.sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({json:{sessionId:sessionId,message:msg}})});
+        var data=await res.json(); hideTyping();
+        var reply=data.result&&data.result.data&&data.result.data.json&&data.result.data.json.reply||'Desculpe, tive um problema. Fale pelo WhatsApp: (19) 98200-3732';
+        var ld=data.result&&data.result.data&&data.result.data.json&&data.result.data.json.leadData;
+        if (ld) { Object.assign(leadData,ld); if (leadData.name||leadData.whatsapp) saveLead(); }
+        addMsg('assistant', reply);
+      } catch(e) { hideTyping(); addMsg('assistant','Desculpe, tive um problema tecnico. Fale pelo WhatsApp: (19) 98200-3732'); }
+      isLoading=false; sendBtn.disabled=false;
+    }
+    async function saveLead() {
+      try { await fetch(API_URL+'/api/trpc/leads.save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({json:Object.assign({sessionId:sessionId},leadData)})}); } catch(e) {}
+    }
+    leadSubmit.addEventListener('click', async function() {
+      var n=document.getElementById('sol-lead-name').value.trim(), w=document.getElementById('sol-lead-whatsapp').value.trim(), e=document.getElementById('sol-lead-email').value.trim();
+      if (!n&&!w) { alert('Preencha pelo menos o nome ou WhatsApp.'); return; }
+      Object.assign(leadData,{name:n,whatsapp:w,email:e}); await saveLead();
+      leadForm.style.display='none';
+      addMsg('assistant','Obrigado, '+(n||'')+'! Dados registrados com sucesso.
+
+Um contador da Sol Contabil vai entrar em contato em breve. Se preferir, fale agora pelo WhatsApp: (19) 98200-3732');
+    });
+    inp.addEventListener('keydown', function(e) { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendMsg(); } });
+    sendBtn.addEventListener('click', function() { sendMsg(); });
+  })();
+  </script>
+  <!-- FIM DO ASSISTENTE TRIBUTARIO - SOL CONTABIL -->
+
 </body>
 </html>
