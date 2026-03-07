@@ -310,7 +310,7 @@
         </button>
       </div>
 
-      <div id="abertura-result" class="hidden">
+      <div id="abertura-result" style="display:none">
         <div id="abertura-result-content"></div>
         <button onclick="resetSim('abertura')" class="sim-btn sim-btn-secondary mt-4">← Fazer nova simulação</button>
       </div>
@@ -385,7 +385,7 @@
         </button>
       </div>
 
-      <div id="mei_ltda-result" class="hidden">
+      <div id="mei_ltda-result" style="display:none">
         <div id="mei_ltda-result-content"></div>
         <button onclick="resetSim('mei_ltda')" class="sim-btn sim-btn-secondary mt-4">← Fazer nova simulação</button>
       </div>
@@ -458,7 +458,7 @@
         </button>
       </div>
 
-      <div id="regime-result" class="hidden">
+      <div id="regime-result" style="display:none">
         <div id="regime-result-content"></div>
         <button onclick="resetSim('regime')" class="sim-btn sim-btn-secondary mt-4">← Fazer nova simulação</button>
       </div>
@@ -536,7 +536,7 @@
         </button>
       </div>
 
-      <div id="honorarios-result" class="hidden">
+      <div id="honorarios-result" style="display:none">
         <div id="honorarios-result-content"></div>
         <button onclick="resetSim('honorarios')" class="sim-btn sim-btn-secondary mt-4">← Fazer nova simulação</button>
       </div>
@@ -587,8 +587,8 @@
   }
 
   function resetSim(type) {
-    document.getElementById(type + '-form').classList.remove('hidden');
-    document.getElementById(type + '-result').classList.add('hidden');
+    document.getElementById(type + '-form').style.display = 'block';
+    document.getElementById(type + '-result').style.display = 'none';
     // Destroy charts
     if (window['chart_' + type]) { window['chart_' + type].destroy(); window['chart_' + type] = null; }
   }
@@ -695,8 +695,8 @@
       '<p class="text-gray-400 text-xs mt-4">⚠️ Simulação estimada. Não substitui análise contábil profissional.</p>';
 
     document.getElementById('abertura-result-content').innerHTML = html;
-    document.getElementById('abertura-form').classList.add('hidden');
-    document.getElementById('abertura-result').classList.remove('hidden');
+    document.getElementById('abertura-form').style.display = 'none';
+    document.getElementById('abertura-result').style.display = 'block';
 
     saveSimulation('abertura',
       { activity: activityLabel, revenue: revenue, socios: socios, funcionarios: funcionarios },
@@ -799,8 +799,8 @@
       '<p class="text-gray-400 text-xs mt-4">⚠️ Simulação estimada. Não substitui análise contábil profissional.</p>';
 
     document.getElementById('mei_ltda-result-content').innerHTML = html;
-    document.getElementById('mei_ltda-form').classList.add('hidden');
-    document.getElementById('mei_ltda-result').classList.remove('hidden');
+    document.getElementById('mei_ltda-form').style.display = 'none';
+    document.getElementById('mei_ltda-result').style.display = 'block';
 
     setTimeout(function() {
       var ctx = document.getElementById('chart-mei-ltda');
@@ -957,8 +957,8 @@
       '<p class="text-gray-400 text-xs mt-4">⚠️ Simulação estimada com base nas tabelas 2026. Não considera deduções específicas, créditos de PIS/COFINS, ISS/ICMS ou benefícios fiscais. Não substitui análise contábil profissional.</p>';
 
     document.getElementById('regime-result-content').innerHTML = html;
-    document.getElementById('regime-form').classList.add('hidden');
-    document.getElementById('regime-result').classList.remove('hidden');
+    document.getElementById('regime-form').style.display = 'none';
+    document.getElementById('regime-result').style.display = 'block';
 
     setTimeout(function() {
       var ctx = document.getElementById('chart-regime');
@@ -1076,15 +1076,19 @@
       '</div></div>' +
 
       '<div class="cta-banner">' +
+      '<div style="background:rgba(255,193,7,0.15);border:1px solid rgba(255,193,7,0.4);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:inline-block;width:100%;box-sizing:border-box;">' +
+      '<p style="color:#fbbf24;font-weight:700;font-size:15px;margin:0 0 4px;">🎁 Oferta Especial — Novos Clientes</p>' +
+      '<p style="color:rgba(255,255,255,0.85);font-size:13px;margin:0;"><strong style="color:#fbbf24;">50% de desconto nos honorários</strong> durante os primeiros 3 meses para novos clientes que fecharem contrato em 2026. Aproveite!</p>' +
+      '</div>' +
       '<p class="text-white font-semibold mb-1">💼 Solicite uma proposta personalizada da Sol Contábil</p>' +
       '<p class="text-white/80 text-sm mb-4">Nossos honorários são transparentes e incluem tudo que sua empresa precisa. Sem surpresas.</p>' +
-      '<a href="https://wa.me/5519982003732?text=Olá!%20Fiz%20o%20simulador%20de%20honorários%20e%20gostaria%20de%20uma%20proposta%20personalizada%20da%20Sol%20Contábil." target="_blank" class="sim-btn sim-btn-whatsapp inline-flex items-center gap-2">Solicitar proposta personalizada</a>' +
+      '<a href="https://wa.me/5519982003732?text=Olá!%20Fiz%20o%20simulador%20de%20honorários%20e%20gostaria%20de%20uma%20proposta%20com%20o%20desconto%20especial%20da%20Sol%20Contábil!" target="_blank" class="sim-btn sim-btn-whatsapp inline-flex items-center gap-2">Solicitar proposta com desconto especial</a>' +
       '</div>' +
       '<p class="text-gray-400 text-xs mt-4">⚠️ Estimativa referencial baseada na Tabela ASSCON 2026. Valores finais são negociados diretamente com o escritório contábil.</p>';
 
     document.getElementById('honorarios-result-content').innerHTML = html;
-    document.getElementById('honorarios-form').classList.add('hidden');
-    document.getElementById('honorarios-result').classList.remove('hidden');
+    document.getElementById('honorarios-form').style.display = 'none';
+    document.getElementById('honorarios-result').style.display = 'block';
 
     setTimeout(function() {
       var ctx = document.getElementById('chart-honorarios');
