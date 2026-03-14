@@ -181,14 +181,23 @@ async function main() {
   // ============================================================
   // PROMPT PARA O CLAUDE
   // ============================================================
-  const prompt = `Você é um especialista em contabilidade e SEO. Crie um artigo de blog COMPLETO em português brasileiro sobre o tema: "${tema}"
+  const prompt = `Você é um contador especialista em SEO com profundo conhecimento da legislação brasileira atualizada em 2026. Crie um artigo de blog COMPLETO em português brasileiro sobre o tema: "${tema}"
 
 O artigo deve ser para o escritório de contabilidade "${CONFIG.empresa}" localizado em ${CONFIG.cidade}-SP.
 ${sugestaoLinks}
 
+REGRAS OBRIGATÓRIAS DE CONTEÚDO:
+- Use SEMPRE informações atualizadas de 2026
+- NUNCA mencione EIRELI (foi extinta em 2021) — use SLU (Sociedade Limitada Unipessoal) no lugar
+- Tipos de empresa válidos em 2026: MEI, ME, EPP, LTDA, SLU, SA, Empresário Individual
+- Simples Nacional 2026: limite de R$ 4,8 milhões/ano
+- MEI 2026: limite de R$ 81 mil/ano
+- Se mencionar ano, use sempre 2026
+- Legislação trabalhista, tributária e contábil deve ser a vigente em 2026
+
 ESTRUTURA OBRIGATÓRIA (retorne APENAS o JSON válido, sem markdown):
 {
-  "titulo": "Título otimizado com palavra-chave principal (máx 60 chars)",
+  "titulo": "Título otimizado com palavra-chave principal (máx 60 chars). Se mencionar ano, use 2026.",
   "metaDescription": "Meta description atraente com palavra-chave (máx 160 chars)",
   "heroSubtitle": "Subtítulo curto e impactante para o hero (máx 100 chars)",
   "keywords": "palavra1, palavra2, palavra3, palavra4, palavra5",
