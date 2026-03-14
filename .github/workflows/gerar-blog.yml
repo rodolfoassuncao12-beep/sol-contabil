@@ -1,0 +1,37 @@
+name: Gerar Post de Blog Diário
+
+on:
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+jobs:
+  gerar-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm install @anthropic-ai/sdk
+
+      - name: Gerar post com Claude
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/gerar-post.js
+
+      - name: Commit e push do novo post
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action - Blog Bot"
+          git add blog/ blog/index.html sitemap.xml
+          git diff --staged --quiet || git commit -m "feat: novo post de blog gerado automaticamente $(date +'%Y-%m-%d')"
+          git push
