@@ -1,0 +1,11 @@
+{
+  "name": "sol-contabil-blog-automation",
+  "version": "1.0.0",
+  "description": "Automação para geração de posts de blog com IA",
+  "scripts": {
+    "gerar-post": "node scripts/gerar-post.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0"
+  }
+}
