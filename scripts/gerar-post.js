@@ -146,7 +146,7 @@ async function main() {
   const dataFormatada = hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
   const dataISO = hoje.toISOString().split('T')[0];
 
-  // Escolhe tema sazonal se existir, senão rotaciona lista geral
+  // Escolhe tema sazonal se existir, senão rotaciona por minutos (evita repetição)
   let tema;
   const sazonais = TEMAS_SAZONAIS[mes];
   if (sazonais && sazonais.length > 0) {
@@ -156,8 +156,18 @@ async function main() {
     }
   }
   if (!tema) {
-    const diaDoAno = Math.floor((Date.now() - new Date(hoje.getFullYear(), 0, 0)) / 86400000);
-    tema = TEMAS[diaDoAno % TEMAS.length];
+    const minutos = Math.floor(Date.now() / 60000);
+    tema = TEMAS[minutos % TEMAS.length];
+  }
+
+  // Se o arquivo já existe, busca próximo tema disponível
+  const gerarSlug = t => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9s-]/g,'').trim().replace(/s+/g,'-').substring(0,60);
+  if (fs.existsSync('blog/' + gerarSlug(tema) + '.html')) {
+    const minutos = Math.floor(Date.now() / 60000);
+    for (let i = 1; i < TEMAS.length; i++) {
+      const t = TEMAS[(minutos + i) % TEMAS.length];
+      if (!fs.existsSync('blog/' + gerarSlug(t) + '.html')) { tema = t; break; }
+    }
   }
 
   console.log(`📝 Gerando post sobre: "${tema}"`);
