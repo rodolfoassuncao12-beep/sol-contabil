@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6CQ0PHLW5Y"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6CQ0PHLW5Y');</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simuladores Inteligentes | Sol Contábil – Limeira SP</title>
+  <meta name="description" content="Simule abertura de empresa, compare MEI vs LTDA, calcule regime tributário e estime honorários contábeis. Ferramentas gratuitas da Sol Contábil com dados de 2026." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'sol-dark': '#0A2540',
+            'sol-blue': '#00A6FB',
+            'sol-mid': '#1a3a5c',
+            'sol-light': '#e8f4fd',
+          },
+          fontFamily: { sans: ['Inter', 'Montserrat', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html { font-family: 'Inter', 'Montserrat', sans-serif; }
+    body { overflow-x: hidden; }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:2px; background:#00A6FB; transition:width 0.3s; }
+    .nav-link:hover::after { width:100%; }
+    #mobile-menu { transition: max-height 0.35s ease, opacity 0.35s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    #mobile-menu.open { max-height: 500px; opacity: 1; }
+    .whatsapp-float { position:fixed; bottom:28px; left:28px; z-index:9999; animation:float 3s ease-in-out infinite; }
+    .whatsapp-float a { display:flex; align-items:center; justify-content:center; width:60px; height:60px; background:#25D366; border-radius:50%; box-shadow:0 4px 20px rgba(37,211,102,0.45); transition:transform 0.2s; }
+    .whatsapp-float a:hover { transform:scale(1.12); }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @media (max-width:480px) { .whatsapp-float { left:16px!important; bottom:16px!important; } }
+
+    /* Simuladores */
+    .sim-tab { cursor:pointer; padding:14px 20px; border-radius:12px; transition:all 0.2s; border:2px solid transparent; text-align:center; }
+    .sim-tab.active { background:#0A2540; color:white; border-color:#00A6FB; box-shadow:0 4px 20px rgba(0,166,251,0.2); }
+    .sim-tab:not(.active) { background:white; color:#374151; border-color:#e5e7eb; }
+    .sim-tab:not(.active):hover { border-color:#00A6FB; color:#0A2540; }
+    .sim-panel { display:none; }
+    .sim-panel.active { display:block; }
+    .form-input { width:100%; padding:12px 16px; border:1.5px solid #d1d5db; border-radius:10px; font-size:15px; transition:border-color 0.2s, box-shadow 0.2s; background:white; color:#111827; }
+    .form-input:focus { outline:none; border-color:#00A6FB; box-shadow:0 0 0 3px rgba(0,166,251,0.15); }
+    .form-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:40px; }
+    .result-card { background:linear-gradient(135deg, #0A2540 0%, #1a3a5c 100%); border-radius:16px; padding:28px; color:white; }
+    .result-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+    .badge-green { background:rgba(34,197,94,0.2); color:#4ade80; border:1px solid rgba(34,197,94,0.3); }
+    .badge-yellow { background:rgba(234,179,8,0.2); color:#fbbf24; border:1px solid rgba(234,179,8,0.3); }
+    .badge-red { background:rgba(239,68,68,0.2); color:#f87171; border:1px solid rgba(239,68,68,0.3); }
+    .badge-blue { background:rgba(0,166,251,0.2); color:#00A6FB; border:1px solid rgba(0,166,251,0.3); }
+    .step-indicator { display:flex; align-items:center; gap:8px; margin-bottom:24px; }
+    .step-dot { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+    .step-dot.active { background:#00A6FB; color:white; }
+    .step-dot.done { background:#22c55e; color:white; }
+    .step-dot.pending { background:#e5e7eb; color:#9ca3af; }
+    .step-line { flex:1; height:2px; background:#e5e7eb; }
+    .step-line.done { background:#22c55e; }
+    .cta-banner { background:linear-gradient(135deg, #00A6FB 0%, #0A2540 100%); border-radius:16px; padding:28px 32px; }
+    .progress-bar { height:8px; border-radius:4px; background:#e5e7eb; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:4px; transition:width 0.5s ease; }
+    .disclaimer { background:#fef3c7; border:1px solid #fcd34d; border-radius:10px; padding:12px 16px; font-size:13px; color:#92400e; }
+    .sim-btn { padding:14px 28px; border-radius:10px; font-weight:600; font-size:15px; cursor:pointer; transition:all 0.2s; border:none; }
+    .sim-btn-primary { background:#00A6FB; color:white; box-shadow:0 4px 14px rgba(0,166,251,0.35); }
+    .sim-btn-primary:hover { background:#0090e0; transform:translateY(-1px); }
+    .sim-btn-secondary { background:#f3f4f6; color:#374151; }
+    .sim-btn-secondary:hover { background:#e5e7eb; }
+    .sim-btn-whatsapp { background:#25D366; color:white; box-shadow:0 4px 14px rgba(37,211,102,0.35); }
+    .sim-btn-whatsapp:hover { background:#1da851; }
+    .chart-container { position:relative; height:220px; }
+    .loading-spinner { display:inline-block; width:20px; height:20px; border:2px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+  </style>
+  <script src="calculos.js"></script>
+  <script src="simuladores.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+<!-- WhatsApp Float -->
+<div class="whatsapp-float">
+  <a href="https://wa.me/5519982003732?text=Olá,%20vim%20dos%20Simuladores%20da%20Sol%20Contábil%20e%20gostaria%20de%20uma%20análise%20personalizada!" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<!-- Header -->
+<header id="header" class="fixed top-0 left-0 right-0 z-50 bg-sol-dark/95 backdrop-blur-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-20">
+      <a href="/" class="flex items-center gap-3 flex-shrink-0">
+        <img src="/assets/logo-sol-contabil.png" alt="Logo Sol Contábil" class="h-10 lg:h-12 w-auto" />
+      </a>
+            <nav class="hidden lg:flex items-center gap-6">
+        <a href="/" class="text-white/80 hover:text-white text-sm font-medium transition-colors">Início</a>
+        <a href="/#servicos" class="text-white/80 hover:text-white text-sm font-medium transition-colors">Serviços</a>
+        <a href="/simuladores" class="text-white/80 hover:text-white text-sm font-medium transition-colors">Simuladores</a>
+        <a href="/blog" class="text-white/80 hover:text-white text-sm font-medium transition-colors">Blog</a>
+        <a href="/#contato" class="text-white/80 hover:text-white text-sm font-medium transition-colors">Contato</a>
+        <a href="/responsavel-tecnico" class="text-white/80 hover:text-white text-sm font-medium transition-colors">Contador Responsável</a>
+      <a href="/cotacao" class="px-5 py-2 bg-sol-blue hover:bg-blue-500 text-white font-semibold rounded-full transition-all text-sm">Cotação Gratuita</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="/#contato" class="hidden lg:inline-flex items-center px-5 py-2.5 bg-sol-blue hover:bg-blue-400 text-white text-sm font-semibold rounded-full transition-colors shadow-lg shadow-sol-blue/30">
+          Solicitar Orçamento
+        </a>
+        <button id="menu-btn" aria-label="Abrir menu" class="lg:hidden flex flex-col gap-1.5 p-2">
+          <span class="block w-6 h-0.5 bg-white transition-all" id="bar1"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all" id="bar2"></span>
+          <span class="block w-6 h-0.5 bg-white transition-all" id="bar3"></span>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="lg:hidden bg-sol-dark border-t border-white/10">
+      <nav class="flex flex-col py-4 gap-1">
+        <a href="/" class="px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Início</a>
+        <a href="/#servicos" class="px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Serviços</a>
+        <a href="/blog" class="px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Blog</a>
+        <a href="/simuladores" class="px-4 py-3 text-sol-blue hover:bg-white/10 rounded-lg transition-colors font-bold">Simuladores</a>
+        <a href="/contabilidade-estrategica" class="px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Consultoria</a>
+        <a href="/#contato" class="px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors font-medium">Contato</a>
+        <div class="px-4 pt-2">
+          <a href="/#contato" class="block text-center px-5 py-3 bg-sol-blue text-white font-semibold rounded-full">Cotação Gratuita</a>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="bg-sol-dark pt-28 pb-16 px-4">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 px-4 py-2 bg-sol-blue/20 border border-sol-blue/30 rounded-full text-sol-blue text-sm font-medium mb-6">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      Ferramentas Gratuitas · Dados 2026
+    </div>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+      Simuladores <span class="text-sol-blue">Inteligentes</span>
+    </h1>
+    <p class="text-white/70 text-lg max-w-2xl mx-auto mb-8">
+      Tome decisões mais inteligentes para o seu negócio. Simule abertura de empresa, compare regimes tributários e descubra quanto você pode economizar — tudo com dados atualizados para 2026.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4 text-sm text-white/60">
+      <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>100% gratuito</span>
+      <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Regras fiscais 2026</span>
+      <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Resultado imediato</span>
+      <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Sem cadastro obrigatório</span>
+    </div>
+  </div>
+</section>
+
+<!-- Tabs de Simuladores -->
+<section class="max-w-6xl mx-auto px-4 py-10">
+  <!-- Tab Buttons -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
+    <button class="sim-tab active" onclick="switchTab('abertura')" id="tab-abertura">
+      <div class="text-2xl mb-2">🏢</div>
+      <div class="font-bold text-sm">Abertura de Empresa</div>
+      <div class="text-xs opacity-70 mt-1">Qual tipo abrir?</div>
+    </button>
+    <button class="sim-tab" onclick="switchTab('mei_ltda')" id="tab-mei_ltda">
+      <div class="text-2xl mb-2">⚖️</div>
+      <div class="font-bold text-sm">MEI vs LTDA</div>
+      <div class="text-xs opacity-70 mt-1">Qual é melhor para mim?</div>
+    </button>
+    <button class="sim-tab" onclick="switchTab('regime')" id="tab-regime">
+      <div class="text-2xl mb-2">📊</div>
+      <div class="font-bold text-sm">Regime Tributário</div>
+      <div class="text-xs opacity-70 mt-1">Simples, Presumido ou Real?</div>
+    </button>
+    <button class="sim-tab" onclick="switchTab('honorarios')" id="tab-honorarios">
+      <div class="text-2xl mb-2">💼</div>
+      <div class="font-bold text-sm">Honorários Contábeis</div>
+      <div class="text-xs opacity-70 mt-1">Quanto custa um contador?</div>
+    </button>
+  </div>
+
+  <!-- ===== SIMULADOR 1: ABERTURA DE EMPRESA ===== -->
+  <div class="sim-panel active" id="panel-abertura">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-sol-blue/10 rounded-xl flex items-center justify-center text-2xl">🏢</div>
+        <div>
+          <h2 class="text-xl font-bold text-sol-dark">Simulador de Abertura de Empresa</h2>
+          <p class="text-gray-500 text-sm">Descubra qual tipo de empresa é ideal para você</p>
+        </div>
+      </div>
+
+      <div id="abertura-form">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Nome completo *</label>
+            <input type="text" id="ab-name" class="form-input" placeholder="Seu nome" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">WhatsApp *</label>
+            <input type="tel" id="ab-whatsapp" class="form-input" placeholder="(19) 99999-9999" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">E-mail</label>
+            <input type="email" id="ab-email" class="form-input" placeholder="seu@email.com" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Cidade</label>
+            <input type="text" id="ab-city" class="form-input" placeholder="Ex: Limeira, SP" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Atividade principal da empresa *</label>
+            <select id="ab-activity" class="form-input form-select">
+              <option value="">Selecione a atividade...</option>
+              <optgroup label="Comércio">
+                <option value="comercio_varejo">Comércio varejista (loja, mercado)</option>
+                <option value="comercio_atacado">Comércio atacadista</option>
+                <option value="ecommerce">E-commerce / Loja online</option>
+              </optgroup>
+              <optgroup label="Serviços">
+                <option value="servicos_gerais">Serviços gerais (limpeza, manutenção)</option>
+                <option value="servicos_ti">Tecnologia da Informação / TI</option>
+                <option value="consultoria">Consultoria / Assessoria</option>
+                <option value="saude">Saúde (médico, dentista, psicólogo)</option>
+                <option value="educacao">Educação / Cursos / Treinamentos</option>
+                <option value="beleza">Beleza / Estética / Salão</option>
+                <option value="alimentacao">Alimentação / Restaurante / Delivery</option>
+                <option value="transporte">Transporte / Logística</option>
+                <option value="construcao">Construção Civil / Reforma</option>
+                <option value="advocacia">Advocacia / Jurídico</option>
+                <option value="contabilidade">Contabilidade / Finanças</option>
+                <option value="marketing">Marketing / Publicidade</option>
+                <option value="outros_servicos">Outros serviços</option>
+              </optgroup>
+              <optgroup label="Indústria">
+                <option value="industria">Indústria / Fabricação</option>
+                <option value="artesanato">Artesanato / Produção manual</option>
+              </optgroup>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Faturamento anual estimado *</label>
+            <select id="ab-revenue" class="form-input form-select">
+              <option value="">Selecione...</option>
+              <option value="ate_81k">Até R$ 81.000/ano (MEI)</option>
+              <option value="81k_180k">R$ 81.001 a R$ 180.000/ano</option>
+              <option value="180k_360k">R$ 180.001 a R$ 360.000/ano</option>
+              <option value="360k_720k">R$ 360.001 a R$ 720.000/ano</option>
+              <option value="720k_1_8m">R$ 720.001 a R$ 1,8 milhão/ano</option>
+              <option value="acima_1_8m">Acima de R$ 1,8 milhão/ano</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Terá sócios?</label>
+            <select id="ab-socios" class="form-input form-select">
+              <option value="nao">Não, serei o único sócio</option>
+              <option value="sim">Sim, terei sócios</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Terá funcionários CLT?</label>
+            <select id="ab-funcionarios" class="form-input form-select">
+              <option value="nao">Não</option>
+              <option value="1">Sim, 1 funcionário</option>
+              <option value="2_5">Sim, 2 a 5 funcionários</option>
+              <option value="mais_5">Sim, mais de 5 funcionários</option>
+            </select>
+          </div>
+        </div>
+        <div class="disclaimer mb-6">
+          ⚠️ <strong>Simulação estimada.</strong> Os resultados são orientativos e não substituem a análise contábil profissional. Consulte um contador para decisões definitivas.
+        </div>
+        <button onclick="calcAbertura()" class="sim-btn sim-btn-primary w-full lg:w-auto">
+          Simular Abertura de Empresa →
+        </button>
+      </div>
+
+      <div id="abertura-result" style="display:none">
+        <div id="abertura-result-content"></div>
+        <button onclick="resetSim('abertura')" class="sim-btn sim-btn-secondary mt-4">← Fazer nova simulação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SIMULADOR 2: MEI vs LTDA ===== -->
+  <div class="sim-panel" id="panel-mei_ltda">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-sol-blue/10 rounded-xl flex items-center justify-center text-2xl">⚖️</div>
+        <div>
+          <h2 class="text-xl font-bold text-sol-dark">Simulador MEI vs LTDA</h2>
+          <p class="text-gray-500 text-sm">Descubra se você ainda pode ser MEI ou já precisa migrar</p>
+        </div>
+      </div>
+
+      <div id="mei_ltda-form">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Nome completo *</label>
+            <input type="text" id="ml-name" class="form-input" placeholder="Seu nome" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">WhatsApp *</label>
+            <input type="tel" id="ml-whatsapp" class="form-input" placeholder="(19) 99999-9999" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">E-mail</label>
+            <input type="email" id="ml-email" class="form-input" placeholder="seu@email.com" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Cidade</label>
+            <input type="text" id="ml-city" class="form-input" placeholder="Ex: Limeira, SP" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Faturamento anual atual (R$) *</label>
+            <input type="number" id="ml-revenue" class="form-input" placeholder="Ex: 72000" min="0" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Atividade *</label>
+            <select id="ml-activity" class="form-input form-select">
+              <option value="">Selecione...</option>
+              <option value="comercio">Comércio</option>
+              <option value="servicos">Prestação de Serviços</option>
+              <option value="industria">Indústria / Fabricação</option>
+              <option value="misto">Comércio + Serviços</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Número de clientes por mês</label>
+            <select id="ml-clientes" class="form-input form-select">
+              <option value="poucos">Poucos clientes (1 a 5)</option>
+              <option value="medio">Médio (6 a 20)</option>
+              <option value="muitos">Muitos (mais de 20)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Pretende contratar funcionários?</label>
+            <select id="ml-func" class="form-input form-select">
+              <option value="nao">Não</option>
+              <option value="sim_1">Sim, 1 funcionário (MEI permite)</option>
+              <option value="sim_mais">Sim, mais de 1 funcionário</option>
+            </select>
+          </div>
+        </div>
+        <div class="disclaimer mb-6">
+          ⚠️ <strong>Simulação estimada.</strong> Limite MEI 2026: R$ 81.000/ano. DAS MEI 2026: R$ 82,05 (comércio/indústria), R$ 86,05 (serviços), R$ 87,05 (misto). Valores baseados no salário mínimo 2026 (R$ 1.621,00).
+        </div>
+        <button onclick="calcMeiLtda()" class="sim-btn sim-btn-primary w-full lg:w-auto">
+          Comparar MEI vs LTDA →
+        </button>
+      </div>
+
+      <div id="mei_ltda-result" style="display:none">
+        <div id="mei_ltda-result-content"></div>
+        <button onclick="resetSim('mei_ltda')" class="sim-btn sim-btn-secondary mt-4">← Fazer nova simulação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SIMULADOR 3: REGIME TRIBUTÁRIO ===== -->
+  <div class="sim-panel" id="panel-regime">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-sol-blue/10 rounded-xl flex items-center justify-center text-2xl">📊</div>
+        <div>
+          <h2 class="text-xl font-bold text-sol-dark">Simulador de Regime Tributário</h2>
+          <p class="text-gray-500 text-sm">Compare Simples Nacional vs Lucro Presumido e veja qual paga menos imposto</p>
+        </div>
+      </div>
+
+      <div id="regime-form">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Nome completo *</label>
+            <input type="text" id="rg-name" class="form-input" placeholder="Seu nome" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">WhatsApp *</label>
+            <input type="tel" id="rg-whatsapp" class="form-input" placeholder="(19) 99999-9999" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">E-mail</label>
+            <input type="email" id="rg-email" class="form-input" placeholder="seu@email.com" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Cidade</label>
+            <input type="text" id="rg-city" class="form-input" placeholder="Ex: Limeira, SP" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Faturamento anual (R$) *</label>
+            <input type="number" id="rg-revenue" class="form-input" placeholder="Ex: 500000" min="0" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Atividade principal *</label>
+            <select id="rg-activity" class="form-input form-select">
+              <option value="">Selecione...</option>
+              <option value="comercio">Comércio (Anexo I)</option>
+              <option value="industria">Indústria (Anexo II)</option>
+              <option value="servicos_iii">Serviços – Anexo III (instalação, manutenção, academia, agência de viagens)</option>
+              <option value="servicos_iv">Serviços – Anexo IV (construção civil, vigilância, limpeza)</option>
+              <option value="servicos_v">Serviços – Anexo V (TI, publicidade, medicina, engenharia, advocacia)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Folha salarial mensal estimada (R$)</label>
+            <input type="number" id="rg-folha" class="form-input" placeholder="Ex: 5000 (0 se não tiver)" min="0" value="0" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Margem de lucro aproximada</label>
+            <select id="rg-margem" class="form-input form-select">
+              <option value="10">Até 10% (margem baixa)</option>
+              <option value="20" selected>10% a 20% (margem média)</option>
+              <option value="30">20% a 30% (margem boa)</option>
+              <option value="40">Acima de 30% (margem alta)</option>
+            </select>
+          </div>
+        </div>
+        <div class="disclaimer mb-6">
+          ⚠️ <strong>Simulação estimada.</strong> Tabelas Simples Nacional 2026 (LC 123/2006). Lucro Presumido: IRPJ 15% + adicional 10% s/ lucro acima R$ 60k/trim + CSLL 9% + PIS 0,65% + COFINS 3% + ISS/ICMS. Não considera deduções específicas.
+        </div>
+        <button onclick="calcRegime()" class="sim-btn sim-btn-primary w-full lg:w-auto">
+          Comparar Regimes Tributários →
+        </button>
+      </div>
+
+      <div id="regime-result" style="display:none">
+        <div id="regime-result-content"></div>
+        <button onclick="resetSim('regime')" class="sim-btn sim-btn-secondary mt-4">← Fazer nova simulação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SIMULADOR 4: HONORÁRIOS CONTÁBEIS ===== -->
+  <div class="sim-panel" id="panel-honorarios">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-sol-blue/10 rounded-xl flex items-center justify-center text-2xl">💼</div>
+        <div>
+          <h2 class="text-xl font-bold text-sol-dark">Simulador de Honorários Contábeis</h2>
+          <p class="text-gray-500 text-sm">Estime quanto você deve pagar por um serviço contábil de qualidade</p>
+        </div>
+      </div>
+
+      <div id="honorarios-form">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Nome completo *</label>
+            <input type="text" id="hon-name" class="form-input" placeholder="Seu nome" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">WhatsApp *</label>
+            <input type="tel" id="hon-whatsapp" class="form-input" placeholder="(19) 99999-9999" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">E-mail</label>
+            <input type="email" id="hon-email" class="form-input" placeholder="seu@email.com" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Cidade</label>
+            <input type="text" id="hon-city" class="form-input" placeholder="Ex: Limeira, SP" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Faturamento mensal (R$) *</label>
+            <input type="number" id="hon-revenue" class="form-input" placeholder="Ex: 30000" min="0" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Regime tributário *</label>
+            <select id="hon-regime" class="form-input form-select">
+              <option value="">Selecione...</option>
+              <option value="mei">MEI</option>
+              <option value="simples">Simples Nacional</option>
+              <option value="presumido">Lucro Presumido</option>
+              <option value="real">Lucro Real</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Notas fiscais por mês</label>
+            <select id="hon-notas" class="form-input form-select">
+              <option value="ate_10">Até 10 notas</option>
+              <option value="11_30">11 a 30 notas</option>
+              <option value="31_100">31 a 100 notas</option>
+              <option value="acima_100">Mais de 100 notas</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Funcionários registrados (CLT)</label>
+            <select id="hon-func" class="form-input form-select">
+              <option value="0">Nenhum</option>
+              <option value="1">1 funcionário</option>
+              <option value="2_5">2 a 5 funcionários</option>
+              <option value="6_10">6 a 10 funcionários</option>
+              <option value="mais_10">Mais de 10 funcionários</option>
+            </select>
+          </div>
+        </div>
+        <div class="disclaimer mb-6">
+          ⚠️ <strong>Estimativa referencial.</strong> Baseado na Tabela de Honorários ASSCON 2026 (Resolução 03/2026). Valores são referenciais — cada escritório define seus próprios honorários conforme complexidade, localização e serviços incluídos.
+        </div>
+        <button onclick="calcHonorarios()" class="sim-btn sim-btn-primary w-full lg:w-auto">
+          Estimar Honorários →
+        </button>
+      </div>
+
+      <div id="honorarios-result" style="display:none">
+        <div id="honorarios-result-content"></div>
+        <button onclick="resetSim('honorarios')" class="sim-btn sim-btn-secondary mt-4">← Fazer nova simulação</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="max-w-4xl mx-auto px-4 pb-16">
+  <div class="cta-banner text-white text-center">
+    <div class="text-4xl mb-4">🎯</div>
+    <h3 class="text-2xl font-bold mb-3">Receba um Diagnóstico Tributário Gratuito</h3>
+    <p class="text-white/80 mb-6 max-w-xl mx-auto">Nossa equipe analisa sua situação real e apresenta as melhores estratégias para reduzir impostos e regularizar sua empresa em Limeira/SP.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="https://wa.me/5519982003732?text=Olá!%20Fiz%20uma%20simulação%20no%20site%20e%20gostaria%20de%20um%20diagnóstico%20tributário%20gratuito." target="_blank" class="sim-btn sim-btn-whatsapp inline-flex items-center gap-2 justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar no WhatsApp
+      </a>
+      <a href="/#contato" class="sim-btn bg-white/20 text-white hover:bg-white/30 inline-flex items-center gap-2 justify-center">
+        Solicitar Diagnóstico
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-sol-dark text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <img src="/assets/logo-sol-contabil.png" alt="Logo Sol Contábil" class="h-12 w-auto" />
+      <div class="text-center md:text-right">
+        <p class="text-white/40 text-sm">© 2026 Sol Contábil LTDA · CRC/SP 1SP353033/O-5 · Limeira/SP</p>
+        <p class="text-white/30 text-xs mt-1">Simulações com caráter exclusivamente estimativo. Não substituem análise contábil profissional.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  var API_URL = 'https://solchatbot-8tvma4yi.manus.space';
+
+  // ===== TAB SWITCHING =====
+  function switchTab(tab) {
+    document.querySelectorAll('.sim-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.sim-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  function resetSim(type) {
+    document.getElementById(type + '-form').style.display = 'block';
+    document.getElementById(type + '-result').style.display = 'none';
+    // Destroy charts
+    if (window['chart_' + type]) { window['chart_' + type].destroy(); window['chart_' + type] = null; }
+  }
+
+  // ===== SAVE TO API =====
+  async function saveSimulation(type, inputData, resultData, leadData) {
+    try {
+      var payload = {
+        simulatorType: type,
+        name: leadData.name || null,
+        whatsapp: leadData.whatsapp || null,
+        email: leadData.email || null,
+        city: leadData.city || null,
+        activity: leadData.activity || null,
+        inputData: JSON.stringify(inputData),
+        resultData: JSON.stringify(resultData),
+        referrer: document.referrer || null,
+      };
+      await fetch(API_URL + '/api/trpc/simulations.save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ json: payload }),
+      });
+    } catch(e) { console.warn('Erro ao salvar simulação:', e); }
+  }
+
+  function fmt(n) { return 'R$ ' + Number(n).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+  function fmtPct(n) { return Number(n).toFixed(1) + '%'; }
+
+  // ===== SIMULADOR 1: ABERTURA =====
+  function calcAbertura() {
+    var name = document.getElementById('ab-name').value.trim();
+    var whatsapp = document.getElementById('ab-whatsapp').value.trim();
+    var email = document.getElementById('ab-email').value.trim();
+    var city = document.getElementById('ab-city').value.trim();
+    var activity = document.getElementById('ab-activity').value;
+    var revenue = document.getElementById('ab-revenue').value;
+    var socios = document.getElementById('ab-socios').value;
+    var funcionarios = document.getElementById('ab-funcionarios').value;
+
+    if (!name || !whatsapp || !activity || !revenue) {
+      alert('Por favor, preencha os campos obrigatórios (Nome, WhatsApp, Atividade e Faturamento).');
+      return;
+    }
+
+    // Lógica de recomendação
+    var tipo = '', regime = '', passos = [], riscos = [], vantagens = [];
+    var isMeiElegivel = revenue === 'ate_81k' && socios === 'nao' && funcionarios !== 'mais_5';
+    var activityLabel = document.getElementById('ab-activity').options[document.getElementById('ab-activity').selectedIndex].text;
+
+    // Atividades vedadas ao MEI
+    var meiVedado = ['advocacia', 'contabilidade', 'saude'].indexOf(activity) >= 0;
+
+    if (isMeiElegivel && !meiVedado) {
+      tipo = 'MEI – Microempreendedor Individual';
+      regime = 'SIMEI (regime especial MEI)';
+      vantagens = ['DAS único: R$ 82,05/mês (comércio) ou R$ 86,05/mês (serviços)', 'Sem contabilidade obrigatória (apenas DASN anual)', 'INSS incluso no DAS (5% do salário mínimo)', 'Emissão de nota fiscal', 'Acesso a crédito como PJ'];
+      riscos = ['Limite de R$ 81.000/ano — ultrapassar exige migração imediata', 'Apenas 1 funcionário permitido', 'Sem sócios permitidos', 'Algumas atividades são vedadas ao MEI'];
+      passos = ['Acesse o Portal do Empreendedor (gov.br/mei)', 'Cadastre-se com CPF e dados pessoais', 'Escolha a atividade (CNAE)', 'Receba o CNPJ em minutos', 'Abra conta PJ e emita notas fiscais'];
+    } else if (revenue === 'ate_81k' || revenue === '81k_180k' || revenue === '180k_360k') {
+      tipo = 'ME – Microempresa (LTDA Unipessoal ou LTDA)';
+      regime = 'Simples Nacional';
+      vantagens = ['Tributação simplificada (4% a 19,5% dependendo da atividade)', 'Pode ter sócios e múltiplos funcionários', 'Distribuição de lucros isenta de IR', 'Maior credibilidade com clientes e fornecedores', 'Acesso a licitações e contratos maiores'];
+      riscos = ['Contabilidade obrigatória', 'Custo mensal com contador', 'Obrigações acessórias (SPED, DEFIS, etc.)'];
+      passos = ['Escolher nome e verificar disponibilidade na Junta Comercial', 'Elaborar contrato social com contador', 'Registrar na Junta Comercial de SP', 'Obter CNPJ, Inscrição Estadual e Municipal', 'Abrir conta PJ e iniciar operações'];
+    } else {
+      tipo = 'EPP – Empresa de Pequeno Porte (LTDA ou SA)';
+      regime = revenue === 'acima_1_8m' ? 'Lucro Presumido ou Lucro Real' : 'Simples Nacional ou Lucro Presumido';
+      vantagens = ['Estrutura societária flexível', 'Pode ter múltiplos sócios e funcionários', 'Distribuição de lucros isenta de IR', 'Maior capacidade de crescimento'];
+      riscos = ['Contabilidade obrigatória e mais complexa', 'Custo maior com contador', 'Mais obrigações acessórias'];
+      passos = ['Definir estrutura societária com contador', 'Elaborar contrato/estatuto social', 'Registrar na Junta Comercial', 'Obter alvarás e licenças necessárias', 'Definir regime tributário com contador'];
+    }
+
+    if (meiVedado && revenue === 'ate_81k') {
+      tipo = 'ME – Microempresa (sua atividade é vedada ao MEI)';
+      regime = 'Simples Nacional';
+    }
+
+    var html = '<div class="result-card mb-6">' +
+      '<div class="flex items-start justify-between mb-4">' +
+      '<div><p class="text-white/60 text-sm mb-1">Tipo de empresa recomendado</p><h3 class="text-xl font-bold text-white">' + tipo + '</h3></div>' +
+      '<span class="result-badge badge-blue">' + regime + '</span>' +
+      '</div>' +
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">' +
+      '<div><p class="text-white/60 text-xs uppercase tracking-wide mb-2">✅ Vantagens</p>' +
+      vantagens.map(function(v) { return '<p class="text-white/90 text-sm mb-1">• ' + v + '</p>'; }).join('') +
+      '</div>' +
+      '<div><p class="text-white/60 text-xs uppercase tracking-wide mb-2">⚠️ Pontos de atenção</p>' +
+      riscos.map(function(r) { return '<p class="text-white/80 text-sm mb-1">• ' + r + '</p>'; }).join('') +
+      '</div></div></div>' +
+
+      '<div class="bg-white rounded-xl border border-gray-100 p-5 mb-5">' +
+      '<h4 class="font-bold text-sol-dark mb-3">📋 Passos para abertura</h4>' +
+      '<div class="space-y-2">' +
+      passos.map(function(p, i) { return '<div class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-sol-blue/10 text-sol-blue text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">' + (i+1) + '</span><p class="text-gray-700 text-sm">' + p + '</p></div>'; }).join('') +
+      '</div></div>' +
+
+      '<div class="cta-banner">' +
+      '<p class="text-white font-semibold mb-1">🎯 Quer abrir sua empresa com segurança?</p>' +
+      '<p class="text-white/80 text-sm mb-4">A Sol Contábil cuida de todo o processo de abertura em Limeira/SP. Fale com nosso time agora.</p>' +
+      '<div class="flex flex-col sm:flex-row gap-3">' +
+      '<a href="https://wa.me/5519982003732?text=Olá!%20Fiz%20o%20simulador%20de%20abertura%20de%20empresa%20e%20gostaria%20de%20abrir%20minha%20empresa%20com%20a%20Sol%20Contábil!" target="_blank" class="sim-btn sim-btn-whatsapp inline-flex items-center gap-2 justify-center">Quero abrir minha empresa com a Sol Contábil</a>' +
+      '</div></div>' +
+      '<p class="text-gray-400 text-xs mt-4">⚠️ Simulação estimada. Não substitui análise contábil profissional.</p>';
+
+    document.getElementById('abertura-result-content').innerHTML = html;
+    document.getElementById('abertura-form').style.display = 'none';
+    document.getElementById('abertura-result').style.display = 'block';
+
+    saveSimulation('abertura',
+      { activity: activityLabel, revenue: revenue, socios: socios, funcionarios: funcionarios },
+      { tipo: tipo, regime: regime },
+      { name: name, whatsapp: whatsapp, email: email, city: city, activity: activityLabel }
+    );
+  }
+
+  // ===== SIMULADOR 2: MEI vs LTDA =====
+  function calcMeiLtda() {
+    var name = document.getElementById('ml-name').value.trim();
+    var whatsapp = document.getElementById('ml-whatsapp').value.trim();
+    var email = document.getElementById('ml-email').value.trim();
+    var city = document.getElementById('ml-city').value.trim();
+    var revenue = parseFloat(document.getElementById('ml-revenue').value) || 0;
+    var activity = document.getElementById('ml-activity').value;
+    var clientes = document.getElementById('ml-clientes').value;
+    var func = document.getElementById('ml-func').value;
+
+    if (!name || !whatsapp || !activity || revenue <= 0) {
+      alert('Por favor, preencha os campos obrigatórios (Nome, WhatsApp, Atividade e Faturamento).');
+      return;
+    }
+
+    var MEI_LIMIT = 81000;
+    var pctUsado = Math.min((revenue / MEI_LIMIT) * 100, 150);
+    var actLabel = document.getElementById('ml-activity').options[document.getElementById('ml-activity').selectedIndex].text;
+
+    // Custo MEI
+    var dasMei = activity === 'comercio' ? 82.05 : activity === 'servicos' ? 86.05 : activity === 'industria' ? 82.05 : 87.05;
+    var custoMeiAnual = dasMei * 12;
+
+    // Custo LTDA Simples Nacional (estimativa)
+    var aliquotaSimples = 0;
+    if (activity === 'comercio') {
+      if (revenue <= 180000) aliquotaSimples = 0.04;
+      else if (revenue <= 360000) aliquotaSimples = 0.073;
+      else if (revenue <= 720000) aliquotaSimples = 0.095;
+      else aliquotaSimples = 0.107;
+    } else if (activity === 'servicos') {
+      if (revenue <= 180000) aliquotaSimples = 0.06;
+      else if (revenue <= 360000) aliquotaSimples = 0.112;
+      else if (revenue <= 720000) aliquotaSimples = 0.135;
+      else aliquotaSimples = 0.16;
+    } else {
+      if (revenue <= 180000) aliquotaSimples = 0.045;
+      else if (revenue <= 360000) aliquotaSimples = 0.078;
+      else aliquotaSimples = 0.10;
+    }
+    var impostoLtdaAnual = revenue * aliquotaSimples;
+    var honorariosContador = revenue <= 180000 ? 4800 : revenue <= 360000 ? 6000 : 8400; // estimativa anual
+    var custoLtdaAnual = impostoLtdaAnual + honorariosContador;
+
+    var podeSerMei = revenue <= MEI_LIMIT && func !== 'sim_mais';
+    var risco = pctUsado >= 80 ? 'alto' : pctUsado >= 60 ? 'medio' : 'baixo';
+
+    var html = '<div class="result-card mb-6">' +
+      '<div class="flex items-start justify-between mb-4">' +
+      '<div><p class="text-white/60 text-sm mb-1">Faturamento anual informado</p><h3 class="text-2xl font-bold text-white">' + fmt(revenue) + '</h3></div>' +
+      '<span class="result-badge ' + (podeSerMei ? 'badge-green' : 'badge-red') + '">' + (podeSerMei ? '✅ Pode ser MEI' : '❌ Precisa migrar') + '</span>' +
+      '</div>' +
+
+      '<p class="text-white/70 text-sm mb-2">Uso do limite MEI 2026 (R$ 81.000/ano)</p>' +
+      '<div class="progress-bar mb-1"><div class="progress-fill ' + (pctUsado >= 100 ? 'bg-red-400' : pctUsado >= 80 ? 'bg-yellow-400' : 'bg-green-400') + '" style="width:' + Math.min(pctUsado, 100) + '%"></div></div>' +
+      '<p class="text-white/60 text-xs mb-4">' + fmtPct(pctUsado) + ' do limite utilizado</p>' +
+
+      '<div class="grid grid-cols-2 gap-4">' +
+      '<div class="bg-white/10 rounded-xl p-4">' +
+      '<p class="text-white/60 text-xs mb-1">Custo anual como MEI</p>' +
+      '<p class="text-xl font-bold text-white">' + fmt(custoMeiAnual) + '</p>' +
+      '<p class="text-white/50 text-xs">DAS: ' + fmt(dasMei) + '/mês</p>' +
+      '</div>' +
+      '<div class="bg-white/10 rounded-xl p-4">' +
+      '<p class="text-white/60 text-xs mb-1">Custo anual como LTDA</p>' +
+      '<p class="text-xl font-bold text-white">' + fmt(custoLtdaAnual) + '</p>' +
+      '<p class="text-white/50 text-xs">Impostos + contador estimado</p>' +
+      '</div></div></div>' +
+
+      '<div class="bg-white rounded-xl border border-gray-100 p-5 mb-5">' +
+      '<h4 class="font-bold text-sol-dark mb-4">📊 Comparativo MEI vs LTDA</h4>' +
+      '<canvas id="chart-mei-ltda" height="200"></canvas></div>' +
+
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">' +
+      '<div class="bg-green-50 border border-green-200 rounded-xl p-4">' +
+      '<h5 class="font-bold text-green-800 mb-2">✅ MEI – Vantagens</h5>' +
+      '<ul class="text-green-700 text-sm space-y-1"><li>• DAS fixo: ' + fmt(dasMei) + '/mês</li><li>• Sem contabilidade obrigatória</li><li>• INSS incluso no DAS</li><li>• Abertura gratuita e online</li></ul>' +
+      '</div>' +
+      '<div class="bg-blue-50 border border-blue-200 rounded-xl p-4">' +
+      '<h5 class="font-bold text-blue-800 mb-2">🏢 LTDA – Vantagens</h5>' +
+      '<ul class="text-blue-700 text-sm space-y-1"><li>• Sem limite de faturamento</li><li>• Múltiplos sócios e funcionários</li><li>• Maior credibilidade</li><li>• Distribuição de lucros isenta</li></ul>' +
+      '</div></div>' +
+
+      (revenue > MEI_LIMIT * 0.8 ? '<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-5"><p class="text-yellow-800 font-semibold">⚠️ Atenção: Risco de ultrapassar o limite MEI!</p><p class="text-yellow-700 text-sm mt-1">Com ' + fmtPct(pctUsado) + ' do limite utilizado, você está próximo de ultrapassar R$ 81.000/ano. Ultrapassar o limite em até 20% permite permanecer MEI no ano seguinte, mas acima disso a exclusão é retroativa ao início do ano.</p></div>' : '') +
+
+      '<div class="cta-banner">' +
+      '<p class="text-white font-semibold mb-1">🎯 Precisa migrar do MEI para LTDA?</p>' +
+      '<p class="text-white/80 text-sm mb-4">A Sol Contábil faz todo o processo de migração com segurança e sem dor de cabeça.</p>' +
+      '<a href="https://wa.me/5519982003732?text=Olá!%20Fiz%20o%20simulador%20MEI%20vs%20LTDA%20e%20preciso%20de%20orientação%20sobre%20minha%20situação." target="_blank" class="sim-btn sim-btn-whatsapp inline-flex items-center gap-2">Falar com especialista</a>' +
+      '</div>' +
+      '<p class="text-gray-400 text-xs mt-4">⚠️ Simulação estimada. Não substitui análise contábil profissional.</p>';
+
+    document.getElementById('mei_ltda-result-content').innerHTML = html;
+    document.getElementById('mei_ltda-form').style.display = 'none';
+    document.getElementById('mei_ltda-result').style.display = 'block';
+
+    setTimeout(function() {
+      var ctx = document.getElementById('chart-mei-ltda');
+      if (ctx) {
+        window.chart_mei_ltda = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['MEI (impostos)', 'LTDA (impostos + contador)'],
+            datasets: [{
+              label: 'Custo anual estimado',
+              data: [custoMeiAnual, custoLtdaAnual],
+              backgroundColor: ['rgba(34,197,94,0.7)', 'rgba(0,166,251,0.7)'],
+              borderColor: ['#22c55e', '#00A6FB'],
+              borderWidth: 2,
+              borderRadius: 8,
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { ticks: { callback: function(v) { return 'R$ ' + v.toLocaleString('pt-BR'); } } }
+            }
+          }
+        });
+      }
+    }, 100);
+
+    saveSimulation('mei_ltda',
+      { revenue: revenue, activity: actLabel, clientes: clientes, funcionarios: func },
+      { podeSerMei: podeSerMei, custoMeiAnual: custoMeiAnual, custoLtdaAnual: custoLtdaAnual, pctLimite: pctUsado },
+      { name: name, whatsapp: whatsapp, email: email, city: city, activity: actLabel }
+    );
+  }
+
+  // ===== SIMULADOR 3: REGIME TRIBUTÁRIO =====
+  function calcRegime() {
+    var name = document.getElementById('rg-name').value.trim();
+    var whatsapp = document.getElementById('rg-whatsapp').value.trim();
+    var email = document.getElementById('rg-email').value.trim();
+    var city = document.getElementById('rg-city').value.trim();
+    var revenue = parseFloat(document.getElementById('rg-revenue').value) || 0;
+    var activity = document.getElementById('rg-activity').value;
+    var folha = parseFloat(document.getElementById('rg-folha').value) || 0;
+    var margem = parseFloat(document.getElementById('rg-margem').value) || 20;
+
+    if (!name || !whatsapp || !activity || revenue <= 0) {
+      alert('Por favor, preencha os campos obrigatórios (Nome, WhatsApp, Atividade e Faturamento).');
+      return;
+    }
+
+    var actLabel = document.getElementById('rg-activity').options[document.getElementById('rg-activity').selectedIndex].text;
+
+    // Simples Nacional 2026 – tabelas por anexo
+    var simplesAliq = 0, simplesDeducao = 0;
+    if (activity === 'comercio') { // Anexo I
+      if (revenue <= 180000) { simplesAliq = 0.04; simplesDeducao = 0; }
+      else if (revenue <= 360000) { simplesAliq = 0.073; simplesDeducao = 5940; }
+      else if (revenue <= 720000) { simplesAliq = 0.095; simplesDeducao = 13860; }
+      else if (revenue <= 1800000) { simplesAliq = 0.107; simplesDeducao = 22500; }
+      else if (revenue <= 3600000) { simplesAliq = 0.143; simplesDeducao = 87300; }
+      else { simplesAliq = 0.19; simplesDeducao = 378000; }
+    } else if (activity === 'industria') { // Anexo II
+      if (revenue <= 180000) { simplesAliq = 0.045; simplesDeducao = 0; }
+      else if (revenue <= 360000) { simplesAliq = 0.078; simplesDeducao = 5940; }
+      else if (revenue <= 720000) { simplesAliq = 0.10; simplesDeducao = 13860; }
+      else if (revenue <= 1800000) { simplesAliq = 0.112; simplesDeducao = 22500; }
+      else if (revenue <= 3600000) { simplesAliq = 0.147; simplesDeducao = 85500; }
+      else { simplesAliq = 0.30; simplesDeducao = 720000; }
+    } else if (activity === 'servicos_iii') { // Anexo III
+      if (revenue <= 180000) { simplesAliq = 0.06; simplesDeducao = 0; }
+      else if (revenue <= 360000) { simplesAliq = 0.112; simplesDeducao = 9360; }
+      else if (revenue <= 720000) { simplesAliq = 0.135; simplesDeducao = 17640; }
+      else if (revenue <= 1800000) { simplesAliq = 0.16; simplesDeducao = 35640; }
+      else if (revenue <= 3600000) { simplesAliq = 0.21; simplesDeducao = 125640; }
+      else { simplesAliq = 0.33; simplesDeducao = 648000; }
+    } else if (activity === 'servicos_iv') { // Anexo IV
+      if (revenue <= 180000) { simplesAliq = 0.045; simplesDeducao = 0; }
+      else if (revenue <= 360000) { simplesAliq = 0.09; simplesDeducao = 8100; }
+      else if (revenue <= 720000) { simplesAliq = 0.102; simplesDeducao = 12420; }
+      else if (revenue <= 1800000) { simplesAliq = 0.14; simplesDeducao = 39780; }
+      else if (revenue <= 3600000) { simplesAliq = 0.22; simplesDeducao = 183780; }
+      else { simplesAliq = 0.33; simplesDeducao = 828000; }
+    } else { // Anexo V (serviços_v)
+      if (revenue <= 180000) { simplesAliq = 0.155; simplesDeducao = 0; }
+      else if (revenue <= 360000) { simplesAliq = 0.18; simplesDeducao = 4500; }
+      else if (revenue <= 720000) { simplesAliq = 0.195; simplesDeducao = 9900; }
+      else if (revenue <= 1800000) { simplesAliq = 0.205; simplesDeducao = 17100; }
+      else if (revenue <= 3600000) { simplesAliq = 0.23; simplesDeducao = 62100; }
+      else { simplesAliq = 0.305; simplesDeducao = 540000; }
+    }
+
+    // Alíquota efetiva Simples Nacional
+    var simplesEfetivo = revenue > 0 ? (revenue * simplesAliq - simplesDeducao) / revenue : simplesAliq;
+    var impostoSimples = revenue * simplesEfetivo;
+
+    // Lucro Presumido 2026
+    // Percentuais de presunção por atividade (com ajuste LC 224/2025 para 2026)
+    var presuncaoIRPJ = 0, presuncaoCSLL = 0;
+    if (activity === 'comercio') { presuncaoIRPJ = 0.08; presuncaoCSLL = 0.12; }
+    else if (activity === 'industria') { presuncaoIRPJ = 0.08; presuncaoCSLL = 0.12; }
+    else if (activity === 'servicos_iii') { presuncaoIRPJ = 0.16; presuncaoCSLL = 0.12; }
+    else if (activity === 'servicos_iv') { presuncaoIRPJ = 0.32; presuncaoCSLL = 0.32; }
+    else { presuncaoIRPJ = 0.32; presuncaoCSLL = 0.32; } // serviços_v
+
+    var lucroPresumidoIRPJ = revenue * presuncaoIRPJ;
+    var lucroPresumidoCSLL = revenue * presuncaoCSLL;
+
+    var irpj = lucroPresumidoIRPJ * 0.15;
+    var adicionalIRPJ = Math.max(0, (lucroPresumidoIRPJ - 240000) * 0.10); // R$ 60k/trim = R$ 240k/ano
+    var csll = lucroPresumidoCSLL * 0.09;
+    var pis = revenue * 0.0065;
+    var cofins = revenue * 0.03;
+    var impostoPresumido = irpj + adicionalIRPJ + csll + pis + cofins;
+
+    var economia = impostoPresumido - impostoSimples;
+    var melhorRegime = economia > 0 ? 'Simples Nacional' : 'Lucro Presumido';
+
+    var html = '<div class="result-card mb-6">' +
+      '<div class="flex items-start justify-between mb-4">' +
+      '<div><p class="text-white/60 text-sm mb-1">Regime recomendado</p><h3 class="text-xl font-bold text-white">' + melhorRegime + '</h3></div>' +
+      '<span class="result-badge badge-green">Economia de ' + fmt(Math.abs(economia)) + '/ano</span>' +
+      '</div>' +
+      '<div class="grid grid-cols-2 gap-4">' +
+      '<div class="bg-white/10 rounded-xl p-4">' +
+      '<p class="text-white/60 text-xs mb-1">Simples Nacional</p>' +
+      '<p class="text-2xl font-bold ' + (melhorRegime === 'Simples Nacional' ? 'text-green-400' : 'text-white') + '">' + fmt(impostoSimples) + '/ano</p>' +
+      '<p class="text-white/50 text-xs">Alíquota efetiva: ' + fmtPct(simplesEfetivo * 100) + '</p>' +
+      '</div>' +
+      '<div class="bg-white/10 rounded-xl p-4">' +
+      '<p class="text-white/60 text-xs mb-1">Lucro Presumido</p>' +
+      '<p class="text-2xl font-bold ' + (melhorRegime === 'Lucro Presumido' ? 'text-green-400' : 'text-white') + '">' + fmt(impostoPresumido) + '/ano</p>' +
+      '<p class="text-white/50 text-xs">IRPJ + CSLL + PIS + COFINS</p>' +
+      '</div></div></div>' +
+
+      '<div class="bg-white rounded-xl border border-gray-100 p-5 mb-5">' +
+      '<h4 class="font-bold text-sol-dark mb-4">📊 Comparativo de Impostos Anuais</h4>' +
+      '<canvas id="chart-regime" height="220"></canvas></div>' +
+
+      '<div class="bg-white rounded-xl border border-gray-100 p-5 mb-5">' +
+      '<h4 class="font-bold text-sol-dark mb-3">🔍 Detalhamento – Lucro Presumido</h4>' +
+      '<div class="grid grid-cols-2 md:grid-cols-4 gap-3">' +
+      '<div class="bg-gray-50 rounded-lg p-3 text-center"><p class="text-xs text-gray-500 mb-1">IRPJ</p><p class="font-bold text-gray-800">' + fmt(irpj + adicionalIRPJ) + '</p></div>' +
+      '<div class="bg-gray-50 rounded-lg p-3 text-center"><p class="text-xs text-gray-500 mb-1">CSLL</p><p class="font-bold text-gray-800">' + fmt(csll) + '</p></div>' +
+      '<div class="bg-gray-50 rounded-lg p-3 text-center"><p class="text-xs text-gray-500 mb-1">PIS</p><p class="font-bold text-gray-800">' + fmt(pis) + '</p></div>' +
+      '<div class="bg-gray-50 rounded-lg p-3 text-center"><p class="text-xs text-gray-500 mb-1">COFINS</p><p class="font-bold text-gray-800">' + fmt(cofins) + '</p></div>' +
+      '</div></div>' +
+
+      '<div class="cta-banner">' +
+      '<p class="text-white font-semibold mb-1">🎯 Quer uma análise tributária completa?</p>' +
+      '<p class="text-white/80 text-sm mb-4">Nossos especialistas analisam sua situação real e identificam oportunidades de economia que a simulação não captura.</p>' +
+      '<a href="https://wa.me/5519982003732?text=Olá!%20Fiz%20o%20simulador%20de%20regime%20tributário%20e%20gostaria%20de%20uma%20análise%20completa." target="_blank" class="sim-btn sim-btn-whatsapp inline-flex items-center gap-2">Receber diagnóstico gratuito</a>' +
+      '</div>' +
+      '<p class="text-gray-400 text-xs mt-4">⚠️ Simulação estimada com base nas tabelas 2026. Não considera deduções específicas, créditos de PIS/COFINS, ISS/ICMS ou benefícios fiscais. Não substitui análise contábil profissional.</p>';
+
+    document.getElementById('regime-result-content').innerHTML = html;
+    document.getElementById('regime-form').style.display = 'none';
+    document.getElementById('regime-result').style.display = 'block';
+
+    setTimeout(function() {
+      var ctx = document.getElementById('chart-regime');
+      if (ctx) {
+        window.chart_regime = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Simples Nacional', 'Lucro Presumido'],
+            datasets: [{
+              label: 'Imposto anual estimado',
+              data: [impostoSimples, impostoPresumido],
+              backgroundColor: [
+                melhorRegime === 'Simples Nacional' ? 'rgba(34,197,94,0.7)' : 'rgba(0,166,251,0.5)',
+                melhorRegime === 'Lucro Presumido' ? 'rgba(34,197,94,0.7)' : 'rgba(0,166,251,0.5)',
+              ],
+              borderColor: [melhorRegime === 'Simples Nacional' ? '#22c55e' : '#00A6FB', melhorRegime === 'Lucro Presumido' ? '#22c55e' : '#00A6FB'],
+              borderWidth: 2, borderRadius: 8,
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { ticks: { callback: function(v) { return 'R$ ' + v.toLocaleString('pt-BR'); } } } }
+          }
+        });
+      }
+    }, 100);
+
+    saveSimulation('regime',
+      { revenue: revenue, activity: actLabel, folha: folha, margem: margem },
+      { melhorRegime: melhorRegime, impostoSimples: impostoSimples, impostoPresumido: impostoPresumido, economia: Math.abs(economia) },
+      { name: name, whatsapp: whatsapp, email: email, city: city, activity: actLabel }
+    );
+  }
+
+  // ===== SIMULADOR 4: HONORÁRIOS =====
+  function calcHonorarios() {
+    var name = document.getElementById('hon-name').value.trim();
+    var whatsapp = document.getElementById('hon-whatsapp').value.trim();
+    var email = document.getElementById('hon-email').value.trim();
+    var city = document.getElementById('hon-city').value.trim();
+    var revenue = parseFloat(document.getElementById('hon-revenue').value) || 0;
+    var regime = document.getElementById('hon-regime').value;
+    var notas = document.getElementById('hon-notas').value;
+    var func = document.getElementById('hon-func').value;
+
+    if (!name || !whatsapp || !regime || revenue <= 0) {
+      alert('Por favor, preencha os campos obrigatórios (Nome, WhatsApp, Regime e Faturamento).');
+      return;
+    }
+
+    var regimeLabel = document.getElementById('hon-regime').options[document.getElementById('hon-regime').selectedIndex].text;
+
+    // Base por regime (mensal)
+    var base = 0;
+    if (regime === 'mei') base = 120;
+    else if (regime === 'simples') {
+      if (revenue <= 10000) base = 280;
+      else if (revenue <= 30000) base = 420;
+      else if (revenue <= 60000) base = 620;
+      else if (revenue <= 100000) base = 850;
+      else base = 1200;
+    } else if (regime === 'presumido') {
+      if (revenue <= 30000) base = 550;
+      else if (revenue <= 60000) base = 780;
+      else if (revenue <= 100000) base = 1100;
+      else base = 1600;
+    } else { // lucro real
+      if (revenue <= 100000) base = 1500;
+      else base = 2500;
+    }
+
+    // Adicional por notas fiscais
+    var adicNotas = 0;
+    if (notas === '11_30') adicNotas = 80;
+    else if (notas === '31_100') adicNotas = 180;
+    else if (notas === 'acima_100') adicNotas = 350;
+
+    // Adicional por funcionários
+    var adicFunc = 0;
+    if (func === '1') adicFunc = 80;
+    else if (func === '2_5') adicFunc = 200;
+    else if (func === '6_10') adicFunc = 400;
+    else if (func === 'mais_10') adicFunc = 700;
+
+    var totalMensal = base + adicNotas + adicFunc;
+    var minMensal = Math.round(totalMensal * 0.85);
+    var maxMensal = Math.round(totalMensal * 1.25);
+    var totalAnual = totalMensal * 12;
+
+    var html = '<div class="result-card mb-6">' +
+      '<div class="mb-4"><p class="text-white/60 text-sm mb-1">Estimativa de honorários mensais</p>' +
+      '<div class="flex items-end gap-3">' +
+      '<h3 class="text-3xl font-bold text-white">' + fmt(totalMensal) + '</h3>' +
+      '<p class="text-white/60 text-sm mb-1">/mês</p></div>' +
+      '<p class="text-white/50 text-sm">Faixa estimada: ' + fmt(minMensal) + ' a ' + fmt(maxMensal) + '/mês</p></div>' +
+      '<div class="grid grid-cols-3 gap-3">' +
+      '<div class="bg-white/10 rounded-xl p-3 text-center"><p class="text-white/60 text-xs mb-1">Base</p><p class="font-bold text-white">' + fmt(base) + '</p></div>' +
+      '<div class="bg-white/10 rounded-xl p-3 text-center"><p class="text-white/60 text-xs mb-1">Notas Fiscais</p><p class="font-bold text-white">+' + fmt(adicNotas) + '</p></div>' +
+      '<div class="bg-white/10 rounded-xl p-3 text-center"><p class="text-white/60 text-xs mb-1">Folha de Pag.</p><p class="font-bold text-white">+' + fmt(adicFunc) + '</p></div>' +
+      '</div></div>' +
+
+      '<div class="bg-white rounded-xl border border-gray-100 p-5 mb-5">' +
+      '<h4 class="font-bold text-sol-dark mb-4">📊 Composição dos Honorários</h4>' +
+      '<canvas id="chart-honorarios" height="200"></canvas></div>' +
+
+      '<div class="bg-white rounded-xl border border-gray-100 p-5 mb-5">' +
+      '<h4 class="font-bold text-sol-dark mb-3">✅ O que está incluído nos honorários</h4>' +
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-2">' +
+      ['Escrituração contábil mensal', 'Apuração de impostos', 'Entrega de obrigações acessórias', 'Emissão de guias de pagamento',
+       regime !== 'mei' ? 'Folha de pagamento (até ' + func + ' func.)' : 'Declaração Anual MEI (DASN)',
+       'Atendimento e consultoria', 'Certificado Digital (alguns escritórios)', 'Suporte por WhatsApp'].map(function(item) {
+        return '<div class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><p class="text-gray-700 text-sm">' + item + '</p></div>';
+      }).join('') +
+      '</div></div>' +
+
+      '<div class="cta-banner">' +
+      '<div style="background:rgba(255,193,7,0.15);border:1px solid rgba(255,193,7,0.4);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:inline-block;width:100%;box-sizing:border-box;">' +
+      '<p style="color:#fbbf24;font-weight:700;font-size:15px;margin:0 0 4px;">🎁 Oferta Especial — Novos Clientes</p>' +
+      '<p style="color:rgba(255,255,255,0.85);font-size:13px;margin:0;"><strong style="color:#fbbf24;">50% de desconto nos honorários</strong> durante os primeiros 3 meses para novos clientes que fecharem contrato em 2026. Aproveite!</p>' +
+      '</div>' +
+      '<p class="text-white font-semibold mb-1">💼 Solicite uma proposta personalizada da Sol Contábil</p>' +
+      '<p class="text-white/80 text-sm mb-4">Nossos honorários são transparentes e incluem tudo que sua empresa precisa. Sem surpresas.</p>' +
+      '<a href="https://wa.me/5519982003732?text=Olá!%20Fiz%20o%20simulador%20de%20honorários%20e%20gostaria%20de%20uma%20proposta%20com%20o%20desconto%20especial%20da%20Sol%20Contábil!" target="_blank" class="sim-btn sim-btn-whatsapp inline-flex items-center gap-2">Solicitar proposta com desconto especial</a>' +
+      '</div>' +
+      '<p class="text-gray-400 text-xs mt-4">⚠️ Estimativa referencial baseada na Tabela ASSCON 2026. Valores finais são negociados diretamente com o escritório contábil.</p>';
+
+    document.getElementById('honorarios-result-content').innerHTML = html;
+    document.getElementById('honorarios-form').style.display = 'none';
+    document.getElementById('honorarios-result').style.display = 'block';
+
+    setTimeout(function() {
+      var ctx = document.getElementById('chart-honorarios');
+      if (ctx && (base > 0 || adicNotas > 0 || adicFunc > 0)) {
+        var labels = ['Base (' + regimeLabel + ')'];
+        var data = [base];
+        if (adicNotas > 0) { labels.push('Notas Fiscais'); data.push(adicNotas); }
+        if (adicFunc > 0) { labels.push('Folha de Pagamento'); data.push(adicFunc); }
+        window.chart_honorarios = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [{ data: data, backgroundColor: ['rgba(0,166,251,0.8)', 'rgba(34,197,94,0.8)', 'rgba(251,191,36,0.8)'], borderWidth: 0 }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        });
+      }
+    }, 100);
+
+    saveSimulation('honorarios',
+      { revenue: revenue, regime: regimeLabel, notas: notas, funcionarios: func },
+      { totalMensal: totalMensal, minMensal: minMensal, maxMensal: maxMensal, totalAnual: totalAnual },
+      { name: name, whatsapp: whatsapp, email: email, city: city, activity: regimeLabel }
+    );
+  }
+
+  // ===== MOBILE MENU =====
+  document.getElementById('menu-btn').addEventListener('click', function() {
+    var menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('open');
+  });
+
+  // ===== SCROLL REVEAL =====
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+</script>
+</body>
+</html>
