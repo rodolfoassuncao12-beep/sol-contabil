@@ -322,7 +322,7 @@
     const funcionarios = parseInt(document.getElementById('honorarios-funcionarios').value) || 0;
     const regime = document.getElementById('honorarios-regime').value;
     const notas = parseInt(document.getElementById('honorarios-notas').value) || 10;
-    const resultado = simularHonorarios(faturamento, funcionarios, regime, notas);
+    const resultado = calcularHonorarios(faturamento, funcionarios, regime, notas);
     const resultadoDiv = document.getElementById('resultado-honorarios');
     resultadoDiv.innerHTML = `
       <div class="result-card">

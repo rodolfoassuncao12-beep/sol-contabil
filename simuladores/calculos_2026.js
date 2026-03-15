@@ -228,7 +228,7 @@ function simularAberturaEmpresa(faturamentoMensal, atividade, temSocios) {
 }
 
 // SIMULADOR 4: Honorários Contábeis
-function simularHonorarios(faturamentoMensal, nFuncionarios, regime, nNotasFiscais) {
+function calcularHonorarios(faturamentoMensal, nFuncionarios, regime, nNotasFiscais) {
   let honorarioBase = 0;
   
   // Faixa de faturamento
