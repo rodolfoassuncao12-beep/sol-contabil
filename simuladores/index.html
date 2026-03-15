@@ -1,133 +1,178 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simuladores - Sol Contábil</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simuladores Inteligentes | Sol Contábil – Limeira SP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .sim-tab { cursor:pointer; padding:14px 20px; border-radius:12px; transition:all 0.2s; border:2px solid transparent; text-align:center; font-weight:600; }
+    .sim-tab.active { background:#0A2540; color:white; border-color:#00A6FB; }
+    .sim-tab:not(.active) { background:white; color:#374151; border-color:#e5e7eb; }
+    .sim-panel { display:none; }
+    .sim-panel.active { display:block; }
+    .result-card { background:linear-gradient(135deg, #0A2540 0%, #1a3a5c 100%); border-radius:16px; padding:28px; color:white; }
+    .form-input { width:100%; padding:12px 16px; border:1.5px solid #d1d5db; border-radius:10px; font-size:15px; background:white; color:#111827; }
+    .form-input:focus { outline:none; border-color:#00A6FB; box-shadow:0 0 0 3px rgba(0,166,251,0.15); }
+    .sim-btn { padding:14px 28px; border-radius:10px; font-weight:600; font-size:15px; cursor:pointer; transition:all 0.2s; border:none; }
+    .sim-btn-primary { background:#00A6FB; color:white; }
+    .sim-btn-primary:hover { background:#0090e0; }
+    .sim-btn-whatsapp { background:#25D366; color:white; }
+    .chart-container { position:relative; height:300px; margin:20px 0; }
+    .hidden { display:none; }
+  </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 text-gray-800 font-sans">
 
-<header class="bg-blue-900 text-white p-4">
-  <div class="max-w-6xl mx-auto">
-    <h1 class="text-2xl font-bold">Simuladores Inteligentes 2026</h1>
+<header class="fixed top-0 left-0 right-0 z-50 bg-blue-900/95 backdrop-blur-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-20">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/assets/logo-sol-contabil.png" alt="Logo" class="h-10 lg:h-12 w-auto" />
+      </a>
+      <nav class="hidden lg:flex items-center gap-6">
+        <a href="/" class="text-white/80 hover:text-white text-sm font-medium">Início</a>
+        <a href="/#servicos" class="text-white/80 hover:text-white text-sm font-medium">Serviços</a>
+        <a href="/simuladores" class="text-white/80 hover:text-white text-sm font-medium">Simuladores</a>
+        <a href="/blog" class="text-white/80 hover:text-white text-sm font-medium">Blog</a>
+      </nav>
+    </div>
   </div>
 </header>
 
-<main class="max-w-6xl mx-auto p-4 py-8">
-  <div class="bg-white rounded-lg shadow-lg p-6">
-    <div class="flex gap-4 mb-6 flex-wrap">
-      <button onclick="mostrarSimulador('mei')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">MEI vs LTDA</button>
-      <button onclick="mostrarSimulador('regime')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Regime</button>
-      <button onclick="mostrarSimulador('abertura')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Abertura</button>
-      <button onclick="mostrarSimulador('honorarios')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Honorários</button>
-      <button onclick="mostrarSimulador('economia')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Economia</button>
-      <button onclick="mostrarSimulador('pfvspj')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">PF vs PJ</button>
-    </div>
-
-    <!-- MEI vs LTDA -->
-    <div id="mei" class="simulador">
-      <h2 class="text-2xl font-bold mb-4">MEI vs LTDA</h2>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <input type="number" id="mei_faturamento" placeholder="Faturamento Mensal" class="border p-2 rounded">
-        <select id="mei_atividade" class="border p-2 rounded">
-          <option value="comercio">Comércio</option>
-          <option value="servicos">Serviços</option>
-        </select>
+<main class="pt-24">
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-blue-900">Simuladores Inteligentes 2026</h1>
+        <p class="mt-4 text-lg text-gray-600">Ferramentas com dados fiscais corretos para 2026</p>
       </div>
-      <button onclick="simularMei()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Calcular</button>
-      <div id="mei_resultado" class="mt-6"></div>
-    </div>
 
-    <!-- Regime Tributário -->
-    <div id="regime" class="simulador hidden">
-      <h2 class="text-2xl font-bold mb-4">Regime Tributário</h2>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <input type="number" id="regime_faturamento" placeholder="Faturamento Mensal" class="border p-2 rounded">
-        <select id="regime_atividade" class="border p-2 rounded">
-          <option value="comercio">Comércio</option>
-          <option value="servicos">Serviços</option>
-        </select>
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 mb-8 max-w-5xl mx-auto">
+        <div class="sim-tab active" onclick="switchTab('mei-ltda')">MEI vs LTDA</div>
+        <div class="sim-tab" onclick="switchTab('regime')">Regime</div>
+        <div class="sim-tab" onclick="switchTab('abertura')">Abertura</div>
+        <div class="sim-tab" onclick="switchTab('honorarios')">Honorários</div>
+        <div class="sim-tab" onclick="switchTab('economia')">Economia</div>
+        <div class="sim-tab" onclick="switchTab('pfvspj')">PF vs PJ</div>
       </div>
-      <button onclick="simularRegime()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Calcular</button>
-      <div id="regime_resultado" class="mt-6"></div>
-    </div>
 
-    <!-- Abertura -->
-    <div id="abertura" class="simulador hidden">
-      <h2 class="text-2xl font-bold mb-4">Qual Empresa Abrir?</h2>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <input type="number" id="abertura_faturamento" placeholder="Faturamento Mensal" class="border p-2 rounded">
-        <select id="abertura_atividade" class="border p-2 rounded">
-          <option value="comercio">Comércio</option>
-          <option value="servicos">Serviços</option>
-        </select>
-        <select id="abertura_socios" class="border p-2 rounded">
-          <option value="nao">Sem Sócios</option>
-          <option value="sim">Com Sócios</option>
-        </select>
-      </div>
-      <button onclick="simularAbertura()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Calcular</button>
-      <div id="abertura_resultado" class="mt-6"></div>
-    </div>
+      <div class="max-w-3xl mx-auto">
+        <!-- MEI vs LTDA -->
+        <div id="panel-mei-ltda" class="sim-panel active">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">MEI ou LTDA?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="mei_faturamento" class="form-input" placeholder="R$ 7.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Atividade</label><select id="mei_atividade" class="form-input"><option value="comercio">Comércio</option><option value="servicos">Serviços</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularMei()" class="sim-btn sim-btn-primary">Comparar</button></div>
+            <div id="mei_resultado" class="hidden mt-8"></div>
+            <div id="mei_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Quer um diagnóstico gratuito?</h4>
+              <div class="mt-4"><input type="text" id="mei_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="mei_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero meu diagnóstico</a></div>
+            </div>
+          </div>
+        </div>
 
-    <!-- Honorários -->
-    <div id="honorarios" class="simulador hidden">
-      <h2 class="text-2xl font-bold mb-4">Honorários Contábeis</h2>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <input type="number" id="honorarios_faturamento" placeholder="Faturamento Mensal" class="border p-2 rounded">
-        <input type="number" id="honorarios_funcionarios" placeholder="Nº de Funcionários" class="border p-2 rounded">
-        <select id="honorarios_regime" class="border p-2 rounded">
-          <option value="simples">Simples Nacional</option>
-          <option value="lucroPresumido">Lucro Presumido</option>
-          <option value="lucroReal">Lucro Real</option>
-        </select>
-        <input type="number" id="honorarios_notas" placeholder="Notas Fiscais/Mês" value="10" class="border p-2 rounded">
-      </div>
-      <button onclick="simularHonorarios()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Calcular</button>
-      <div id="honorarios_resultado" class="mt-6"></div>
-    </div>
+        <!-- Regime Tributário -->
+        <div id="panel-regime" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">Regime Tributário</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="regime_faturamento" class="form-input" placeholder="R$ 20.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Atividade</label><select id="regime_atividade" class="form-input"><option value="comercio">Comércio</option><option value="servicos">Serviços</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularRegime()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="regime_resultado" class="hidden mt-8"></div>
+            <div id="regime_chart" class="hidden mt-8"><div class="chart-container"><canvas id="regimeChart"></canvas></div></div>
+            <div id="regime_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Quer um diagnóstico gratuito?</h4>
+              <div class="mt-4"><input type="text" id="regime_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="regime_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero meu diagnóstico</a></div>
+            </div>
+          </div>
+        </div>
 
-    <!-- Economia -->
-    <div id="economia" class="simulador hidden">
-      <h2 class="text-2xl font-bold mb-4">Economia Tributária</h2>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <input type="number" id="economia_faturamento" placeholder="Faturamento Mensal" class="border p-2 rounded">
-        <select id="economia_regime" class="border p-2 rounded">
-          <option value="MEI">MEI</option>
-          <option value="Simples Nacional">Simples Nacional</option>
-          <option value="Lucro Presumido">Lucro Presumido</option>
-        </select>
-        <select id="economia_atividade" class="border p-2 rounded">
-          <option value="comercio">Comércio</option>
-          <option value="servicos">Serviços</option>
-        </select>
-      </div>
-      <button onclick="simularEconomia()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Calcular</button>
-      <div id="economia_resultado" class="mt-6"></div>
-    </div>
+        <!-- Abertura -->
+        <div id="panel-abertura" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">Qual Empresa Abrir?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="abertura_faturamento" class="form-input" placeholder="R$ 10.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Atividade</label><select id="abertura_atividade" class="form-input"><option value="comercio">Comércio</option><option value="servicos">Serviços</option></select></div>
+              <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700 mb-2">Terá sócios?</label><select id="abertura_socios" class="form-input"><option value="nao">Não</option><option value="sim">Sim</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularAbertura()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="abertura_resultado" class="hidden mt-8"></div>
+            <div id="abertura_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Pronto para abrir?</h4>
+              <div class="mt-4"><input type="text" id="abertura_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="abertura_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero abrir minha empresa</a></div>
+            </div>
+          </div>
+        </div>
 
-    <!-- PF vs PJ -->
-    <div id="pfvspj" class="simulador hidden">
-      <h2 class="text-2xl font-bold mb-4">PF vs PJ para Profissionais de Saúde</h2>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <input type="number" id="pfvspj_faturamento" placeholder="Faturamento Mensal" class="border p-2 rounded">
-        <select id="pfvspj_especialidade" class="border p-2 rounded">
-          <option value="medico">Médico</option>
-          <option value="dentista">Dentista</option>
-          <option value="psicólogo">Psicólogo</option>
-          <option value="fisioterapeuta">Fisioterapeuta</option>
-        </select>
+        <!-- Honorários -->
+        <div id="panel-honorarios" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">Honorários Contábeis</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="honorarios_faturamento" class="form-input" placeholder="R$ 15.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Nº de Funcionários</label><input type="number" id="honorarios_funcionarios" class="form-input" placeholder="0"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Regime</label><select id="honorarios_regime" class="form-input"><option value="simples">Simples Nacional</option><option value="lucroPresumido">Lucro Presumido</option><option value="lucroReal">Lucro Real</option></select></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Notas Fiscais/Mês</label><input type="number" id="honorarios_notas" class="form-input" value="10" placeholder="10"></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularHonorarios()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="honorarios_resultado" class="hidden mt-8"></div>
+            <div id="honorarios_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Quer uma proposta?</h4>
+              <div class="mt-4"><input type="text" id="honorarios_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="honorarios_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero uma proposta</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Economia -->
+        <div id="panel-economia" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">Economia Tributária</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="economia_faturamento" class="form-input" placeholder="R$ 20.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Regime Atual</label><select id="economia_regime" class="form-input"><option value="MEI">MEI</option><option value="Simples Nacional">Simples Nacional</option><option value="Lucro Presumido">Lucro Presumido</option></select></div>
+              <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700 mb-2">Atividade</label><select id="economia_atividade" class="form-input"><option value="comercio">Comércio</option><option value="servicos">Serviços</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularEconomia()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="economia_resultado" class="hidden mt-8"></div>
+            <div id="economia_chart" class="hidden mt-8"><div class="chart-container"><canvas id="economiaChart"></canvas></div></div>
+            <div id="economia_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Quer implementar?</h4>
+              <div class="mt-4"><input type="text" id="economia_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="economia_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero economizar</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PF vs PJ -->
+        <div id="panel-pfvspj" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">PF vs. PJ Saúde</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="pfvspj_faturamento" class="form-input" placeholder="R$ 15.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Especialidade</label><select id="pfvspj_especialidade" class="form-input"><option value="medico">Médico</option><option value="dentista">Dentista</option><option value="psicólogo">Psicólogo</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularPfVsPj()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="pfvspj_resultado" class="hidden mt-8"></div>
+            <div id="pfvspj_chart" class="hidden mt-8"><div class="chart-container"><canvas id="pfvspjChart"></canvas></div></div>
+            <div id="pfvspj_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Pronto para abrir sua PJ?</h4>
+              <div class="mt-4"><input type="text" id="pfvspj_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="pfvspj_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero abrir minha PJ</a></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <button onclick="simularPfVsPj()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Calcular</button>
-      <div id="pfvspj_resultado" class="mt-6"></div>
     </div>
-  </div>
+  </section>
 </main>
 
 <script>
-// Parâmetros 2026
 const PARAMS = {
   dasMEI: { comercio: 82.05, servicos: 86.05 },
   limiteMEI: 81000,
@@ -149,9 +194,13 @@ const PARAMS = {
   ]
 };
 
-function mostrarSimulador(id) {
-  document.querySelectorAll('.simulador').forEach(el => el.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+let regimeChart, economiaChart, pfvspjChart;
+
+function switchTab(tabName) {
+  document.querySelectorAll('.sim-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.sim-panel').forEach(panel => panel.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + tabName).classList.add('active');
 }
 
 function getAliquotaSimples(faturamento, tabela) {
@@ -175,15 +224,31 @@ function simularMei() {
   const ltdaLiquido = faturamento - ltdaImposto - 250;
   
   const melhor = meiLiquido > ltdaLiquido ? 'MEI' : 'LTDA';
+  const diferenca = Math.abs(meiLiquido - ltdaLiquido);
   
   document.getElementById('mei_resultado').innerHTML = `
-    <div class="bg-blue-50 p-4 rounded">
-      <p class="font-bold text-lg mb-2">Melhor: ${melhor}</p>
-      <p>MEI: R$ ${meiLiquido.toFixed(2)}/mês</p>
-      <p>LTDA: R$ ${ltdaLiquido.toFixed(2)}/mês</p>
-      <p class="mt-2 text-green-600 font-bold">Diferença: R$ ${Math.abs(meiLiquido - ltdaLiquido).toFixed(2)}/mês</p>
+    <div class="result-card">
+      <h4 class="text-2xl font-bold mb-6">Melhor: ${melhor}</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">MEI</p>
+          <p class="text-sm">Imposto: <span class="text-red-400 font-bold">R$ ${das.toFixed(2)}</span></p>
+          <p class="text-sm">Líquido: <span class="text-green-400 font-bold">R$ ${meiLiquido.toFixed(2)}</span></p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">LTDA</p>
+          <p class="text-sm">Imposto: <span class="text-red-400 font-bold">R$ ${ltdaImposto.toFixed(2)}</span></p>
+          <p class="text-sm">Honorários: <span class="text-yellow-400">R$ 250.00</span></p>
+          <p class="text-sm">Líquido: <span class="text-green-400 font-bold">R$ ${ltdaLiquido.toFixed(2)}</span></p>
+        </div>
+      </div>
+      <div class="bg-green-500/20 border border-green-500 rounded-lg p-4 text-center">
+        <p class="text-lg text-green-400 font-bold">Diferença: R$ ${diferenca.toFixed(2)}/mês</p>
+      </div>
     </div>
   `;
+  document.getElementById('mei_resultado').classList.remove('hidden');
+  document.getElementById('mei_lead').classList.remove('hidden');
 }
 
 function simularRegime() {
@@ -193,19 +258,49 @@ function simularRegime() {
   const tabela = atividade === 'comercio' ? PARAMS.simplesAnexoI : PARAMS.simplesAnexoIII;
   const aliquota = getAliquotaSimples(faturamento, tabela);
   const simples = faturamento * aliquota;
-  
   const presumido = faturamento * 0.25;
   const lucroReal = faturamento * 0.30;
   
   document.getElementById('regime_resultado').innerHTML = `
-    <div class="bg-blue-50 p-4 rounded">
-      <p class="font-bold text-lg mb-2">Melhor: Simples Nacional</p>
-      <p>Simples: R$ ${simples.toFixed(2)}/mês</p>
-      <p>Presumido: R$ ${presumido.toFixed(2)}/mês</p>
-      <p>Real: R$ ${lucroReal.toFixed(2)}/mês</p>
-      <p class="mt-2 text-green-600 font-bold">Economia: R$ ${(presumido - simples).toFixed(2)}/mês</p>
+    <div class="result-card">
+      <h4 class="text-2xl font-bold mb-6">Melhor: Simples Nacional</h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Simples</p>
+          <p class="text-2xl font-bold text-green-400">R$ ${simples.toFixed(2)}</p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Presumido</p>
+          <p class="text-2xl font-bold text-yellow-400">R$ ${presumido.toFixed(2)}</p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Real</p>
+          <p class="text-2xl font-bold text-red-400">R$ ${lucroReal.toFixed(2)}</p>
+        </div>
+      </div>
+      <div class="bg-green-500/20 border border-green-500 rounded-lg p-4 text-center">
+        <p class="text-lg text-green-400 font-bold">Economia: R$ ${(presumido - simples).toFixed(2)}/mês</p>
+      </div>
     </div>
   `;
+  document.getElementById('regime_resultado').classList.remove('hidden');
+  document.getElementById('regime_lead').classList.remove('hidden');
+  
+  if (regimeChart) regimeChart.destroy();
+  const ctx = document.getElementById('regimeChart').getContext('2d');
+  regimeChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Simples', 'Presumido', 'Real'],
+      datasets: [{
+        label: 'Imposto Mensal',
+        data: [simples, presumido, lucroReal],
+        backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+  document.getElementById('regime_chart').classList.remove('hidden');
 }
 
 function simularAbertura() {
@@ -237,13 +332,22 @@ function simularAbertura() {
   if (temSocios) tipo = 'LTDA';
   
   document.getElementById('abertura_resultado').innerHTML = `
-    <div class="bg-blue-50 p-4 rounded">
-      <p class="font-bold text-lg mb-2">Recomendação: ${tipo}</p>
-      <p>Regime: ${regime}</p>
-      <p>Custo Abertura: R$ ${custo.toFixed(2)}</p>
-      <p class="mt-2 text-green-600 font-bold">Pronto para abrir!</p>
+    <div class="result-card">
+      <h4 class="text-2xl font-bold mb-6">${tipo}</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Regime</p>
+          <p class="text-xl font-bold text-blue-400">${regime}</p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Custo Abertura</p>
+          <p class="text-xl font-bold text-yellow-400">R$ ${custo.toFixed(2)}</p>
+        </div>
+      </div>
     </div>
   `;
+  document.getElementById('abertura_resultado').classList.remove('hidden');
+  document.getElementById('abertura_lead').classList.remove('hidden');
 }
 
 function simularHonorarios() {
@@ -267,13 +371,26 @@ function simularHonorarios() {
   const total = base + adicional;
   
   document.getElementById('honorarios_resultado').innerHTML = `
-    <div class="bg-blue-50 p-4 rounded">
-      <p class="font-bold text-lg mb-2">Faixa de Honorários</p>
-      <p>Mínimo: R$ ${(total * 0.85).toFixed(2)}</p>
-      <p>Estimado: R$ ${total.toFixed(2)}</p>
-      <p>Máximo: R$ ${(total * 1.15).toFixed(2)}</p>
+    <div class="result-card">
+      <h4 class="text-2xl font-bold mb-6">Faixa de Honorários</h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Mínimo</p>
+          <p class="text-2xl font-bold text-green-400">R$ ${(total * 0.85).toFixed(2)}</p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Estimado</p>
+          <p class="text-2xl font-bold text-blue-400">R$ ${total.toFixed(2)}</p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Máximo</p>
+          <p class="text-2xl font-bold text-yellow-400">R$ ${(total * 1.15).toFixed(2)}</p>
+        </div>
+      </div>
     </div>
   `;
+  document.getElementById('honorarios_resultado').classList.remove('hidden');
+  document.getElementById('honorarios_lead').classList.remove('hidden');
 }
 
 function simularEconomia() {
@@ -293,14 +410,45 @@ function simularEconomia() {
   const economia = impostoAtual - impostoOtimizado;
   
   document.getElementById('economia_resultado').innerHTML = `
-    <div class="bg-blue-50 p-4 rounded">
-      <p class="font-bold text-lg mb-2">Economia Tributária</p>
-      <p>Imposto Atual: R$ ${impostoAtual.toFixed(2)}/mês</p>
-      <p>Imposto Otimizado: R$ ${impostoOtimizado.toFixed(2)}/mês</p>
-      <p class="mt-2 text-green-600 font-bold">Economia: R$ ${Math.max(0, economia).toFixed(2)}/mês</p>
-      <p class="text-green-600 font-bold">Anual: R$ ${Math.max(0, economia * 12).toFixed(2)}</p>
+    <div class="result-card">
+      <h4 class="text-2xl font-bold mb-6">Economia Tributária</h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Atual</p>
+          <p class="text-2xl font-bold text-red-400">R$ ${impostoAtual.toFixed(2)}</p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Otimizado</p>
+          <p class="text-2xl font-bold text-blue-400">R$ ${impostoOtimizado.toFixed(2)}</p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">Economia</p>
+          <p class="text-2xl font-bold text-green-400">R$ ${Math.max(0, economia).toFixed(2)}</p>
+        </div>
+      </div>
+      <div class="bg-green-500/20 border border-green-500 rounded-lg p-4 text-center">
+        <p class="text-lg text-green-400 font-bold">Anual: R$ ${Math.max(0, economia * 12).toFixed(2)}</p>
+      </div>
     </div>
   `;
+  document.getElementById('economia_resultado').classList.remove('hidden');
+  document.getElementById('economia_lead').classList.remove('hidden');
+  
+  if (economiaChart) economiaChart.destroy();
+  const ctx = document.getElementById('economiaChart').getContext('2d');
+  economiaChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Atual', 'Otimizado'],
+      datasets: [{
+        label: 'Imposto Mensal',
+        data: [impostoAtual, impostoOtimizado],
+        backgroundColor: ['#ef4444', '#10b981']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+  document.getElementById('economia_chart').classList.remove('hidden');
 }
 
 function simularPfVsPj() {
@@ -320,13 +468,41 @@ function simularPfVsPj() {
   const melhor = totalPF > totalPJ ? 'PJ' : 'PF';
   
   document.getElementById('pfvspj_resultado').innerHTML = `
-    <div class="bg-blue-50 p-4 rounded">
-      <p class="font-bold text-lg mb-2">Melhor: ${melhor}</p>
-      <p>PF Total: R$ ${totalPF.toFixed(2)}/mês</p>
-      <p>PJ Total: R$ ${totalPJ.toFixed(2)}/mês</p>
-      <p class="mt-2 text-green-600 font-bold">Economia: R$ ${Math.max(0, totalPF - totalPJ).toFixed(2)}/mês</p>
+    <div class="result-card">
+      <h4 class="text-2xl font-bold mb-6">Melhor: ${melhor}</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">PF Total</p>
+          <p class="text-2xl font-bold text-red-400">R$ ${totalPF.toFixed(2)}</p>
+        </div>
+        <div class="bg-white/10 p-4 rounded-lg">
+          <p class="text-sm text-gray-300">PJ Total</p>
+          <p class="text-2xl font-bold text-green-400">R$ ${totalPJ.toFixed(2)}</p>
+        </div>
+      </div>
+      <div class="bg-green-500/20 border border-green-500 rounded-lg p-4 text-center">
+        <p class="text-lg text-green-400 font-bold">Economia: R$ ${Math.max(0, totalPF - totalPJ).toFixed(2)}/mês</p>
+      </div>
     </div>
   `;
+  document.getElementById('pfvspj_resultado').classList.remove('hidden');
+  document.getElementById('pfvspj_lead').classList.remove('hidden');
+  
+  if (pfvspjChart) pfvspjChart.destroy();
+  const ctx = document.getElementById('pfvspjChart').getContext('2d');
+  pfvspjChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['PF', 'PJ'],
+      datasets: [{
+        label: 'Imposto Mensal',
+        data: [totalPF, totalPJ],
+        backgroundColor: ['#ef4444', '#10b981']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+  document.getElementById('pfvspj_chart').classList.remove('hidden');
 }
 </script>
 
