@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simuladores Inteligentes | Sol Contábil – Limeira SP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .sim-tab { cursor:pointer; padding:14px 20px; border-radius:12px; transition:all 0.2s; border:2px solid transparent; text-align:center; font-weight:600; }
+    .sim-tab.active { background:#0A2540; color:white; border-color:#00A6FB; }
+    .sim-tab:not(.active) { background:white; color:#374151; border-color:#e5e7eb; }
+    .sim-panel { display:none; }
+    .sim-panel.active { display:block; }
+    .result-card { background:linear-gradient(135deg, #0A2540 0%, #1a3a5c 100%); border-radius:16px; padding:28px; color:white; }
+    .form-input { width:100%; padding:12px 16px; border:1.5px solid #d1d5db; border-radius:10px; font-size:15px; background:white; color:#111827; }
+    .form-input:focus { outline:none; border-color:#00A6FB; box-shadow:0 0 0 3px rgba(0,166,251,0.15); }
+    .sim-btn { padding:14px 28px; border-radius:10px; font-weight:600; font-size:15px; cursor:pointer; transition:all 0.2s; border:none; }
+    .sim-btn-primary { background:#00A6FB; color:white; }
+    .sim-btn-primary:hover { background:#0090e0; }
+    .sim-btn-whatsapp { background:#25D366; color:white; }
+    .hidden { display:none; }
+    .alert-warning { background:#fef3c7; border:1px solid #fcd34d; border-radius:10px; padding:12px 16px; font-size:13px; color:#92400e; }
+    .alert-info { background:#dbeafe; border:1px solid #93c5fd; border-radius:10px; padding:12px 16px; font-size:13px; color:#1e40af; }
+    .economia-destaque { background:#dcfce7; border:2px solid #22c55e; border-radius:12px; padding:20px; text-align:center; }
+    .economia-valor { font-size:28px; font-weight:bold; color:#16a34a; }
+    .tabela-comparativa { width:100%; border-collapse:collapse; margin:16px 0; }
+    .tabela-comparativa th, .tabela-comparativa td { padding:12px; text-align:left; border-bottom:1px solid #e5e7eb; }
+    .tabela-comparativa th { background:#f3f4f6; font-weight:bold; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-blue-900/95 backdrop-blur-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-20">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/assets/logo-sol-contabil.png" alt="Logo" class="h-10 lg:h-12 w-auto" />
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="pt-24">
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-blue-900">Simuladores Inteligentes 2026</h1>
+        <p class="mt-4 text-lg text-gray-600">Ferramentas com dados fiscais corretos para 2026</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 mb-8 max-w-5xl mx-auto">
+        <div class="sim-tab active" onclick="switchTab(event, 'mei-ltda')">MEI vs LTDA</div>
+        <div class="sim-tab" onclick="switchTab(event, 'regime')">Regime</div>
+        <div class="sim-tab" onclick="switchTab(event, 'abertura')">Abertura</div>
+        <div class="sim-tab" onclick="switchTab(event, 'honorarios')">Honorários</div>
+        <div class="sim-tab" onclick="switchTab(event, 'economia')">Economia</div>
+        <div class="sim-tab" onclick="switchTab(event, 'pfvspj')">PF vs PJ</div>
+      </div>
+
+      <div class="max-w-3xl mx-auto">
+        <!-- MEI vs LTDA -->
+        <div id="panel-mei-ltda" class="sim-panel active">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">MEI ou LTDA?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="mei_faturamento" class="form-input" placeholder="R$ 7.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Atividade</label><select id="mei_atividade" class="form-input"><option value="comercio">Comércio</option><option value="servicos">Serviços</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularMei()" class="sim-btn sim-btn-primary">Comparar</button></div>
+            <div id="mei_resultado" class="hidden mt-8"></div>
+            <div id="mei_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Quer um diagnóstico gratuito?</h4>
+              <div class="mt-4"><input type="text" id="mei_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="mei_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero meu diagnóstico</a></div>
+            </div>
+            <div class="alert-info mt-6"><p><strong>Aviso:</strong> Simulação estimada 2026. Não substitui análise contábil profissional. Consulte um contador.</p></div>
+          </div>
+        </div>
+
+        <!-- Regime Tributário -->
+        <div id="panel-regime" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">Regime Tributário</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="regime_faturamento" class="form-input" placeholder="R$ 20.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Atividade</label><select id="regime_atividade" class="form-input"><option value="comercio">Comércio</option><option value="servicos">Serviços</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularRegime()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="regime_resultado" class="hidden mt-8"></div>
+            <div id="regime_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Quer um diagnóstico gratuito?</h4>
+              <div class="mt-4"><input type="text" id="regime_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="regime_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero meu diagnóstico</a></div>
+            </div>
+            <div class="alert-info mt-6"><p><strong>Aviso:</strong> Simulação estimada 2026. Não substitui análise contábil profissional. Consulte um contador.</p></div>
+          </div>
+        </div>
+
+        <!-- Abertura -->
+        <div id="panel-abertura" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">Qual Empresa Abrir?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="abertura_faturamento" class="form-input" placeholder="R$ 10.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Atividade</label><select id="abertura_atividade" class="form-input"><option value="comercio">Comércio</option><option value="servicos">Serviços</option><option value="medico">Médico/Dentista</option></select></div>
+              <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700 mb-2">Terá sócios?</label><select id="abertura_socios" class="form-input"><option value="nao">Não</option><option value="sim">Sim</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularAbertura()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="abertura_resultado" class="hidden mt-8"></div>
+            <div id="abertura_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Pronto para abrir?</h4>
+              <div class="mt-4"><input type="text" id="abertura_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="abertura_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero abrir minha empresa</a></div>
+            </div>
+            <div class="alert-info mt-6"><p><strong>Aviso:</strong> Simulação estimada 2026. Não substitui análise contábil profissional. Consulte um contador.</p></div>
+          </div>
+        </div>
+
+        <!-- Honorários -->
+        <div id="panel-honorarios" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">Honorários Contábeis</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="honorarios_faturamento" class="form-input" placeholder="R$ 15.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Nº de Funcionários</label><input type="number" id="honorarios_funcionarios" class="form-input" placeholder="0"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Regime</label><select id="honorarios_regime" class="form-input"><option value="simples">Simples Nacional</option><option value="lucroPresumido">Lucro Presumido</option><option value="lucroReal">Lucro Real</option></select></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Notas Fiscais/Mês</label><input type="number" id="honorarios_notas" class="form-input" value="10" placeholder="10"></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularHonorarios()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="honorarios_resultado" class="hidden mt-8"></div>
+            <div id="honorarios_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Quer uma proposta?</h4>
+              <div class="mt-4"><input type="text" id="honorarios_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="honorarios_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero uma proposta</a></div>
+            </div>
+            <div class="alert-info mt-6"><p><strong>Aviso:</strong> Simulação estimada 2026. Não substitui análise contábil profissional. Consulte um contador.</p></div>
+          </div>
+        </div>
+
+        <!-- Economia -->
+        <div id="panel-economia" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">Economia Tributária</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="economia_faturamento" class="form-input" placeholder="R$ 20.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Regime Atual</label><select id="economia_regime" class="form-input"><option value="MEI">MEI</option><option value="Simples Nacional">Simples Nacional</option><option value="Lucro Presumido">Lucro Presumido</option></select></div>
+              <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700 mb-2">Atividade</label><select id="economia_atividade" class="form-input"><option value="comercio">Comércio</option><option value="servicos">Serviços</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularEconomia()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="economia_resultado" class="hidden mt-8"></div>
+            <div id="economia_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Quer implementar?</h4>
+              <div class="mt-4"><input type="text" id="economia_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="economia_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero economizar</a></div>
+            </div>
+            <div class="alert-info mt-6"><p><strong>Aviso:</strong> Simulação estimada 2026. Não substitui análise contábil profissional. Consulte um contador.</p></div>
+          </div>
+        </div>
+
+        <!-- PF vs PJ -->
+        <div id="panel-pfvspj" class="sim-panel">
+          <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-900 mb-6">PF vs. PJ Saúde</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Faturamento Mensal</label><input type="number" id="pfvspj_faturamento" class="form-input" placeholder="R$ 15.000"></div>
+              <div><label class="block text-sm font-medium text-gray-700 mb-2">Especialidade</label><select id="pfvspj_especialidade" class="form-input"><option value="medico">Médico</option><option value="dentista">Dentista</option><option value="psicólogo">Psicólogo</option></select></div>
+            </div>
+            <div class="mt-8 text-center"><button onclick="simularPfVsPj()" class="sim-btn sim-btn-primary">Calcular</button></div>
+            <div id="pfvspj_resultado" class="hidden mt-8"></div>
+            <div id="pfvspj_lead" class="hidden mt-8 p-6 bg-blue-50 rounded-lg">
+              <h4 class="font-bold text-lg text-blue-900">Pronto para abrir sua PJ?</h4>
+              <div class="mt-4"><input type="text" id="pfvspj_nome" class="form-input mb-4" placeholder="Seu Nome"><input type="text" id="pfvspj_whatsapp" class="form-input mb-4" placeholder="Seu WhatsApp"><a href="https://wa.me/5519982003732" target="_blank" class="block text-center sim-btn sim-btn-whatsapp">Quero abrir minha PJ</a></div>
+            </div>
+            <div class="alert-info mt-6"><p><strong>Aviso:</strong> Simulação estimada 2026. Não substitui análise contábil profissional. Consulte um contador.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const PARAMS = {
+  dasMEI: { comercio: 82.05, servicos: 86.05 },
+  limiteMEI: 81000,
+  irpf: [
+    { ate: 5000, aliquota: 0, deducao: 0 },
+    { de: 5000.01, ate: 6500, aliquota: 0.075, deducao: 375 },
+    { de: 6500.01, ate: 8000, aliquota: 0.15, deducao: 862.50 },
+    { de: 8000.01, ate: 11000, aliquota: 0.225, deducao: 1462.50 },
+    { de: 11000.01, ate: Infinity, aliquota: 0.275, deducao: 2012.50 }
+  ],
+  simplesAnexoI: [
+    { ate: 180000, aliquota: 0.04, deducao: 0 },
+    { ate: 360000, aliquota: 0.073, deducao: 5940 },
+    { ate: 720000, aliquota: 0.095, deducao: 13860 },
+    { ate: 1800000, aliquota: 0.107, deducao: 22500 },
+    { ate: 3600000, aliquota: 0.143, deducao: 87300 },
+    { ate: 4800000, aliquota: 0.19, deducao: 256440 }
+  ],
+  simplesAnexoIII: [
+    { ate: 180000, aliquota: 0.06, deducao: 0 },
+    { ate: 360000, aliquota: 0.112, deducao: 9360 },
+    { ate: 720000, aliquota: 0.135, deducao: 17640 },
+    { ate: 1800000, aliquota: 0.16, deducao: 35640 },
+    { ate: 3600000, aliquota: 0.21, deducao: 125640 },
+    { ate: 4800000, aliquota: 0.33, deducao: 557640 }
+  ]
+};
+
+function switchTab(e, tabName) {
+  document.querySelectorAll('.sim-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.sim-panel').forEach(panel => panel.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById('panel-' + tabName).classList.add('active');
+}
+
+function calcularIRPF(rendimento) {
+  for (let faixa of PARAMS.irpf) {
+    if (rendimento <= faixa.ate) {
+      return Math.max(0, (rendimento * faixa.aliquota) - faixa.deducao);
+    }
+  }
+  return 0;
+}
+
+function calcularAliquotaSimples(rbt12, tabela) {
+  for (let faixa of tabela) {
+    if (rbt12 <= faixa.ate) {
+      return ((rbt12 * faixa.aliquota) - faixa.deducao) / rbt12;
+    }
+  }
+  return tabela[tabela.length - 1].aliquota;
+}
+
+function simularMei() {
+  const faturamento = parseFloat(document.getElementById('mei_faturamento').value) || 0;
+  const atividade = document.getElementById('mei_atividade').value;
+  const das = atividade === 'comercio' ? PARAMS.dasMEI.comercio : PARAMS.dasMEI.servicos;
+  const meiLiquido = faturamento - das;
+  const faturamentoAnual = faturamento * 12;
+  const tabela = atividade === 'comercio' ? PARAMS.simplesAnexoI : PARAMS.simplesAnexoIII;
+  const aliquota = calcularAliquotaSimples(faturamento * 12, tabela);
+  const ltdaImposto = faturamento * aliquota;
+  const ltdaLiquido = faturamento - ltdaImposto - 250;
+  const melhor = meiLiquido > ltdaLiquido ? 'MEI' : 'LTDA';
+  const diferenca = Math.abs(meiLiquido - ltdaLiquido);
+  let alerta = '';
+  if (faturamentoAnual > PARAMS.limiteMEI) {
+    alerta = '<div class="alert-warning mt-4">⚠️ Seu faturamento ultrapassa o limite do MEI (R$ 81.000/ano). Você precisará migrar para ME ou LTDA.</div>';
+  }
+  document.getElementById('mei_resultado').innerHTML = `<div class="result-card"><h4 class="text-2xl font-bold mb-6">Melhor: ${melhor}</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">MEI</p><p class="text-sm">DAS: <span class="text-red-400 font-bold">R$ ${das.toFixed(2)}</span></p><p class="text-sm">Líquido: <span class="text-green-400 font-bold">R$ ${meiLiquido.toFixed(2)}</span></p><p class="text-xs text-gray-400 mt-2">Limite: 1 funcionário</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">LTDA</p><p class="text-sm">Imposto: <span class="text-red-400 font-bold">R$ ${ltdaImposto.toFixed(2)}</span></p><p class="text-sm">Honorários: R$ 250.00</p><p class="text-sm">Líquido: <span class="text-green-400 font-bold">R$ ${ltdaLiquido.toFixed(2)}</span></p></div></div><div class="bg-green-500/20 border border-green-500 rounded-lg p-4 text-center"><p class="text-lg text-green-400 font-bold">Diferença: R$ ${diferenca.toFixed(2)}/mês</p></div>${alerta}</div>`;
+  document.getElementById('mei_resultado').classList.remove('hidden');
+  document.getElementById('mei_lead').classList.remove('hidden');
+}
+
+function simularRegime() {
+  const faturamento = parseFloat(document.getElementById('regime_faturamento').value) || 0;
+  const atividade = document.getElementById('regime_atividade').value;
+  const rbt12 = faturamento * 12;
+  const tabela = atividade === 'comercio' ? PARAMS.simplesAnexoI : PARAMS.simplesAnexoIII;
+  const aliquotaSimples = calcularAliquotaSimples(rbt12, tabela);
+  const simples = faturamento * aliquotaSimples;
+  const basePresumida = faturamento * (atividade === 'comercio' ? 0.08 : 0.32);
+  const irpj = basePresumida * 0.15;
+  const irpjAdicional = Math.max(0, (basePresumida - 20000) * 0.10);
+  const csll = basePresumida * 0.09;
+  const pis = faturamento * 0.0065;
+  const cofins = faturamento * 0.03;
+  const iss = faturamento * 0.05;
+  const presumido = irpj + irpjAdicional + csll + pis + cofins + iss;
+  const lucroReal = faturamento * 0.30;
+  const economia = presumido - simples;
+  document.getElementById('regime_resultado').innerHTML = `<div class="result-card"><h4 class="text-2xl font-bold mb-6">Melhor: Simples Nacional</h4><div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Simples</p><p class="text-2xl font-bold text-green-400">R$ ${simples.toFixed(2)}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Presumido</p><p class="text-2xl font-bold text-yellow-400">R$ ${presumido.toFixed(2)}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Real</p><p class="text-2xl font-bold text-red-400">R$ ${lucroReal.toFixed(2)}</p></div></div><div class="bg-green-500/20 border border-green-500 rounded-lg p-4 text-center"><p class="text-lg text-green-400 font-bold">Economia: R$ ${economia.toFixed(2)}/mês = R$ ${(economia * 12).toFixed(2)}/ano</p></div></div>`;
+  document.getElementById('regime_resultado').classList.remove('hidden');
+  document.getElementById('regime_lead').classList.remove('hidden');
+}
+
+function simularAbertura() {
+  const faturamento = parseFloat(document.getElementById('abertura_faturamento').value) || 0;
+  const atividade = document.getElementById('abertura_atividade').value;
+  const temSocios = document.getElementById('abertura_socios').value === 'sim';
+  const anual = faturamento * 12;
+  let tipo, regime, custo, prazo, documentos;
+  if (anual <= 81000 && atividade !== 'medico') {
+    tipo = 'MEI'; regime = 'MEI'; custo = 0; prazo = 'Imediato'; documentos = 'Documento pessoal, comprovante de endereço';
+  } else if (anual <= 360000) {
+    tipo = 'ME'; regime = 'Simples Nacional'; custo = 1500; prazo = '15-30 dias'; documentos = 'Contrato social, documentos pessoais';
+  } else if (anual <= 4800000) {
+    tipo = 'EPP'; regime = 'Simples Nacional'; custo = 2000; prazo = '30-45 dias'; documentos = 'Contrato social, documentos pessoais';
+  } else {
+    tipo = 'LTDA/SLU'; regime = 'Lucro Presumido/Real'; custo = 3000; prazo = '30-45 dias'; documentos = 'Contrato social, documentos pessoais';
+  }
+  if (temSocios) { tipo = 'LTDA'; documentos = 'Contrato social com sócios, documentos de todos'; } else if (anual > 360000) { tipo = 'SLU'; }
+  if (atividade === 'medico') { tipo = 'LTDA ou SLU'; regime = 'Simples (Anexo V) ou Presumido'; documentos += ', Registro CRM'; }
+  document.getElementById('abertura_resultado').innerHTML = `<div class="result-card"><h4 class="text-2xl font-bold mb-6">${tipo}</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Regime</p><p class="text-lg font-bold text-blue-400">${regime}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Custo</p><p class="text-lg font-bold text-yellow-400">R$ ${custo.toFixed(2)}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Prazo</p><p class="text-lg font-bold text-green-400">${prazo}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Documentos</p><p class="text-sm text-gray-200">${documentos}</p></div></div></div>`;
+  document.getElementById('abertura_resultado').classList.remove('hidden');
+  document.getElementById('abertura_lead').classList.remove('hidden');
+}
+
+function simularHonorarios() {
+  const faturamento = parseFloat(document.getElementById('honorarios_faturamento').value) || 0;
+  const funcionarios = parseInt(document.getElementById('honorarios_funcionarios').value) || 0;
+  const regime = document.getElementById('honorarios_regime').value;
+  const notas = parseInt(document.getElementById('honorarios_notas').value) || 10;
+  let base = 0;
+  if (faturamento <= 15000) base = 425;
+  else if (faturamento <= 30000) base = 650;
+  else if (faturamento <= 60000) base = 1000;
+  else base = 1600;
+  let adicionalFunc = funcionarios === 1 ? 100 : funcionarios <= 5 ? funcionarios * 80 : funcionarios <= 10 ? funcionarios * 65 : funcionarios * 50;
+  let adicionalRegime = regime === 'lucroPresumido' ? base * 0.40 : regime === 'lucroReal' ? base * 0.80 : 0;
+  let adicionalNotas = notas > 100 ? 250 : notas > 30 ? 120 : notas > 10 ? 50 : 0;
+  const total = base + adicionalFunc + adicionalRegime + adicionalNotas;
+  const minimo = total * 0.85;
+  const maximo = total * 1.15;
+  document.getElementById('honorarios_resultado').innerHTML = `<div class="result-card"><h4 class="text-2xl font-bold mb-6">Faixa de Honorários</h4><div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Mínimo</p><p class="text-2xl font-bold text-green-400">R$ ${minimo.toFixed(2)}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Estimado</p><p class="text-2xl font-bold text-blue-400">R$ ${total.toFixed(2)}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Máximo</p><p class="text-2xl font-bold text-yellow-400">R$ ${maximo.toFixed(2)}</p></div></div></div>`;
+  document.getElementById('honorarios_resultado').classList.remove('hidden');
+  document.getElementById('honorarios_lead').classList.remove('hidden');
+}
+
+function simularEconomia() {
+  const faturamento = parseFloat(document.getElementById('economia_faturamento').value) || 0;
+  const regimeAtual = document.getElementById('economia_regime').value;
+  const atividade = document.getElementById('economia_atividade').value;
+  const rbt12 = faturamento * 12;
+  let impostoAtual = 0;
+  if (regimeAtual === 'MEI') impostoAtual = atividade === 'comercio' ? PARAMS.dasMEI.comercio : PARAMS.dasMEI.servicos;
+  else if (regimeAtual === 'Simples Nacional') {
+    const tabela = atividade === 'comercio' ? PARAMS.simplesAnexoI : PARAMS.simplesAnexoIII;
+    impostoAtual = faturamento * calcularAliquotaSimples(rbt12, tabela);
+  } else {
+    const basePresumida = faturamento * (atividade === 'comercio' ? 0.08 : 0.32);
+    impostoAtual = (basePresumida * 0.15) + (basePresumida * 0.09) + (faturamento * 0.0065) + (faturamento * 0.03) + (faturamento * 0.05);
+  }
+  const tabela = atividade === 'comercio' ? PARAMS.simplesAnexoI : PARAMS.simplesAnexoIII;
+  const impostoOtimizado = faturamento * calcularAliquotaSimples(rbt12, tabela);
+  const economia = impostoAtual - impostoOtimizado;
+  const economiaAnual = economia * 12;
+  document.getElementById('economia_resultado').innerHTML = `<div class="result-card"><h4 class="text-2xl font-bold mb-6">Economia Tributária</h4><div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Atual</p><p class="text-2xl font-bold text-red-400">R$ ${impostoAtual.toFixed(2)}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Otimizado</p><p class="text-2xl font-bold text-blue-400">R$ ${impostoOtimizado.toFixed(2)}</p></div><div class="bg-white/10 p-4 rounded-lg"><p class="text-sm text-gray-300">Economia</p><p class="text-2xl font-bold text-green-400">R$ ${Math.max(0, economia).toFixed(2)}</p></div></div><div class="economia-destaque"><p class="text-sm text-gray-700 mb-2">Você pode economizar</p><p class="economia-valor">R$ ${Math.max(0, economiaAnual).toFixed(2)}/ano</p></div></div>`;
+  document.getElementById('economia_resultado').classList.remove('hidden');
+  document.getElementById('economia_lead').classList.remove('hidden');
+}
+
+function simularPfVsPj() {
+  const faturamento = parseFloat(document.getElementById('pfvspj_faturamento').value) || 0;
+  const inssPF = Math.min(faturamento * 0.20, 1695.11);
+  const issPF = faturamento * 0.05;
+  const baseIrpfPF = faturamento - inssPF;
+  const irpfPF = calcularIRPF(baseIrpfPF);
+  const totalPF = inssPF + issPF + irpfPF;
+  const rbt12 = faturamento * 12;
+  const aliquotaAnexoIII = calcularAliquotaSimples(rbt12, PARAMS.simplesAnexoIII);
+  const dasPJ = faturamento * aliquotaAnexoIII;
+  const proLabore = faturamento * 0.28;
+  const inssSocioPJ = Math.min(proLabore * 0.11, 932.31);
+  const baseIrpfPJ = proLabore - inssSocioPJ;
+  const irpfPJ = calcularIRPF(baseIrpfPJ);
+  const totalPJ = dasPJ + inssSocioPJ + irpfPJ;
+  const economia = totalPF - totalPJ;
+  const economiaAnual = economia * 12;
+  const melhor = totalPF > totalPJ ? 'PJ' : 'PF';
+  document.getElementById('pfvspj_resultado').innerHTML = `<div class="result-card"><h4 class="text-2xl font-bold mb-6">Melhor: ${melhor}</h4><table class="tabela-comparativa"><tr><th>Descrição</th><th>PF</th><th>PJ</th></tr><tr><td>INSS</td><td>R$ ${inssPF.toFixed(2)}</td><td>R$ ${inssSocioPJ.toFixed(2)}</td></tr><tr><td>ISS</td><td>R$ ${issPF.toFixed(2)}</td><td>Incluso</td></tr><tr><td>IRPF</td><td>R$ ${irpfPF.toFixed(2)}</td><td>R$ ${irpfPJ.toFixed(2)}</td></tr><tr style="background:#f3f4f6; font-weight:bold;"><td>TOTAL</td><td>R$ ${totalPF.toFixed(2)}</td><td>R$ ${totalPJ.toFixed(2)}</td></tr></table><div class="economia-destaque"><p class="text-sm text-gray-700 mb-2">Abrindo PJ, você economiza</p><p class="economia-valor">R$ ${Math.max(0, economiaAnual).toFixed(2)}/ano</p></div></div>`;
+  document.getElementById('pfvspj_resultado').classList.remove('hidden');
+  document.getElementById('pfvspj_lead').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
