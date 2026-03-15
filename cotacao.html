@@ -10,6 +10,28 @@
   <meta name="description" content="Solicite uma cotação personalizada de serviços contábeis em Limeira SP. Preencha o formulário e receba uma proposta personalizada em instantes. Sem compromisso." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://solcontabil.com.br/cotacao" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Sol Contábil LTDA",
+    "url": "https://solcontabil.com.br",
+    "telephone": "+5519982003732",
+    "priceRange": "$$",
+    "address": { "@type": "PostalAddress", "addressLocality": "Limeira", "addressRegion": "SP", "addressCountry": "BR" },
+    "description": "Escritório de contabilidade em Limeira SP. Cotação gratuita e personalizada de honorários contábeis.",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Serviços Contábeis",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Escrituração Contábil" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria Tributária" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Folha de Pagamento" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Abertura de Empresa" } }
+      ]
+    }
+  }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -228,6 +250,11 @@
         <label class="text-sm text-white/60 mb-1.5 block">Ramo de atividade <span class="text-red-400">*</span></label>
         <input id="inp-atividade" type="text" class="form-input" placeholder="Ex: Comércio de roupas, Clínica médica, Consultoria de TI..." />
       </div>
+      <div class="mt-4 rounded-xl p-4" style="background:rgba(0,166,251,0.05);border:1px solid rgba(0,166,251,0.15)">
+        <label class="text-sm text-white/60 mb-1.5 block">WhatsApp <span class="text-white/30 text-xs">(opcional — para receber sua proposta)</span></label>
+        <input id="inp-whatsapp-early" type="tel" class="form-input" placeholder="(19) 99999-9999" oninput="mascaraWpp(this)" maxlength="15" />
+        <p class="text-white/30 text-xs mt-2">🔒 Seus dados são protegidos. Usamos apenas para enviar sua proposta.</p>
+      </div>
     </div>
 
     <!-- ETAPA 2 — Porte -->
@@ -289,6 +316,27 @@
           <button class="opt-card text-center" data-val="acima_30" onclick="selOpt('func',this)">
             <p class="opt-title font-bold text-sm text-white">+30</p>
             <p class="text-white/30 text-xs">Grande</p>
+          </button>
+        </div>
+      </div>
+      <div class="mt-5">
+        <label class="text-sm text-white/60 mb-3 block">Notas fiscais emitidas por mês</label>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="notas-grid">
+          <button class="opt-card text-center" data-val="ate10" onclick="selOpt('notas',this)">
+            <p class="opt-title font-bold text-sm text-white">Até 10</p>
+            <p class="text-white/30 text-xs">Incluso</p>
+          </button>
+          <button class="opt-card text-center" data-val="11_30" onclick="selOpt('notas',this)">
+            <p class="opt-title font-bold text-sm text-white">11 a 30</p>
+            <p class="text-white/30 text-xs">+ R$ 50/mês</p>
+          </button>
+          <button class="opt-card text-center" data-val="31_100" onclick="selOpt('notas',this)">
+            <p class="opt-title font-bold text-sm text-white">31 a 100</p>
+            <p class="text-white/30 text-xs">+ R$ 120/mês</p>
+          </button>
+          <button class="opt-card text-center" data-val="acima100" onclick="selOpt('notas',this)">
+            <p class="opt-title font-bold text-sm text-white">Acima de 100</p>
+            <p class="text-white/30 text-xs">+ R$ 250/mês</p>
           </button>
         </div>
       </div>
@@ -408,6 +456,25 @@
       </div>
     </div>
 
+    <!-- ETAPA 4.5 — Preview de honorários -->
+    <div id="etapa45" class="etapa" style="display:none">
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-3">👀</div>
+        <h2 class="text-xl font-bold text-white mb-1">Estimativa rápida do seu perfil</h2>
+        <p class="text-white/50 text-sm">Com base nas informações fornecidas</p>
+      </div>
+      <div id="preview-honorarios" class="rounded-2xl p-6 text-center mb-5" style="background:linear-gradient(135deg,rgba(0,166,251,0.15),rgba(2,132,199,0.08));border:1px solid rgba(0,166,251,0.3)">
+        <p class="text-white/60 text-sm mb-1">Faixa estimada de honorários</p>
+        <p class="text-3xl font-extrabold text-white mb-1" id="preview-valor">—</p>
+        <p class="text-white/40 text-xs">por mês · valores finais na proposta completa</p>
+      </div>
+      <div class="rounded-xl p-4 mb-5" style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2)">
+        <p class="text-green-400 font-semibold text-sm mb-2">✅ O que está incluído no seu perfil:</p>
+        <ul id="preview-lista" class="space-y-1 text-white/70 text-sm"></ul>
+      </div>
+      <p class="text-center text-white/60 text-sm mb-4">Para receber a <strong class="text-white">proposta completa e personalizada</strong>, informe seus dados:</p>
+    </div>
+
     <!-- ETAPA 5 — Contato -->
     <div id="etapa5" class="etapa">
       <h2 class="text-xl font-bold text-white mb-1">Quase lá! Onde enviamos a proposta?</h2>
@@ -419,7 +486,8 @@
         </div>
         <div>
           <label class="text-sm text-white/60 mb-1.5 block">WhatsApp <span class="text-red-400">*</span></label>
-          <input id="inp-whatsapp" type="tel" class="form-input" placeholder="(19) 99999-9999" />
+          <input id="inp-whatsapp" type="tel" class="form-input" placeholder="(19) 99999-9999" oninput="mascaraWpp(this)" maxlength="15" />
+          <p id="wpp-erro" class="text-red-400 text-xs mt-1 hidden">Por favor, informe um WhatsApp válido com DDD.</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -441,8 +509,13 @@
     <div id="etapa6" class="etapa">
       <div class="text-center py-10">
         <div class="spinner mb-6"></div>
-        <p class="text-white font-semibold text-lg mb-2">Preparando sua proposta...</p>
-        <p class="text-white/50 text-sm">Analisando seu perfil e calculando os honorários ideais</p>
+        <p class="text-white font-semibold text-lg mb-2" id="loading-msg">Analisando seu perfil...</p>
+        <p class="text-white/50 text-sm" id="loading-sub">Calculando os honorários ideais para o seu negócio</p>
+        <div class="mt-6 flex justify-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-sol-blue animate-bounce" style="animation-delay:0s"></span>
+          <span class="w-2 h-2 rounded-full bg-sol-blue animate-bounce" style="animation-delay:0.2s"></span>
+          <span class="w-2 h-2 rounded-full bg-sol-blue animate-bounce" style="animation-delay:0.4s"></span>
+        </div>
       </div>
     </div>
 
@@ -455,10 +528,10 @@
 
   <!-- Botões de navegação -->
   <div id="nav-btns" class="flex gap-3">
-    <button id="btn-voltar" onclick="voltar()" class="hidden items-center gap-2 px-5 py-3 rounded-xl text-white/60 hover:text-white transition-all text-sm font-medium" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)">
+    <button id="btn-voltar" onclick="voltar()" aria-label="Voltar para etapa anterior" class="hidden items-center gap-2 px-5 py-3 rounded-xl text-white/60 hover:text-white transition-all text-sm font-medium" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)">
       ← Voltar
     </button>
-    <button id="btn-avancar" onclick="avancar()" class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white transition-all text-sm" style="background:linear-gradient(135deg,#00A6FB,#0284c7)">
+    <button id="btn-avancar" onclick="avancar()" aria-label="Avançar para próxima etapa" class="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white transition-all text-sm" style="background:linear-gradient(135deg,#00A6FB,#0284c7)">
       Continuar →
     </button>
   </div>
@@ -493,6 +566,7 @@ const state = {
   atividade: '',
   fat: '',
   func: '',
+  notas: 'ate10', // padrão: até 10 notas (incluso)
   servicos: [],
   sit: '',
   urg: '',
@@ -500,7 +574,131 @@ const state = {
   whatsapp: '',
   email: '',
   cidade: '',
+  whatsappEarly: '', // captura opcional na etapa 1
 };
+
+// ============================================================
+// MÁSCARA WHATSAPP
+// ============================================================
+function mascaraWpp(input) {
+  let v = input.value.replace(/\D/g, '').substring(0, 11);
+  if (v.length > 6) v = '(' + v.substring(0,2) + ') ' + v.substring(2,7) + '-' + v.substring(7);
+  else if (v.length > 2) v = '(' + v.substring(0,2) + ') ' + v.substring(2);
+  else if (v.length > 0) v = '(' + v;
+  input.value = v;
+  // Sincroniza com o campo principal se for o early
+  if (input.id === 'inp-whatsapp-early' && document.getElementById('inp-whatsapp')) {
+    document.getElementById('inp-whatsapp').value = v;
+  }
+  if (input.id === 'inp-whatsapp' && document.getElementById('inp-whatsapp-early')) {
+    document.getElementById('inp-whatsapp-early').value = v;
+  }
+}
+
+// ============================================================
+// VALIDAÇÕES
+// ============================================================
+function valEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function valWpp(wpp) {
+  const nums = wpp.replace(/\D/g,'');
+  return nums.length >= 10 && nums.length <= 13;
+}
+
+// ============================================================
+// MENSAGENS ROTATIVAS NO LOADING
+// ============================================================
+const loadingMsgs = [
+  ['Analisando seu perfil...', 'Identificando o melhor enquadramento tributário'],
+  ['Calculando honorários...', 'Baseado nas tabelas ASSCON/CRC-SP 2026'],
+  ['Verificando serviços incluídos...', 'Montando o escopo ideal para sua empresa'],
+  ['Preparando sua proposta...', 'Quase pronto! Personalizando os detalhes'],
+];
+let loadingInterval;
+function iniciarLoading() {
+  let i = 0;
+  const msgEl = document.getElementById('loading-msg');
+  const subEl = document.getElementById('loading-sub');
+  if (msgEl && subEl) {
+    msgEl.textContent = loadingMsgs[0][0];
+    subEl.textContent = loadingMsgs[0][1];
+    loadingInterval = setInterval(() => {
+      i = (i + 1) % loadingMsgs.length;
+      if (msgEl) msgEl.textContent = loadingMsgs[i][0];
+      if (subEl) subEl.textContent = loadingMsgs[i][1];
+    }, 3000);
+  }
+}
+function pararLoading() {
+  if (loadingInterval) clearInterval(loadingInterval);
+}
+
+// ============================================================
+// PREVIEW DE HONORÁRIOS (etapa 4.5)
+// ============================================================
+function calcPreviewHonorarios() {
+  const fatMap = {
+    'ate_81k':   { min: 89,   rec: 150,  max: 200,  label: 'MEI' },
+    '81k_360k':  { min: 350,  rec: 450,  max: 600,  label: 'Simples Nacional' },
+    '360k_720k': { min: 600,  rec: 800,  max: 1100, label: 'Simples Nacional' },
+    '720k_1_8m': { min: 900,  rec: 1200, max: 1600, label: 'Simples / Presumido' },
+    '1_8m_4_8m': { min: 1400, rec: 1800, max: 2500, label: 'Lucro Presumido' },
+    'acima_4_8m':{ min: 2000, rec: 2800, max: 4000, label: 'Lucro Real/Presumido' },
+    'nao_sei':   { min: 300,  rec: 500,  max: 800,  label: 'A definir' },
+  };
+
+  // Adicional por funcionários (CRC-SP 2026)
+  const funcAdic = { '0': 0, '1_3': 240, '4_10': 520, '11_30': 1000, 'acima_30': 1800 };
+
+  // Adicional por serviço selecionado
+  const funcNum = { '0':0, '1_3':2, '4_10':7, '11_30':20, 'acima_30':35 };
+  const n = funcNum[state.func] || 0;
+  const svcAdic = {
+    escrituracao: 0,
+    fiscal: 150,
+    dp_folha: Math.max(80, n * 80), // R$80 por funcionário, mín R$80
+    irpf: 120,
+    abertura: 0,
+    pericia: 350,
+    consultoria: 250,
+    certidoes: 100,
+  };
+
+  // Adicional por notas fiscais (tabela CRC-SP 2026)
+  const notasAdic = { ate10: 0, '11_30': 50, '31_100': 120, acima100: 250 };
+  const adicNotas = notasAdic[state.notas] || 0;
+
+  const base = fatMap[state.fat] || { min: 300, rec: 500, max: 800, label: '' };
+  const adicFunc = funcAdic[state.func] || 0;
+  const adicSvc = state.servicos.reduce((acc, s) => acc + (svcAdic[s] || 0), 0);
+
+  const rec = base.rec + adicFunc + adicSvc + adicNotas;
+  const min = base.min + Math.round(adicFunc * 0.8) + Math.round(adicSvc * 0.8) + Math.round(adicNotas * 0.8);
+  const max = base.max + Math.round(adicFunc * 1.3) + Math.round(adicSvc * 1.2) + Math.round(adicNotas * 1.2);
+
+  const fmt2 = v => 'R$ ' + v.toLocaleString('pt-BR');
+  document.getElementById('preview-valor').innerHTML =
+    `<span style="color:rgba(255,255,255,0.5);font-size:1rem">${fmt2(min)}</span>
+     <span class="mx-3">→</span>
+     <span class="text-sol-blue">${fmt2(rec)}</span>
+     <span style="color:rgba(255,255,255,0.5);font-size:1rem"> → ${fmt2(max)}</span>`;
+
+  const svcNomes = {
+    escrituracao: '✓ Escrituração contábil completa',
+    fiscal: '✓ Consultoria fiscal e tributária',
+    dp_folha: '✓ Folha de pagamento e DP',
+    irpf: '✓ Declaração de Imposto de Renda',
+    abertura: '✓ Abertura de empresa',
+    pericia: '✓ Perícia e auditoria contábil',
+    consultoria: '✓ Consultoria empresarial',
+    certidoes: '✓ Certidões e regularização',
+  };
+  const lista = document.getElementById('preview-lista');
+  lista.innerHTML = state.servicos.map(s => `<li>${svcNomes[s] || s}</li>`).join('');
+  if (state.servicos.length === 0) lista.innerHTML = '<li>Selecione os serviços para ver o detalhamento</li>';
+}
 
 // ============================================================
 // SELEÇÃO DE OPÇÕES
@@ -535,12 +733,16 @@ function toggleSvc(btn) {
 function podeAvancar() {
   const e = state.etapa;
   if (e === 1) return state.tipo !== '' && document.getElementById('inp-atividade').value.trim().length >= 3;
-  if (e === 2) return state.fat !== '' && state.func !== '';
+  if (e === 2) return state.fat !== '' && state.func !== '' && state.notas !== '';
   if (e === 3) return state.servicos.length > 0;
   if (e === 4) return state.sit !== '' && state.urg !== '';
   if (e === 5) {
-    return document.getElementById('inp-nome').value.trim().length >= 2 &&
-           document.getElementById('inp-whatsapp').value.trim().length >= 10;
+    const nome = document.getElementById('inp-nome').value.trim();
+    const wpp = document.getElementById('inp-whatsapp').value.trim().replace(/\D/g,'');
+    const email = document.getElementById('inp-email').value.trim();
+    // Valida e-mail apenas se preenchido
+    if (email && !valEmail(email)) return false;
+    return nome.length >= 2 && wpp.length >= 10 && wpp.length <= 13;
   }
   return true;
 }
@@ -553,72 +755,114 @@ function avancar() {
     alert('Por favor, preencha todos os campos obrigatórios antes de continuar.');
     return;
   }
-  if (state.etapa === 5) {
+
+  // Etapa 1 — salva atividade e early WhatsApp
+  if (state.etapa === 1) {
     state.atividade = document.getElementById('inp-atividade').value.trim();
+    const earlyWpp = document.getElementById('inp-whatsapp-early');
+    if (earlyWpp) state.whatsappEarly = earlyWpp.value.trim();
+  }
+
+  // Etapa 4 → vai para preview (4.5)
+  if (state.etapa === 4) {
+    state.etapa = 45;
+    renderEtapa();
+    calcPreviewHonorarios();
+    return;
+  }
+
+  // Etapa 4.5 → vai para etapa 5 (contato)
+  if (state.etapa === 45) {
+    state.etapa = 5;
+    // Preenche WhatsApp se já foi capturado no early
+    if (state.whatsappEarly) {
+      const wppEl = document.getElementById('inp-whatsapp');
+      if (wppEl && !wppEl.value) wppEl.value = state.whatsappEarly;
+    }
+    renderEtapa();
+    return;
+  }
+
+  // Etapa 5 → gerar proposta
+  if (state.etapa === 5) {
     state.nome = document.getElementById('inp-nome').value.trim();
     state.whatsapp = document.getElementById('inp-whatsapp').value.trim();
     state.email = document.getElementById('inp-email').value.trim();
     state.cidade = document.getElementById('inp-cidade').value.trim();
+    // Validação extra WhatsApp
+    const wppLimpo = state.whatsapp.replace(/\D/g,'');
+    if (wppLimpo.length < 10) {
+      document.getElementById('wpp-erro').classList.remove('hidden');
+      return;
+    }
+    document.getElementById('wpp-erro').classList.add('hidden');
     gerarProposta();
-  } else {
-    if (state.etapa === 1) state.atividade = document.getElementById('inp-atividade').value.trim();
-    state.etapa++;
-    renderEtapa();
+    return;
   }
+
+  state.etapa++;
+  renderEtapa();
 }
 
 function voltar() {
-  if (state.etapa > 1) {
-    state.etapa--;
-    renderEtapa();
-  }
+  if (state.etapa === 45) { state.etapa = 4; renderEtapa(); return; }
+  if (state.etapa === 5) { state.etapa = 45; renderEtapa(); calcPreviewHonorarios(); return; }
+  if (state.etapa > 1) { state.etapa--; renderEtapa(); }
 }
 
 function renderEtapa() {
-  // Esconder todas as etapas
-  for (let i = 1; i <= 7; i++) {
-    const el = document.getElementById('etapa' + i);
-    if (el) el.classList.remove('active');
-  }
+  // Esconder todas as etapas (incluindo 4.5)
+  ['1','2','3','4','45','5','6','7'].forEach(id => {
+    const el = document.getElementById('etapa' + id);
+    if (el) { el.classList.remove('active'); el.style.display = 'none'; }
+  });
+
   // Mostrar etapa atual
   const cur = document.getElementById('etapa' + state.etapa);
-  if (cur) cur.classList.add('active');
+  if (cur) { cur.style.display = 'block'; cur.classList.add('active'); }
 
-  // Progresso
-  const pct = Math.round((state.etapa / 5) * 100);
-  const pctClamped = Math.min(pct, 100);
-  document.getElementById('progress-fill').style.width = pctClamped + '%';
-  document.getElementById('pct-label').textContent = pctClamped + '%';
-  document.getElementById('etapa-label').textContent = 'Etapa ' + Math.min(state.etapa, 5) + ' de 5';
+  // Progresso — mapeia etapa 45 como 4.8
+  const etapaNum = state.etapa === 45 ? 4.8 : state.etapa;
+  const pct = Math.min(100, Math.round((etapaNum / 5) * 100));
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('pct-label').textContent = pct + '%';
+  const etapaLabel = state.etapa === 45 ? '4 de 5' : 'Etapa ' + Math.min(state.etapa, 5) + ' de 5';
+  document.getElementById('etapa-label').textContent = etapaLabel;
 
   // Labels de progresso
   const labels = ['lbl2','lbl3','lbl4','lbl5'];
   labels.forEach((id, i) => {
     const el = document.getElementById(id);
-    if (el) el.className = 'text-xs ' + (state.etapa > i + 1 ? 'text-sol-blue' : 'text-white/20');
+    if (el) el.className = 'text-xs ' + (etapaNum > i + 1 ? 'text-sol-blue' : 'text-white/20');
   });
 
   // Botão voltar
   const btnV = document.getElementById('btn-voltar');
-  if (state.etapa > 1 && state.etapa <= 5) {
-    btnV.classList.remove('hidden');
-    btnV.classList.add('flex');
-  } else {
-    btnV.classList.add('hidden');
-    btnV.classList.remove('flex');
-  }
+  const showVoltar = state.etapa > 1 && state.etapa !== 6 && state.etapa !== 7;
+  if (showVoltar) { btnV.classList.remove('hidden'); btnV.classList.add('flex'); }
+  else { btnV.classList.add('hidden'); btnV.classList.remove('flex'); }
 
-  // Botão avançar
+  // Tracking de etapa (Google Analytics)
+  try {
+    gtag('event', 'cotacao_etapa', { etapa: state.etapa, event_category: 'cotacao', event_label: 'Etapa ' + state.etapa });
+  } catch(e) {}
+
+  // Botão avançar e nav
   const btnA = document.getElementById('btn-avancar');
   const navBtns = document.getElementById('nav-btns');
-  if (state.etapa >= 6) {
+  if (state.etapa === 6 || state.etapa === 7) {
     navBtns.style.display = 'none';
     document.getElementById('progresso-container').style.display = 'none';
+    if (state.etapa === 6) iniciarLoading();
+    else pararLoading();
   } else {
+    pararLoading();
     navBtns.style.display = 'flex';
     document.getElementById('progresso-container').style.display = 'block';
     if (state.etapa === 5) {
       btnA.innerHTML = '✨ Gerar Minha Proposta Gratuita';
+    } else if (state.etapa === 45) {
+      btnA.innerHTML = '📋 Receber Proposta Completa →';
     } else {
       btnA.innerHTML = 'Continuar →';
     }
@@ -632,10 +876,24 @@ async function gerarProposta() {
   state.etapa = 6;
   renderEtapa();
 
+  // Salva lead no localStorage antes de chamar API (evita perda em erro)
+  try {
+    localStorage.setItem('solcontabil_lead', JSON.stringify({
+      nome: state.nome,
+      whatsapp: state.whatsapp,
+      email: state.email,
+      tipo: state.tipo,
+      fat: state.fat,
+      servicos: state.servicos,
+      ts: new Date().toISOString()
+    }));
+  } catch(e) { /* ignora se localStorage indisponível */ }
+
   const payload = {
     tipoEmpresa: state.tipo,
     atividade: state.atividade,
     faturamentoAnual: state.fat,
+    notasFiscais: state.notas,
     funcionarios: state.func,
     servicos: state.servicos,
     situacaoAtual: state.sit,
@@ -644,11 +902,12 @@ async function gerarProposta() {
     whatsapp: state.whatsapp,
     email: state.email || undefined,
     cidade: state.cidade || undefined,
+    instrucoes: 'NUNCA mencionar EIRELI (extinta em 2021). Usar SLU (Sociedade Limitada Unipessoal) para empresas sem sócios. Dados 2026: salário mínimo R$1.621, teto INSS R$8.475,55, isenção IRPF até R$5.000.',
   };
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 45000); // 45s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -672,6 +931,7 @@ async function gerarProposta() {
     }
   } catch (e) {
     console.error('Erro na chamada API:', e);
+    // Tenta recuperar do localStorage e pré-preenche link WhatsApp
     renderErro();
   }
 }
@@ -795,16 +1055,29 @@ function renderProposta(p) {
 }
 
 function renderErro() {
+  // Recupera dados do localStorage para pré-preencher WhatsApp
+  let waMsgErro = 'Olá! Tentei fazer uma cotação no site e gostaria de receber uma proposta personalizada.';
+  try {
+    const lead = JSON.parse(localStorage.getItem('solcontabil_lead') || '{}');
+    if (lead.nome && lead.fat) {
+      const fatLabel = { ate_81k:'até R$81k', '81k_360k':'R$81k-360k', '360k_720k':'R$360k-720k', '720k_1_8m':'R$720k-1,8M', '1_8m_4_8m':'R$1,8M-4,8M', acima_4_8m:'acima R$4,8M', nao_sei:'a definir' };
+      waMsgErro = `Olá! Fiz uma cotação no site da Sol Contábil. Meu nome é ${lead.nome}, tenho uma ${lead.tipo || 'empresa'} com faturamento ${fatLabel[lead.fat] || lead.fat}/ano. Serviços de interesse: ${(lead.servicos||[]).join(', ')}. Gostaria de receber uma proposta.`;
+    }
+  } catch(e) {}
+  const waErroLink = 'https://wa.me/5519982003732?text=' + encodeURIComponent(waMsgErro);
+
   document.getElementById('resultado-container').innerHTML = `
     <div class="text-center py-8">
-      <div class="text-4xl mb-4">😕</div>
-      <p class="text-white font-semibold mb-2">Não conseguimos gerar a proposta agora</p>
-      <p class="text-white/50 text-sm mb-6">Mas não se preocupe — fale diretamente com nosso contador!</p>
-      <a href="https://wa.me/5519982003732?text=Olá,%20tentei%20fazer%20uma%20cotação%20no%20site%20e%20gostaria%20de%20receber%20uma%20proposta%20personalizada."
+      <div class="text-4xl mb-4">⏱️</div>
+      <p class="text-white font-semibold mb-2">A proposta está demorando mais que o esperado</p>
+      <p class="text-white/50 text-sm mb-2">Não se preocupe — seu perfil foi registrado!</p>
+      <p class="text-white/40 text-xs mb-4">Fale agora com Rodolfo Assunção e receba a proposta em até 2 horas.</p>
+      <button onclick="tentarNovamente()" class="block w-full mb-3 px-6 py-3 rounded-xl font-semibold text-sm" style="background:rgba(0,166,251,0.15);border:1px solid rgba(0,166,251,0.3);color:#00A6FB">🔄 Tentar novamente</button>
+      <a href="${waErroLink}"
          target="_blank" rel="noopener"
-         class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white text-sm"
+         class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white text-sm w-full"
          style="background:linear-gradient(135deg,#25d366,#128c7e)">
-        📱 Falar no WhatsApp
+        📱 Falar no WhatsApp agora
       </a>
     </div>
   `;
@@ -812,16 +1085,26 @@ function renderErro() {
   renderEtapa();
 }
 
+function tentarNovamente() {
+  // Volta ao estado de loading e tenta chamar API novamente
+  state.etapa = 6;
+  renderEtapa();
+  gerarPropostaExec();
+}
+
+// Separa execução da API para permitir retry
+async function gerarPropostaExec() {
+
 function reiniciar() {
-  state.etapa = 1; state.tipo = ''; state.atividade = ''; state.fat = ''; state.func = '';
-  state.servicos = []; state.sit = ''; state.urg = ''; state.nome = ''; state.whatsapp = ''; state.email = ''; state.cidade = '';
-  document.getElementById('inp-atividade').value = '';
-  document.getElementById('inp-nome').value = '';
-  document.getElementById('inp-whatsapp').value = '';
-  document.getElementById('inp-email').value = '';
-  document.getElementById('inp-cidade').value = '';
+  Object.assign(state, { etapa:1, tipo:'', atividade:'', fat:'', func:'', notas:'ate10', servicos:[], sit:'', urg:'', nome:'', whatsapp:'', email:'', cidade:'', whatsappEarly:'' });
+  ['inp-atividade','inp-nome','inp-whatsapp','inp-email','inp-cidade','inp-whatsapp-early'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   document.querySelectorAll('.opt-card, .svc-card').forEach(b => b.classList.remove('selected'));
   document.getElementById('svc-count').classList.add('hidden');
+  document.getElementById('wpp-erro')?.classList.add('hidden');
+  pararLoading();
   renderEtapa();
 }
 
