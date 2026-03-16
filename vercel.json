@@ -22,6 +22,10 @@
       ]
     }
   ],
+  "passwordProtection": {
+    "deploymentUrl": "solcontabil.com.br",
+    "password": "Todo dia ela faz tudo sempre igual 2357"
+  },
   "rewrites": [
     {
       "source": "/contador-em-limeira",
