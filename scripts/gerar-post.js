@@ -593,6 +593,108 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
     </div>
   </footer>
 
+  <!-- CHATBOT WIDGET - SOL CONTÁBIL v2 -->
+  <button id="sol-toggle" style="position: fixed; bottom: 28px; right: 28px; z-index: 9998; width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer; background: linear-gradient(145deg, #0A2540 0%, #1a6fc4 100%); box-shadow: 0 4px 24px rgba(26,111,196,0.5); transition: transform 0.25s, box-shadow 0.25s; display: flex; align-items: center; justify-content: center;" title="Abrir assistente virtual">
+    <span id="sol-badge" style="position: absolute; top: -3px; right: -3px; width: 22px; height: 22px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: white; border: 2px solid white; animation: sol-pulse 2s infinite;">1</span>
+    <svg id="sol-toggle-icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="position: absolute; transition: opacity 0.2s, transform 0.2s;">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    <svg id="sol-toggle-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="position: absolute; opacity: 0; transform: rotate(-90deg); transition: opacity 0.2s, transform 0.2s;">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <div id="sol-window" style="position: fixed; bottom: 100px; right: 28px; z-index: 9999; width: 370px; height: 560px; max-height: 82vh; background: white; border-radius: 20px; box-shadow: 0 12px 56px rgba(0,0,0,0.18); display: none; flex-direction: column; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); animation: sol-slidein 0.3s cubic-bezier(0.34,1.56,0.64,1);">
+    <div id="sol-header" style="background: linear-gradient(135deg, #0A2540 0%, #1a6fc4 100%); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid rgba(255,255,255,0.3);">🤖</div>
+        <div>
+          <p style="color: white; font-size: 14px; font-weight: 700; margin: 0; line-height: 1.2;">Sol</p>
+          <p style="color: rgba(255,255,255,0.75); font-size: 11px; margin: 0; display: flex; align-items: center; gap: 4px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #4ade80; display: inline-block; animation: sol-blink 2s infinite;"></span> Online agora</p>
+        </div>
+      </div>
+      <button id="sol-header-close" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0;">✕</button>
+    </div>
+    <div id="sol-messages" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #f9fafb;">
+      <div style="background: white; border-radius: 12px; padding: 12px; max-width: 85%; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+        <p style="margin: 0; color: #1f2937; font-size: 13px; line-height: 1.5;">👋 Olá! Sou a Sol, assistente da Sol Contábil. Respondemos em segundos ✓</p>
+      </div>
+    </div>
+    <div style="padding: 12px 16px; border-top: 1px solid #e5e7eb; display: flex; gap: 8px; flex-shrink: 0;">
+      <input id="sol-input" type="text" placeholder="Sua dúvida..." style="flex: 1; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; font-size: 13px; outline: none; font-family: 'DM Sans', 'Segoe UI', sans-serif;">
+      <button id="sol-send-btn" style="background: #1a6fc4; color: white; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: 600; font-family: 'DM Sans', 'Segoe UI', sans-serif;">→</button>
+    </div>
+  </div>
+
+  <style>
+    @keyframes sol-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4)} 50%{box-shadow:0 0 0 6px rgba(239,68,68,0)} }
+    @keyframes sol-blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    @keyframes sol-slidein { from{opacity:0;transform:translateY(20px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+    #sol-toggle:hover { transform: scale(1.1); box-shadow: 0 6px 32px rgba(26,111,196,0.65); }
+    #sol-toggle.is-open { background: linear-gradient(145deg, #1a1a2e 0%, #374151 100%); }
+    #sol-toggle.is-open #sol-toggle-icon-chat { opacity: 0; transform: rotate(90deg); }
+    #sol-toggle.is-open #sol-toggle-icon-close { opacity: 1; transform: rotate(0deg); }
+    @media (max-width: 480px) {
+      #sol-window { width: calc(100vw - 16px); right: 8px; bottom: 84px; height: 72vh; border-radius: 16px; }
+      #sol-toggle { bottom: 18px; right: 18px; width: 56px; height: 56px; }
+    }
+  </style>
+
+  <script>
+    const solToggle = document.getElementById('sol-toggle');
+    const solWindow = document.getElementById('sol-window');
+    const solHeaderClose = document.getElementById('sol-header-close');
+    const solInput = document.getElementById('sol-input');
+    const solSendBtn = document.getElementById('sol-send-btn');
+    const solMessages = document.getElementById('sol-messages');
+    const solBadge = document.getElementById('sol-badge');
+
+    // Mostrar notificação automaticamente
+    solBadge.style.display = 'flex';
+
+    // Toggle da janela
+    solToggle.addEventListener('click', () => {
+      const isOpen = solWindow.style.display !== 'none';
+      solWindow.style.display = isOpen ? 'none' : 'flex';
+      solToggle.classList.toggle('is-open');
+      if (!isOpen) {
+        solInput.focus();
+        solBadge.style.display = 'none';
+      }
+    });
+
+    // Fechar janela
+    solHeaderClose.addEventListener('click', () => {
+      solWindow.style.display = 'none';
+      solToggle.classList.remove('is-open');
+    });
+
+    // Enviar mensagem
+    solSendBtn.addEventListener('click', () => {
+      const msg = solInput.value.trim();
+      if (msg) {
+        const userMsg = document.createElement('div');
+        userMsg.style.cssText = 'align-self: flex-end; background: #1a6fc4; color: white; border-radius: 12px; padding: 10px 12px; max-width: 85%; font-size: 13px; line-height: 1.5;';
+        userMsg.textContent = msg;
+        solMessages.appendChild(userMsg);
+        solInput.value = '';
+
+        setTimeout(() => {
+          const botMsg = document.createElement('div');
+          botMsg.style.cssText = 'background: white; border-radius: 12px; padding: 12px; max-width: 85%; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 13px; line-height: 1.5;';
+          botMsg.textContent = 'Obrigado pela sua mensagem! Um especialista da Sol Contábil entrará em contato em breve. 📞';
+          solMessages.appendChild(botMsg);
+          solMessages.scrollTop = solMessages.scrollHeight;
+        }, 500);
+      }
+    });
+
+    solInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') solSendBtn.click();
+    });
+  </script>
+
 </body>
 </html>`;
 
