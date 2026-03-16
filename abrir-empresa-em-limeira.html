@@ -332,5 +332,111 @@
     });
     solInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') solSendBtn.click(); });
   </script>
+<!-- PROTEÇÃO POR SENHA - SOL CONTÁBIL -->
+<script>
+(function() {
+    const password = "Todo dia ela faz tudo sempre igual 2357";
+    const sessionKey = "sol-contabil-authenticated";
+    
+    // Verificar se já foi autenticado nesta sessão
+    if (sessionStorage.getItem(sessionKey) === "true") {
+        return;
+    }
+    
+    // Criar modal de senha
+    const modal = document.createElement("div");
+    modal.id = "password-modal";
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    `;
+    
+    modal.innerHTML = `
+        <div style="
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        ">
+            <h2 style="margin: 0 0 10px 0; color: #333; font-size: 24px;">Sol Contábil</h2>
+            <p style="color: #666; margin: 0 0 20px 0;">Site em manutenção. Digite a senha para acessar.</p>
+            <input 
+                type="password" 
+                id="password-input" 
+                placeholder="Digite a senha..." 
+                style="
+                    width: 100%;
+                    padding: 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 6px;
+                    font-size: 16px;
+                    margin-bottom: 15px;
+                    box-sizing: border-box;
+                "
+            />
+            <button 
+                id="password-btn" 
+                style="
+                    width: 100%;
+                    padding: 12px;
+                    background: #0066cc;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: background 0.3s;
+                "
+                onmouseover="this.style.background='#0052a3'"
+                onmouseout="this.style.background='#0066cc'"
+            >
+                Entrar
+            </button>
+            <p id="error-msg" style="color: #e74c3c; margin: 10px 0 0 0; display: none;">Senha incorreta!</p>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    document.body.style.overflow = "hidden";
+    
+    const input = document.getElementById("password-input");
+    const btn = document.getElementById("password-btn");
+    const errorMsg = document.getElementById("error-msg");
+    
+    function checkPassword() {
+        if (input.value === password) {
+            sessionStorage.setItem(sessionKey, "true");
+            modal.remove();
+            document.body.style.overflow = "auto";
+        } else {
+            errorMsg.style.display = "block";
+            input.value = "";
+            input.focus();
+        }
+    }
+    
+    btn.addEventListener("click", checkPassword);
+    input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") checkPassword();
+    });
+    
+    input.focus();
+})();
+</script>
+<!-- FIM DA PROTEÇÃO POR SENHA -->
+
 </body>
 </html>
