@@ -539,7 +539,7 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
   try {
     const msg = await client.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 4000,
+      max_tokens: 8000,
       messages: [{ role: "user", content: prompt }]
     });
     const textoResposta = msg.content[0].text;
