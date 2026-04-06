@@ -3,10 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // ============================================================
-// CLUSTERS DE CONTEÚDO
-// Cada cluster tem 1 página PILAR + vários SATÉLITES
-// O script gera em sequência: pilar primeiro, depois satélites
-// Quando termina um cluster, começa o próximo automaticamente
+// CLUSTERS DE CONTEÚDO — CONTABILIDADE GERAL
 // ============================================================
 const CLUSTERS = [
 
@@ -184,6 +181,136 @@ const CLUSTERS = [
 ];
 
 // ============================================================
+// CLUSTERS DE CONTEÚDO — E-COMMERCE (prospecção passiva)
+// ============================================================
+const CLUSTERS_ECOMMERCE = [
+
+  {
+    id: 'ecommerce-fiscal-geral',
+    pilar: {
+      tema: "Contabilidade para E-commerce: Guia Completo para Vendedores Online 2026",
+      descricao: "Página pilar sobre obrigações fiscais e contábeis para lojas virtuais e vendedores online"
+    },
+    satelites: [
+      "Qual CNPJ abrir para vender online: MEI, ME ou LTDA?",
+      "Nota fiscal para e-commerce: obrigações e como emitir 2026",
+      "Simples Nacional para loja virtual: como calcular impostos",
+      "Como separar finanças pessoais e do e-commerce",
+      "Fluxo de caixa para loja online: como controlar",
+      "ICMS no e-commerce: o que muda entre estados em 2026",
+      "Como fazer a contabilidade da sua loja virtual",
+      "Pró-labore no e-commerce: como se pagar corretamente",
+      "DAS MEI para vendedores online: como calcular e pagar",
+      "Regimes tributários para e-commerce: qual o mais vantajoso",
+      "Como organizar documentos fiscais do e-commerce",
+    ]
+  },
+
+  {
+    id: 'mercado-livre-fiscal',
+    pilar: {
+      tema: "Guia Fiscal Completo para Vendedores do Mercado Livre 2026",
+      descricao: "Página pilar sobre impostos, CNPJ e obrigações fiscais para quem vende no Mercado Livre"
+    },
+    satelites: [
+      "MEI pode vender no Mercado Livre? Limites e regras 2026",
+      "Como emitir nota fiscal no Mercado Livre passo a passo",
+      "Impostos para vendedor do Mercado Livre: o que pagar em 2026",
+      "Mercado Livre retém imposto? Entenda o repasse fiscal",
+      "CNPJ para Mercado Livre: como abrir e qual tipo escolher",
+      "Como declarar vendas do Mercado Livre no Imposto de Renda",
+      "Mercado Livre Full: obrigações fiscais do estoque na ML",
+      "Como reduzir impostos vendendo no Mercado Livre legalmente",
+      "Receita Federal e Mercado Livre: o que o fisco enxerga",
+      "Quando migrar de MEI para ME vendendo no Mercado Livre",
+      "Informe de rendimentos Mercado Livre: como usar na declaração",
+    ]
+  },
+
+  {
+    id: 'shopee-fiscal',
+    pilar: {
+      tema: "Guia Fiscal para Vendedores da Shopee: Impostos e CNPJ 2026",
+      descricao: "Página pilar sobre obrigações fiscais e contábeis para quem vende na Shopee"
+    },
+    satelites: [
+      "MEI pode vender na Shopee? O que a legislação diz em 2026",
+      "Como emitir nota fiscal para vendas na Shopee",
+      "Impostos para vendedor da Shopee: guia completo 2026",
+      "CNPJ para Shopee: qual tipo abrir para vender mais",
+      "Como declarar vendas da Shopee no IR 2026",
+      "Shopee retém imposto dos vendedores? Entenda como funciona",
+      "Limite de faturamento na Shopee para MEI: o que fazer ao atingir",
+      "Como organizar o financeiro vendendo na Shopee",
+      "Shopee Fulfillment: implicações fiscais do estoque terceirizado",
+      "Como reduzir a carga tributária vendendo na Shopee",
+    ]
+  },
+
+  {
+    id: 'nuvemshop-loja-propria',
+    pilar: {
+      tema: "Contabilidade para Loja Virtual Própria: Guia Completo 2026",
+      descricao: "Página pilar sobre fiscal e contábil para quem tem loja própria (Nuvemshop, WooCommerce, VTEX)"
+    },
+    satelites: [
+      "CNPJ para Nuvemshop: como abrir sua loja virtual com segurança",
+      "Nota fiscal em loja virtual própria: como emitir corretamente",
+      "Impostos para loja virtual: guia completo 2026",
+      "Como integrar ERP contábil à sua loja Nuvemshop",
+      "Frete e impostos no e-commerce: como calcular e repassar",
+      "Dropshipping fiscal: como regularizar sua operação em 2026",
+      "Loja virtual e ICMS interestadual: o que é e como recolher",
+      "Como precificar considerando impostos na loja virtual",
+      "WooCommerce e obrigações fiscais: o que todo lojista deve saber",
+      "Abertura de empresa para loja virtual: passo a passo completo",
+      "Como fazer a contabilidade de uma loja Nuvemshop mensalmente",
+    ]
+  },
+
+  {
+    id: 'amazon-outros-marketplaces',
+    pilar: {
+      tema: "Guia Fiscal para Vendedores de Marketplaces: Amazon, Magalu e Outros 2026",
+      descricao: "Página pilar sobre impostos para quem vende em múltiplos marketplaces"
+    },
+    satelites: [
+      "Como vender na Amazon Brasil com CNPJ: obrigações fiscais",
+      "Magalu Marketplace: impostos e nota fiscal para vendedores",
+      "Como conciliar vendas de múltiplos marketplaces na contabilidade",
+      "Relatório de vendas para declaração do IR: como organizar",
+      "Gateway de pagamento e impostos: o que muda para e-commerce",
+      "Como escalar vendas online sem aumentar a carga tributária",
+      "Estoque e CMV no e-commerce: como controlar corretamente",
+      "Devolução e troca no e-commerce: como tratar fiscalmente",
+      "Vender no exterior pelo e-commerce: obrigações fiscais 2026",
+      "E-commerce B2B: diferenças fiscais em relação ao B2C",
+    ]
+  },
+
+  {
+    id: 'ecommerce-crescimento',
+    pilar: {
+      tema: "Como Crescer no E-commerce sem Problemas com o Fisco em 2026",
+      descricao: "Página pilar sobre planejamento fiscal para escalar vendas online com segurança"
+    },
+    satelites: [
+      "Quando formalizar o e-commerce: MEI, ME ou esperar?",
+      "Como planejar tributariamente a expansão do e-commerce",
+      "Sócio no e-commerce: como estruturar a sociedade corretamente",
+      "Marca própria no e-commerce: implicações fiscais e jurídicas",
+      "Como contratar funcionários para o e-commerce em 2026",
+      "Investidor anjo no e-commerce: como estruturar fiscalmente",
+      "Franquia de e-commerce: obrigações fiscais do franqueado",
+      "E-commerce e reforma tributária 2026: o que muda para vendedores",
+      "Como fazer auditoria fiscal preventiva no e-commerce",
+      "Planejamento tributário para lojistas online em 2026",
+    ]
+  },
+
+];
+
+// ============================================================
 // TEMAS SAZONAIS - Prioridade em meses específicos
 // ============================================================
 const TEMAS_SAZONAIS = {
@@ -204,6 +331,21 @@ const TEMAS_SAZONAIS = {
     "Fechamento fiscal 2026: o que sua empresa precisa fazer",
     "13 salário segunda parcela 2026: prazo e como calcular",
     "Planejamento tributário 2027: como começar agora",
+  ],
+};
+
+// Temas sazonais específicos para e-commerce
+const TEMAS_SAZONAIS_ECOMMERCE = {
+  '11': [
+    "Black Friday 2026: como preparar o e-commerce fiscalmente",
+    "Como emitir notas fiscais em volume na Black Friday",
+  ],
+  '12': [
+    "Natal e e-commerce: obrigações fiscais do pico de vendas",
+    "Fechamento fiscal do e-commerce 2026: checklist completo",
+  ],
+  '03': [
+    "DASN-SIMEI 2026 para vendedores online: como declarar corretamente",
   ],
 };
 
@@ -229,17 +371,14 @@ const CONFIG = {
 
 // ============================================================
 // SELECIONA O PRÓXIMO POST A GERAR
-// Lógica: percorre os clusters em ordem, pilar primeiro,
-// depois satélites. Pula posts já existentes.
 // ============================================================
-function selecionarProximoPost() {
+function selecionarProximoPost(clusters) {
   const gerarSlug = t => t.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9\s-]/g, '')
     .trim().replace(/\s+/g, '-').substring(0, 60);
 
-  for (const cluster of CLUSTERS) {
-    // Verifica pilar
+  for (const cluster of clusters) {
     const slugPilar = gerarSlug(cluster.pilar.tema);
     if (!fs.existsSync(`blog/${slugPilar}.html`)) {
       return {
@@ -255,7 +394,6 @@ function selecionarProximoPost() {
       };
     }
 
-    // Verifica satélites
     for (const satelite of cluster.satelites) {
       const slugSatelite = gerarSlug(satelite);
       if (!fs.existsSync(`blog/${slugSatelite}.html`)) {
@@ -276,26 +414,50 @@ function selecionarProximoPost() {
 
   // Todos os clusters completos — volta ao início
   return {
-    tema: CLUSTERS[0].pilar.tema,
+    tema: clusters[0].pilar.tema,
     tipo: 'pilar',
-    clusterId: CLUSTERS[0].id,
-    clusterTema: CLUSTERS[0].pilar.tema,
+    clusterId: clusters[0].id,
+    clusterTema: clusters[0].pilar.tema,
   };
 }
 
 // ============================================================
-// FUNÇÃO PRINCIPAL
+// BUSCA POSTS EXISTENTES
 // ============================================================
-async function main() {
-  const client = new Anthropic();
+function obterPostsExistentes() {
+  const blogDir = path.join('blog');
+  if (!fs.existsSync(blogDir)) return [];
+  try {
+    return fs.readdirSync(blogDir)
+      .filter(f => f.endsWith('.html') && f !== 'index.html')
+      .slice(-8)
+      .map(arquivo => {
+        const slug = arquivo.replace('.html', '');
+        try {
+          const conteudo = fs.readFileSync(path.join(blogDir, arquivo), 'utf8');
+          const match = conteudo.match(/<title>([^<]+) - /);
+          return { slug, titulo: match ? match[1] : slug.replace(/-/g, ' ') };
+        } catch { return { slug, titulo: slug.replace(/-/g, ' ') }; }
+      });
+  } catch { return []; }
+}
+
+// ============================================================
+// GERA UM ÚNICO POST (função reutilizável)
+// isEcommerce: boolean — define clusters, badge e tom do prompt
+// ============================================================
+async function gerarPost(client, isEcommerce = false) {
   const hoje = new Date();
   const mes = String(hoje.getMonth() + 1).padStart(2, '0');
   const dataFormatada = hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
   const dataISO = hoje.toISOString().split('T')[0];
 
+  const clustersAlvo = isEcommerce ? CLUSTERS_ECOMMERCE : CLUSTERS;
+  const sazonaisAlvo = isEcommerce ? TEMAS_SAZONAIS_ECOMMERCE : TEMAS_SAZONAIS;
+
   // Verifica tema sazonal primeiro
   let temaInfo = null;
-  const sazonais = TEMAS_SAZONAIS[mes];
+  const sazonais = sazonaisAlvo[mes];
   if (sazonais) {
     const diaDoMes = hoje.getDate();
     if (diaDoMes <= sazonais.length) {
@@ -307,23 +469,21 @@ async function main() {
     }
   }
 
-  // Se não há sazonal, seleciona próximo do cluster
   if (!temaInfo) {
-    temaInfo = selecionarProximoPost();
+    temaInfo = selecionarProximoPost(clustersAlvo);
   }
 
   const { tema, tipo, clusterTema, slugPilar, linksSatelites } = temaInfo;
 
-  console.log(`📝 Gerando post [${tipo}]: "${tema}"`);
+  const categoriaLabel = isEcommerce ? 'e-commerce' : 'geral';
+  console.log(`📝 [${categoriaLabel}] Gerando post [${tipo}]: "${tema}"`);
   if (clusterTema) console.log(`🗂️  Cluster: "${clusterTema}"`);
 
-  // Gera o slug
   const slug = tema.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9\s-]/g, '')
     .trim().replace(/\s+/g, '-').substring(0, 60);
 
-  // Monta contexto de links do cluster para o prompt
   let contextoCluster = '';
   if (tipo === 'satelite' && slugPilar) {
     contextoCluster += `\nEste artigo faz parte do cluster "${clusterTema}".`;
@@ -337,21 +497,23 @@ async function main() {
     contextoCluster += linksSatelites.map(l => `- /blog/${l.slug} → "${l.tema}"`).join('\n');
   }
 
-  // Posts existentes para links internos gerais
   const postsExistentes = obterPostsExistentes();
   const linksGerais = postsExistentes.length > 0
     ? `\nOUTROS POSTS DO BLOG (use 1-2 quando relevante):\n` +
       postsExistentes.slice(0, 5).map(p => `- /blog/${p.slug} → "${p.titulo}"`).join('\n')
     : '';
 
-  // ============================================================
-  // PROMPT
-  // ============================================================
+  // Tom e instrução adicional para e-commerce
+  const instrucaoEcommerce = isEcommerce
+    ? `\nEste artigo é voltado especificamente para VENDEDORES ONLINE (Mercado Livre, Shopee, Nuvemshop, Amazon etc.). Use linguagem direta e prática, como se estivesse falando com um lojista digital que entende de vendas mas não de contabilidade. Mencione plataformas de marketplace quando relevante. O objetivo é atrair vendedores online que precisam de contador especializado em e-commerce.`
+    : '';
+
   const prompt = `Você é um contador especialista em SEO com profundo conhecimento da legislação brasileira atualizada em 2026. Crie um artigo de blog COMPLETO em português brasileiro sobre o tema: "${tema}"
 
 O artigo deve ser para o escritório de contabilidade "${CONFIG.empresa}" localizado em ${CONFIG.cidade}-SP.
 ${contextoCluster}
 ${linksGerais}
+${instrucaoEcommerce}
 
 REGRAS OBRIGATÓRIAS:
 - Use SEMPRE informações atualizadas de 2026
@@ -384,7 +546,7 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
     const jsonLimpo = textoResposta.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     resultado = JSON.parse(jsonLimpo);
   } catch (err) {
-    console.error('Erro ao chamar Claude API:', err);
+    console.error(`Erro ao chamar Claude API [${categoriaLabel}]:`, err);
     process.exit(1);
   }
 
@@ -392,14 +554,15 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
 
   const tempoLeitura = resultado.tempoLeitura || '6 min';
 
-  // Badge do tipo de post
-  const badgeTipo = tipo === 'pilar'
+  // Badge — e-commerce tem badge laranja especial
+  const badgeTipo = isEcommerce
+    ? `<span class="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">🛒 E-commerce</span>`
+    : tipo === 'pilar'
     ? `<span class="inline-block bg-sol-gold text-sol-dark text-xs font-bold px-3 py-1 rounded-full mb-4">📚 Guia Completo</span>`
     : tipo === 'sazonal'
     ? `<span class="inline-block bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">🗓️ Conteúdo da Semana</span>`
     : `<span class="inline-block bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">🔍 Artigo Especializado</span>`;
 
-  // Link para pilar (se for satélite)
   const linkPilar = (tipo === 'satelite' && slugPilar && fs.existsSync(`blog/${slugPilar}.html`))
     ? `<div class="bg-blue-50 border-l-4 border-sol-blue p-4 mb-8 rounded-r-lg">
         <p class="text-sm font-semibold text-sol-blue mb-1">📚 Parte do Guia Completo</p>
@@ -409,9 +572,11 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
       </div>`
     : '';
 
-  // ============================================================
-  // HTML DO POST
-  // ============================================================
+  // CTA personalizado para e-commerce
+  const ctaDescricao = isEcommerce
+    ? `Vende online e tem dúvidas sobre impostos? Fale com a ${CONFIG.empresa} e regularize seu e-commerce hoje!`
+    : `Precisa de ajuda com contabilidade? Fale agora com um especialista da ${CONFIG.empresa} e resolva sua situação!`;
+
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -564,8 +729,8 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
 
       <!-- CTA -->
       <section class="text-center py-8 bg-sol-blue text-white rounded-lg mt-8">
-        <h3 class="text-2xl font-bold mb-4">Precisa de ajuda com contabilidade?</h3>
-        <p class="mb-6 text-lg">Fale agora com um especialista da ${CONFIG.empresa} e resolva sua situação!</p>
+        <h3 class="text-2xl font-bold mb-4">${isEcommerce ? '🛒 Contador especialista em e-commerce' : 'Precisa de ajuda com contabilidade?'}</h3>
+        <p class="mb-6 text-lg">${ctaDescricao}</p>
         <a href="https://wa.me/${CONFIG.whatsapp}" target="_blank" class="inline-block bg-sol-gold hover:bg-yellow-600 text-sol-dark font-bold py-3 px-8 rounded-full text-lg transition duration-300 ease-in-out">
           ${resultado.ctaTexto}
         </a>
@@ -650,10 +815,8 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
     const solMessages = document.getElementById('sol-messages');
     const solBadge = document.getElementById('sol-badge');
 
-    // Mostrar notificação automaticamente
     solBadge.style.display = 'flex';
 
-    // Toggle da janela
     solToggle.addEventListener('click', () => {
       const isOpen = solWindow.style.display !== 'none';
       solWindow.style.display = isOpen ? 'none' : 'flex';
@@ -664,13 +827,11 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
       }
     });
 
-    // Fechar janela
     solHeaderClose.addEventListener('click', () => {
       solWindow.style.display = 'none';
       solToggle.classList.remove('is-open');
     });
 
-    // Enviar mensagem
     solSendBtn.addEventListener('click', () => {
       const msg = solInput.value.trim();
       if (msg) {
@@ -698,50 +859,28 @@ ESTRUTURA OBRIGATÓRIA (retorne APENAS JSON válido, sem markdown):
 </body>
 </html>`;
 
-  // Salva o post
   const caminhoPost = path.join('blog', `${slug}.html`);
   fs.writeFileSync(caminhoPost, html, 'utf8');
   console.log(`💾 Post salvo: ${caminhoPost}`);
 
-  // Atualiza index e sitemap
-  atualizarIndexBlog(slug, resultado.titulo, resultado.metaDescription, dataFormatada, dataISO, tempoLeitura, tipo);
-  gerarSitemap(dataISO);
+  atualizarIndexBlog(slug, resultado.titulo, resultado.metaDescription, dataFormatada, dataISO, tempoLeitura, tipo, isEcommerce);
 
-  console.log(`🚀 Pronto! [${tipo.toUpperCase()}] "${resultado.titulo}"`);
-}
-
-// ============================================================
-// BUSCA POSTS EXISTENTES
-// ============================================================
-function obterPostsExistentes() {
-  const blogDir = path.join('blog');
-  if (!fs.existsSync(blogDir)) return [];
-  try {
-    return fs.readdirSync(blogDir)
-      .filter(f => f.endsWith('.html') && f !== 'index.html')
-      .slice(-8)
-      .map(arquivo => {
-        const slug = arquivo.replace('.html', '');
-        try {
-          const conteudo = fs.readFileSync(path.join(blogDir, arquivo), 'utf8');
-          const match = conteudo.match(/<title>([^<]+) - /);
-          return { slug, titulo: match ? match[1] : slug.replace(/-/g, ' ') };
-        } catch { return { slug, titulo: slug.replace(/-/g, ' ') }; }
-      });
-  } catch { return []; }
+  return { slug, titulo: resultado.titulo, dataISO };
 }
 
 // ============================================================
 // ATUALIZA O INDEX DO BLOG
 // ============================================================
-function atualizarIndexBlog(slug, titulo, descricao, dataFormatada, dataISO, tempoLeitura, tipo) {
+function atualizarIndexBlog(slug, titulo, descricao, dataFormatada, dataISO, tempoLeitura, tipo, isEcommerce = false) {
   const indexPath = path.join('blog', 'index.html');
   if (!fs.existsSync(indexPath)) {
     console.log('⚠️  blog/index.html não encontrado.');
     return;
   }
 
-  const badgeHtml = tipo === 'pilar'
+  const badgeHtml = isEcommerce
+    ? `<span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded mb-2">🛒 E-commerce</span>`
+    : tipo === 'pilar'
     ? `<span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded mb-2">📚 Guia Completo</span>`
     : `<span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded mb-2">🔍 Artigo</span>`;
 
@@ -820,6 +959,33 @@ ${urlsPosts.join('\n')}
 
   fs.writeFileSync('sitemap.xml', sitemap, 'utf8');
   console.log(`🗺️  Sitemap atualizado com ${urlsPosts.length} posts!`);
+}
+
+// ============================================================
+// FUNÇÃO PRINCIPAL — gera 2 posts por execução
+// ============================================================
+async function main() {
+  const client = new Anthropic();
+  const dataISO = new Date().toISOString().split('T')[0];
+
+  console.log('🌅 Sol Contábil — Gerador de Blog');
+  console.log('====================================');
+
+  // Post 1: conteúdo geral (clusters originais)
+  console.log('\n--- POST 1/2: Contabilidade Geral ---');
+  const post1 = await gerarPost(client, false);
+
+  // Post 2: e-commerce (prospecção passiva)
+  console.log('\n--- POST 2/2: E-commerce ---');
+  const post2 = await gerarPost(client, true);
+
+  // Atualiza sitemap uma única vez ao final
+  gerarSitemap(dataISO);
+
+  console.log('\n====================================');
+  console.log(`✅ 2 posts gerados com sucesso!`);
+  console.log(`   📄 Geral:      ${post1.titulo}`);
+  console.log(`   🛒 E-commerce: ${post2.titulo}`);
 }
 
 main().catch(err => {
