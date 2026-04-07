@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Nota Fiscal para E-commerce 2026 - Sol Contábil</title>
+  <meta name="description" content="Descubra quanto de imposto você paga por nota fiscal no e-commerce. Simule por plataforma: Mercado Livre, Shopee, Nuvemshop e mais.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'sol-blue': '#1a6fc4',
+            'sol-dark': '#0A2540',
+            'sol-gold': '#f5a623',
+          },
+          fontFamily: {
+            'sora': ['Sora', 'sans-serif'],
+            'mono': ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Sora', sans-serif; }
+    body { background: #f0f4f8; min-height: 100vh; }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 60%, #0d2e50 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -15%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(245,166,35,0.09) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(26,111,196,0.13) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(10,37,64,0.08);
+      transition: box-shadow 0.3s;
+    }
+    .card:hover { box-shadow: 0 8px 40px rgba(10,37,64,0.12); }
+
+    .input-field {
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 16px;
+      font-family: 'Sora', sans-serif;
+      color: #0A2540;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      background: #f8fafc;
+    }
+    .input-field:focus {
+      border-color: #1a6fc4;
+      box-shadow: 0 0 0 4px rgba(26,111,196,0.1);
+      background: white;
+    }
+
+    .select-field {
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-family: 'Sora', sans-serif;
+      color: #0A2540;
+      outline: none;
+      background: #f8fafc;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a6fc4' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      transition: border-color 0.2s;
+    }
+    .select-field:focus {
+      border-color: #1a6fc4;
+      box-shadow: 0 0 0 4px rgba(26,111,196,0.1);
+      background-color: white;
+    }
+
+    .btn-simular {
+      background: linear-gradient(135deg, #1a6fc4 0%, #0A2540 100%);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 18px 40px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Sora', sans-serif;
+    }
+    .btn-simular:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(26,111,196,0.4);
+    }
+    .btn-simular:active { transform: translateY(0); }
+
+    .stat-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-box:hover {
+      transform: translateY(-2px);
+      border-color: #1a6fc4;
+    }
+    .stat-box.destaque {
+      background: linear-gradient(135deg, #0A2540 0%, #1a6fc4 100%);
+      border-color: transparent;
+      color: white;
+    }
+
+    .plataforma-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .linha-imposto {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .linha-imposto:last-child { border-bottom: none; }
+
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s ease;
+    }
+
+    .alerta-box {
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 100%);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(245,166,35,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 36px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Sora', sans-serif;
+    }
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+    }
+
+    .resultado-section { display: none; animation: fadeInUp 0.4s ease; }
+    .resultado-section.show { display: block; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-number {
+      width: 32px; height: 32px;
+      background: #1a6fc4;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0A2540;
+      margin-bottom: 8px;
+    }
+    .tooltip { font-size: 12px; color: #64748b; margin-top: 6px; }
+
+    /* NF counter animation */
+    .counter { font-family: 'JetBrains Mono', monospace; }
+
+    .disclaimer {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    /* Tabs de plataforma */
+    .plat-tab {
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      transition: all 0.2s;
+      font-family: 'Sora', sans-serif;
+    }
+    .plat-tab.active, .plat-tab:hover {
+      border-color: #1a6fc4;
+      color: #1a6fc4;
+      background: rgba(26,111,196,0.06);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="bg-white shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/">
+        <img src="/assets/logo-sol-contabil.png" alt="Sol Contábil" class="h-9" onerror="this.style.display='none'">
+      </a>
+      <a href="https://wa.me/5519982003732" target="_blank" class="text-sm font-semibold text-sol-blue hover:underline flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.123 1.528 5.855L.057 23.886a.5.5 0 0 0 .611.611l6.031-1.471A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.523-5.183-1.43l-.371-.221-3.836.935.952-3.836-.241-.383A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Falar com contador
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-bg py-14 px-4">
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      <span class="inline-block bg-sol-gold text-sol-dark text-xs font-bold px-4 py-2 rounded-full mb-5 tracking-wide uppercase">🧾 Ferramenta Gratuita 2026</span>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
+        Simulador de Nota Fiscal<br>para E-commerce
+      </h1>
+      <p class="text-lg text-white/70 max-w-xl mx-auto mb-8">
+        Descubra quanto de imposto você paga por NF-e e quanto isso representa no seu faturamento anual — por plataforma e regime tributário.
+      </p>
+      <div class="flex justify-center gap-3 flex-wrap">
+        <span style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:600;">🛍️ Mercado Livre</span>
+        <span style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:600;">🧡 Shopee</span>
+        <span style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:600;">☁️ Nuvemshop</span>
+        <span style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:600;">📦 Amazon</span>
+        <span style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:600;">🛒 Loja Própria</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEÚDO -->
+  <div class="max-w-3xl mx-auto px-4 -mt-6 pb-16">
+
+    <!-- FORMULÁRIO -->
+    <div class="card p-8 mb-6">
+      <h2 class="text-xl font-bold text-sol-dark mb-6 flex items-center gap-2">
+        <span>🧾</span> Dados da sua operação
+      </h2>
+
+      <div class="space-y-6">
+
+        <!-- Valor médio da venda -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">1</div>
+            <label style="margin:0">Valor médio por venda (ticket médio)</label>
+          </div>
+          <div class="relative">
+            <span style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#64748b;font-weight:600;font-size:15px;">R$</span>
+            <input type="text" id="ticket" class="input-field" style="padding-left:44px;" placeholder="ex: 150,00" oninput="formatarMoeda(this)">
+          </div>
+          <p class="tooltip">💡 Valor médio de cada pedido que você recebe</p>
+        </div>
+
+        <!-- Vendas por mês -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">2</div>
+            <label style="margin:0">Quantidade de vendas por mês</label>
+          </div>
+          <input type="number" id="qtd_vendas" class="input-field" placeholder="ex: 80" min="1">
+          <p class="tooltip">💡 Média mensal de pedidos/NFs emitidas</p>
+        </div>
+
+        <!-- Plataforma -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">3</div>
+            <label style="margin:0">Onde você vende principalmente?</label>
+          </div>
+          <select id="plataforma" class="select-field">
+            <option value="mercadolivre">Mercado Livre</option>
+            <option value="shopee">Shopee</option>
+            <option value="amazon">Amazon Brasil</option>
+            <option value="nuvemshop">Nuvemshop / Loja própria</option>
+            <option value="multiplas">Múltiplas plataformas</option>
+          </select>
+        </div>
+
+        <!-- Regime tributário -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">4</div>
+            <label style="margin:0">Seu regime tributário atual</label>
+          </div>
+          <select id="regime" class="select-field">
+            <option value="mei">MEI</option>
+            <option value="simples_i">Simples Nacional — Anexo I (comércio/revenda)</option>
+            <option value="simples_iii">Simples Nacional — Anexo III (serviços/infoprodutos)</option>
+            <option value="presumido">Lucro Presumido</option>
+            <option value="nao_sei">Não sei / Ainda não tenho CNPJ</option>
+          </select>
+          <p class="tooltip">💡 Se não souber, selecione "Não sei" — estimaremos pelo mais comum para e-commerce</p>
+        </div>
+
+        <!-- Tipo de produto -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">5</div>
+            <label style="margin:0">O que você vende?</label>
+          </div>
+          <select id="produto" class="select-field">
+            <option value="produto_fisico">Produto físico (roupas, eletrônicos, casa, etc.)</option>
+            <option value="alimento">Alimentos e bebidas</option>
+            <option value="cosmetico">Cosméticos e beleza</option>
+            <option value="infoproduto">Infoproduto / curso digital</option>
+            <option value="software">Software / assinatura digital</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button class="btn-simular mt-8" onclick="simular()">
+        🧾 Simular impostos por nota fiscal
+      </button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="resultado-section">
+
+      <!-- Header resultado -->
+      <div class="card p-6 mb-4">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <p class="text-sm font-semibold text-sol-blue mb-1">📊 Resultado da simulação</p>
+            <h3 class="text-2xl font-bold text-sol-dark" id="titulo-resultado">–</h3>
+            <p class="text-gray-500 text-sm mt-1" id="subtitulo-resultado">–</p>
+          </div>
+          <div id="badge-plataforma"></div>
+        </div>
+      </div>
+
+      <!-- 4 KPIs principais -->
+      <div class="grid grid-cols-2 gap-4 mb-4" id="kpis"></div>
+
+      <!-- Detalhamento por imposto -->
+      <div class="card p-6 mb-4">
+        <h4 class="font-bold text-sol-dark mb-4">🔍 Composição do imposto por nota fiscal</h4>
+        <div id="detalhamento-impostos"></div>
+      </div>
+
+      <!-- Cenário anual -->
+      <div class="card p-6 mb-4">
+        <h4 class="font-bold text-sol-dark mb-4">📅 Projeção anual</h4>
+        <div id="cenario-anual" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- Alerta situacional -->
+      <div id="bloco-alerta" class="mb-4"></div>
+
+      <!-- O que inclui -->
+      <div class="card p-6 mb-4">
+        <h4 class="font-bold text-sol-dark mb-3">ℹ️ O que está incluído</h4>
+        <ul class="space-y-2 text-sm text-gray-600" id="lista-inclui"></ul>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer mb-6">
+        <p class="text-sm text-amber-800">
+          <strong>⚠️ Valores estimados:</strong> esta simulação usa alíquotas médias de 2026. O valor exato depende do município (ISS), estado (ICMS), atividade específica e faturamento acumulado dos últimos 12 meses. <strong>Consulte um contador para confirmar.</strong>
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-box">
+        <p class="text-sol-gold font-bold text-sm uppercase tracking-wider mb-2 relative z-10">🎯 Quer pagar menos imposto?</p>
+        <h3 class="text-2xl font-bold text-white mb-3 relative z-10">Fale com quem entende de e-commerce</h3>
+        <p class="text-white/70 mb-6 relative z-10 max-w-md mx-auto">
+          A Sol Contábil é especialista em vendedores online. Analisamos seu caso real e mostramos quanto você pode economizar legalmente.
+        </p>
+        <a href="https://wa.me/5519982003732" target="_blank" class="btn-whatsapp relative z-10">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.123 1.528 5.855L.057 23.886a.5.5 0 0 0 .611.611l6.031-1.471A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.523-5.183-1.43l-.371-.221-3.836.935.952-3.836-.241-.383A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Falar com especialista em e-commerce
+        </a>
+        <p class="text-white/40 text-xs mt-4 relative z-10">Sol Contábil • Limeira, SP • Resposta em minutos</p>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="bg-sol-dark text-white py-6">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+      <p class="text-white/50 text-sm">&copy; 2026 Sol Contábil LTDA • CRC-1SP353033/O-5 • Limeira, SP</p>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // ALÍQUOTAS 2026
+    // ============================================================
+
+    // Simples Nacional Anexo I — comércio (alíquotas efetivas médias por faixa)
+    const SIMPLES_I_FAIXAS = [
+      { limite: 180000,  aliq: 0.0400 },
+      { limite: 360000,  aliq: 0.0600 },
+      { limite: 720000,  aliq: 0.0720 },
+      { limite: 1800000, aliq: 0.0850 },
+      { limite: 3600000, aliq: 0.0920 },
+      { limite: 4800000, aliq: 0.1100 },
+    ];
+
+    // Simples Nacional Anexo III — serviços/infoprodutos
+    const SIMPLES_III_FAIXAS = [
+      { limite: 180000,  aliq: 0.0600 },
+      { limite: 360000,  aliq: 0.0900 },
+      { limite: 720000,  aliq: 0.1200 },
+      { limite: 1800000, aliq: 0.1450 },
+      { limite: 3600000, aliq: 0.1900 },
+      { limite: 4800000, aliq: 0.2800 },
+    ];
+
+    // Comissões médias por plataforma (apenas referência informativa)
+    const PLATAFORMAS = {
+      mercadolivre: { nome: 'Mercado Livre', emoji: '🛍️', cor: '#FFE600', corTexto: '#333', comissao: 0.14 },
+      shopee:       { nome: 'Shopee',        emoji: '🧡', cor: '#EE4D2D', corTexto: '#fff', comissao: 0.12 },
+      amazon:       { nome: 'Amazon Brasil', emoji: '📦', cor: '#FF9900', corTexto: '#111', comissao: 0.15 },
+      nuvemshop:    { nome: 'Nuvemshop',     emoji: '☁️', cor: '#00B1EA', corTexto: '#fff', comissao: 0.00 },
+      multiplas:    { nome: 'Múltiplas',     emoji: '🛒', cor: '#1a6fc4', corTexto: '#fff', comissao: 0.13 },
+    };
+
+    // Composição dos impostos por regime (sobre faturamento bruto)
+    function getComposicaoImpostos(regime, faturamentoAnual, produto) {
+      const isDigital = ['infoproduto', 'software'].includes(produto);
+
+      if (regime === 'mei') {
+        return {
+          label: 'MEI',
+          total_aliq: 0, // DAS fixo, não percentual
+          fixo: 76.90, // mensal
+          itens: [
+            { nome: 'DAS (INSS + impostos)', aliq: null, fixo: 76.90, descricao: 'Valor fixo mensal' },
+          ],
+          obs: 'MEI paga valor fixo de R$ 76,90/mês independente do faturamento (até R$ 81.000/ano).'
+        };
+      }
+
+      if (regime === 'simples_i' || (regime === 'nao_sei' && !isDigital)) {
+        const faixas = SIMPLES_I_FAIXAS;
+        let aliq = 0.04;
+        for (const f of faixas) {
+          if (faturamentoAnual <= f.limite) { aliq = f.aliq; break; }
+          aliq = f.aliq;
+        }
+        return {
+          label: 'Simples Nacional (Anexo I)',
+          total_aliq: aliq,
+          itens: [
+            { nome: 'IRPJ', aliq: aliq * 0.25, descricao: 'Imposto de Renda PJ' },
+            { nome: 'CSLL', aliq: aliq * 0.15, descricao: 'Contribuição Social' },
+            { nome: 'COFINS', aliq: aliq * 0.28, descricao: 'Contribuição sobre faturamento' },
+            { nome: 'PIS', aliq: aliq * 0.07, descricao: 'Programa de Integração Social' },
+            { nome: 'CPP', aliq: aliq * 0.20, descricao: 'Contribuição Previdenciária Patronal' },
+            { nome: 'ICMS/ISS', aliq: aliq * 0.05, descricao: 'Imposto estadual/municipal' },
+          ],
+          obs: `Alíquota efetiva de ${(aliq*100).toFixed(1)}% sobre o faturamento (Simples Nacional paga tudo em uma guia DAS).`
+        };
+      }
+
+      if (regime === 'simples_iii' || (regime === 'nao_sei' && isDigital)) {
+        const faixas = SIMPLES_III_FAIXAS;
+        let aliq = 0.06;
+        for (const f of faixas) {
+          if (faturamentoAnual <= f.limite) { aliq = f.aliq; break; }
+          aliq = f.aliq;
+        }
+        return {
+          label: 'Simples Nacional (Anexo III)',
+          total_aliq: aliq,
+          itens: [
+            { nome: 'IRPJ', aliq: aliq * 0.22, descricao: 'Imposto de Renda PJ' },
+            { nome: 'CSLL', aliq: aliq * 0.13, descricao: 'Contribuição Social' },
+            { nome: 'COFINS', aliq: aliq * 0.24, descricao: 'Contribuição sobre faturamento' },
+            { nome: 'PIS', aliq: aliq * 0.05, descricao: 'Programa de Integração Social' },
+            { nome: 'CPP', aliq: aliq * 0.20, descricao: 'Contribuição Previdenciária Patronal' },
+            { nome: 'ISS', aliq: aliq * 0.16, descricao: 'Imposto sobre serviços' },
+          ],
+          obs: `Alíquota efetiva de ${(aliq*100).toFixed(1)}% sobre o faturamento.`
+        };
+      }
+
+      if (regime === 'presumido') {
+        const presuncao = isDigital ? 0.32 : 0.08;
+        const irpj = presuncao * 0.15;
+        const csll = presuncao * 0.09;
+        const pis = 0.0065;
+        const cofins = 0.03;
+        const total = irpj + csll + pis + cofins;
+        return {
+          label: 'Lucro Presumido',
+          total_aliq: total,
+          itens: [
+            { nome: 'IRPJ', aliq: irpj, descricao: `${(presuncao*100).toFixed(0)}% presunção × 15%` },
+            { nome: 'CSLL', aliq: csll, descricao: `${(presuncao*100).toFixed(0)}% presunção × 9%` },
+            { nome: 'PIS', aliq: pis, descricao: 'Cumulativo 0,65%' },
+            { nome: 'COFINS', aliq: cofins, descricao: 'Cumulativo 3%' },
+          ],
+          obs: `Alíquota efetiva de ${(total*100).toFixed(2)}% sobre o faturamento. ISS/ICMS não incluído (varia por município/estado).`
+        };
+      }
+
+      // fallback
+      return { label: '–', total_aliq: 0.05, itens: [], obs: '' };
+    }
+
+    function formatarMoeda(input) {
+      let v = input.value.replace(/\D/g, '');
+      v = (parseInt(v) / 100).toFixed(2);
+      input.value = isNaN(v) ? '' : Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    }
+
+    function parseMoeda(str) {
+      return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    function formatBRL(v) {
+      return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function simular() {
+      const ticket = parseMoeda(document.getElementById('ticket').value);
+      const qtd = parseInt(document.getElementById('qtd_vendas').value) || 0;
+      const plataformaKey = document.getElementById('plataforma').value;
+      const regime = document.getElementById('regime').value;
+      const produto = document.getElementById('produto').value;
+
+      if (!ticket || ticket <= 0) { alert('Informe o valor médio por venda.'); return; }
+      if (!qtd || qtd <= 0) { alert('Informe a quantidade de vendas por mês.'); return; }
+
+      const plat = PLATAFORMAS[plataformaKey];
+      const faturamentoMensal = ticket * qtd;
+      const faturamentoAnual = faturamentoMensal * 12;
+      const composicao = getComposicaoImpostos(regime, faturamentoAnual, produto);
+
+      // Cálculo do imposto
+      let impostoPorNF, impostoMensal, impostoAnual, aliquotaEfetiva;
+
+      if (regime === 'mei') {
+        impostoMensal = composicao.fixo;
+        impostoAnual = impostoMensal * 12;
+        impostoPorNF = impostoMensal / qtd;
+        aliquotaEfetiva = (impostoMensal / faturamentoMensal) * 100;
+      } else {
+        impostoPorNF = ticket * composicao.total_aliq;
+        impostoMensal = faturamentoMensal * composicao.total_aliq;
+        impostoAnual = faturamentoAnual * composicao.total_aliq;
+        aliquotaEfetiva = composicao.total_aliq * 100;
+      }
+
+      // Comissão da plataforma
+      const comissaoPorNF = ticket * plat.comissao;
+      const custoTotalPorNF = impostoPorNF + comissaoPorNF;
+      const liquidoPorNF = ticket - custoTotalPorNF;
+
+      // Renderiza
+      document.getElementById('titulo-resultado').textContent =
+        `${qtd} vendas/mês • Ticket R$ ${ticket.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+      document.getElementById('subtitulo-resultado').textContent =
+        `Regime: ${composicao.label} • Faturamento mensal: ${formatBRL(faturamentoMensal)}`;
+
+      // Badge plataforma
+      document.getElementById('badge-plataforma').innerHTML = `
+        <span class="plataforma-badge" style="background:${plat.cor};color:${plat.corTexto};">
+          ${plat.emoji} ${plat.nome}
+        </span>`;
+
+      // KPIs
+      document.getElementById('kpis').innerHTML = `
+        <div class="stat-box destaque col-span-2">
+          <p class="text-white/70 text-xs font-semibold uppercase tracking-wider mb-1">Imposto por nota fiscal</p>
+          <p class="text-3xl font-bold text-white counter">${formatBRL(impostoPorNF)}</p>
+          <p class="text-white/60 text-xs mt-1">${aliquotaEfetiva.toFixed(2)}% do valor da venda</p>
+        </div>
+        <div class="stat-box">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Imposto mensal</p>
+          <p class="text-2xl font-bold text-sol-blue counter">${formatBRL(impostoMensal)}</p>
+          <p class="text-gray-400 text-xs mt-1">em ${qtd} vendas</p>
+        </div>
+        <div class="stat-box">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Líquido por venda</p>
+          <p class="text-2xl font-bold text-green-600 counter">${formatBRL(liquidoPorNF)}</p>
+          <p class="text-gray-400 text-xs mt-1">após imposto${plat.comissao > 0 ? ' + comissão' : ''}</p>
+        </div>
+      `;
+
+      // Detalhamento por imposto
+      const detEl = document.getElementById('detalhamento-impostos');
+      if (regime === 'mei') {
+        detEl.innerHTML = `
+          <div class="linha-imposto">
+            <div>
+              <p class="font-semibold text-sol-dark text-sm">DAS MEI (fixo mensal)</p>
+              <p class="text-xs text-gray-400">INSS + impostos incluídos</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-sol-blue font-mono">${formatBRL(composicao.fixo)}<span class="text-gray-400 text-xs">/mês</span></p>
+              <p class="text-xs text-gray-400">${formatBRL(impostoPorNF)} por NF</p>
+            </div>
+          </div>
+          ${plat.comissao > 0 ? `
+          <div class="linha-imposto">
+            <div>
+              <p class="font-semibold text-sol-dark text-sm">Comissão ${plat.nome}</p>
+              <p class="text-xs text-gray-400">${(plat.comissao*100).toFixed(0)}% por venda (média)</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-orange-500 font-mono">${formatBRL(comissaoPorNF)}</p>
+              <p class="text-xs text-gray-400">por NF</p>
+            </div>
+          </div>` : ''}
+          <div class="linha-imposto" style="background:#f0fdf4;border-radius:8px;padding:12px;margin-top:8px;">
+            <p class="font-bold text-green-700 text-sm">💚 Você recebe líquido por venda</p>
+            <p class="font-bold text-green-600 font-mono text-lg">${formatBRL(liquidoPorNF)}</p>
+          </div>
+        `;
+      } else {
+        let linhasHtml = composicao.itens.map(item => {
+          const valorItem = ticket * item.aliq;
+          const pct = ((item.aliq / composicao.total_aliq) * 100).toFixed(0);
+          return `
+            <div class="linha-imposto">
+              <div style="flex:1">
+                <div class="flex justify-between mb-1">
+                  <p class="font-semibold text-sol-dark text-sm">${item.nome}</p>
+                  <p class="font-bold text-sol-blue font-mono text-sm">${formatBRL(valorItem)}</p>
+                </div>
+                <p class="text-xs text-gray-400 mb-1">${item.descricao} • ${(item.aliq*100).toFixed(2)}%</p>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:${pct}%;background:#1a6fc4;"></div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        if (plat.comissao > 0) {
+          linhasHtml += `
+            <div class="linha-imposto" style="border-top:2px dashed #e2e8f0;margin-top:8px;padding-top:16px;">
+              <div style="flex:1">
+                <div class="flex justify-between mb-1">
+                  <p class="font-semibold text-orange-600 text-sm">Comissão ${plat.nome} (${(plat.comissao*100).toFixed(0)}%)</p>
+                  <p class="font-bold text-orange-500 font-mono text-sm">${formatBRL(comissaoPorNF)}</p>
+                </div>
+                <p class="text-xs text-gray-400">Não é imposto — é a taxa da plataforma</p>
+              </div>
+            </div>`;
+        }
+
+        linhasHtml += `
+          <div style="background:#f0fdf4;border-radius:8px;padding:14px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;">
+            <p class="font-bold text-green-700 text-sm">💚 Você recebe líquido por venda</p>
+            <p class="font-bold text-green-600 font-mono text-xl">${formatBRL(liquidoPorNF)}</p>
+          </div>`;
+
+        detEl.innerHTML = linhasHtml;
+      }
+
+      // Cenário anual
+      document.getElementById('cenario-anual').innerHTML = `
+        <div class="stat-box text-center">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Faturamento anual</p>
+          <p class="text-xl font-bold text-sol-dark counter">${formatBRL(faturamentoAnual)}</p>
+          <p class="text-gray-400 text-xs mt-1">${(qtd*12).toLocaleString('pt-BR')} vendas/ano</p>
+        </div>
+        <div class="stat-box text-center">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Total de impostos/ano</p>
+          <p class="text-xl font-bold text-red-500 counter">${formatBRL(impostoAnual)}</p>
+          <p class="text-gray-400 text-xs mt-1">${aliquotaEfetiva.toFixed(2)}% do faturamento</p>
+        </div>
+        <div class="stat-box text-center">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Receita líquida/ano</p>
+          <p class="text-xl font-bold text-green-600 counter">${formatBRL(faturamentoAnual - impostoAnual)}</p>
+          <p class="text-gray-400 text-xs mt-1">após impostos</p>
+        </div>
+      `;
+
+      // Alertas situacionais
+      const alertEl = document.getElementById('bloco-alerta');
+      alertEl.innerHTML = '';
+
+      const alertas = [];
+
+      if (regime === 'mei' && faturamentoMensal > 5000) {
+        alertas.push({
+          tipo: 'warning',
+          titulo: '⚠️ Atenção: você pode estar chegando no limite do MEI',
+          texto: `Seu faturamento estimado é ${formatBRL(faturamentoAnual)}/ano. O limite do MEI é R$ 81.000/ano. ${faturamentoAnual > 81000 ? 'Você JÁ ultrapassou o limite — precisa migrar para ME urgente para evitar autuação.' : 'Fique de olho: se ultrapassar, precisa migrar para ME.'}`,
+          cor: faturamentoAnual > 81000 ? '#fef2f2' : '#fffbeb',
+          borda: faturamentoAnual > 81000 ? '#fecaca' : '#fde68a',
+          corTexto: faturamentoAnual > 81000 ? '#991b1b' : '#92400e',
+        });
+      }
+
+      if (plat.comissao > 0) {
+        const totalDesconto = (composicao.total_aliq + plat.comissao) * 100 || (impostoMensal / faturamentoMensal * 100) + plat.comissao * 100;
+        alertas.push({
+          tipo: 'info',
+          titulo: `💡 Imposto + comissão ${plat.nome} = ${totalDesconto.toFixed(1)}% da sua receita`,
+          texto: `A comissão da plataforma (${(plat.comissao*100).toFixed(0)}%) somada aos impostos representa ${totalDesconto.toFixed(1)}% de cada venda. Precificar considerando esse custo é essencial para não trabalhar no prejuízo.`,
+          cor: '#eff6ff',
+          borda: '#bfdbfe',
+          corTexto: '#1e40af',
+        });
+      }
+
+      if (faturamentoAnual > 360000 && (regime === 'simples_i' || regime === 'simples_iii')) {
+        alertas.push({
+          tipo: 'tip',
+          titulo: '🧠 Dica de planejamento tributário',
+          texto: `Com faturamento acima de R$ 360K/ano, pode valer comparar o Simples Nacional com o Lucro Presumido. Em alguns casos o LP é mais vantajoso. Um contador especialista pode calcular exatamente para o seu caso.`,
+          cor: '#f0fdf4',
+          borda: '#bbf7d0',
+          corTexto: '#166534',
+        });
+      }
+
+      alertas.forEach(a => {
+        alertEl.innerHTML += `
+          <div style="background:${a.cor};border:1px solid ${a.borda};border-radius:12px;padding:16px 20px;margin-bottom:12px;">
+            <p class="font-bold text-sm mb-1" style="color:${a.corTexto}">${a.titulo}</p>
+            <p class="text-sm" style="color:${a.corTexto};opacity:0.85">${a.texto}</p>
+          </div>`;
+      });
+
+      // O que inclui
+      const incluiItems = [
+        regime === 'mei'
+          ? '📌 MEI: DAS fixo de R$ 76,90/mês (valor 2026)'
+          : `📌 ${composicao.label}: alíquota efetiva de ${aliquotaEfetiva.toFixed(2)}%`,
+        plat.comissao > 0
+          ? `📌 Comissão ${plat.nome}: ${(plat.comissao*100).toFixed(0)}% por venda (média estimada)`
+          : '📌 Loja própria: sem comissão de marketplace',
+        '📌 Não inclui: frete, embalagem, custo do produto, folha de pagamento',
+        '📌 Não inclui: ICMS interestadual (varia conforme estado do comprador)',
+        '📌 Cálculo baseado no faturamento anual estimado (ticket × qtd × 12)',
+      ];
+      document.getElementById('lista-inclui').innerHTML =
+        incluiItems.map(i => `<li class="flex gap-2 items-start"><span>${i}</span></li>`).join('');
+
+      // Exibe e scroll
+      const resultadoEl = document.getElementById('resultado');
+      resultadoEl.classList.add('show');
+      setTimeout(() => resultadoEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
+  </script>
+
+</body>
+</html>
