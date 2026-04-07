@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Tributos para E-commerce 2026 - Sol Contábil</title>
+  <meta name="description" content="Simule quanto sua loja online paga de imposto em 2026. Compare MEI, ME e LTDA e descubra o melhor regime tributário para seu e-commerce.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'sol-blue': '#1a6fc4',
+            'sol-dark': '#0A2540',
+            'sol-gold': '#f5a623',
+          },
+          fontFamily: {
+            'sora': ['Sora', 'sans-serif'],
+            'mono': ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Sora', sans-serif; }
+
+    body {
+      background: #f0f4f8;
+      min-height: 100vh;
+    }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 60%, #0d2e50 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(26,111,196,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(10,37,64,0.08);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 40px rgba(10,37,64,0.12);
+    }
+
+    .input-field {
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 16px;
+      font-family: 'Sora', sans-serif;
+      color: #0A2540;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      background: #f8fafc;
+    }
+
+    .input-field:focus {
+      border-color: #1a6fc4;
+      box-shadow: 0 0 0 4px rgba(26,111,196,0.1);
+      background: white;
+    }
+
+    .select-field {
+      width: 100%;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-family: 'Sora', sans-serif;
+      color: #0A2540;
+      transition: border-color 0.2s;
+      outline: none;
+      background: #f8fafc;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a6fc4' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+
+    .select-field:focus {
+      border-color: #1a6fc4;
+      box-shadow: 0 0 0 4px rgba(26,111,196,0.1);
+      background-color: white;
+    }
+
+    .btn-simular {
+      background: linear-gradient(135deg, #1a6fc4 0%, #0A2540 100%);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 18px 40px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Sora', sans-serif;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-simular:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(26,111,196,0.4);
+    }
+
+    .btn-simular:active {
+      transform: translateY(0);
+    }
+
+    .resultado-card {
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .resultado-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .resultado-card.melhor {
+      background: linear-gradient(135deg, #0A2540 0%, #1a6fc4 100%);
+      color: white;
+      box-shadow: 0 8px 32px rgba(26,111,196,0.35);
+    }
+
+    .resultado-card.normal {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+    }
+
+    .resultado-card.bloqueado {
+      background: #fef2f2;
+      border: 2px solid #fecaca;
+      opacity: 0.75;
+    }
+
+    .badge-melhor {
+      background: #f5a623;
+      color: #0A2540;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .valor-imposto {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .disclaimer {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 100%);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(245,166,35,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 36px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Sora', sans-serif;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+    }
+
+    .resultado-section {
+      display: none;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    .resultado-section.show {
+      display: block;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s ease;
+    }
+
+    .tag-plataforma {
+      display: inline-block;
+      background: rgba(26,111,196,0.1);
+      color: #1a6fc4;
+      border: 1px solid rgba(26,111,196,0.2);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: #1a6fc4;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0A2540;
+      margin-bottom: 8px;
+    }
+
+    .tooltip {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="bg-white shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/">
+        <img src="/assets/logo-sol-contabil.png" alt="Sol Contábil" class="h-9" onerror="this.style.display='none'">
+      </a>
+      <a href="https://wa.me/5519982003732" target="_blank" class="text-sm font-semibold text-sol-blue hover:underline flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.123 1.528 5.855L.057 23.886a.5.5 0 0 0 .611.611l6.031-1.471A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.523-5.183-1.43l-.371-.221-3.836.935.952-3.836-.241-.383A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Falar com contador
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-bg py-14 px-4">
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      <span class="inline-block bg-sol-gold text-sol-dark text-xs font-bold px-4 py-2 rounded-full mb-5 tracking-wide uppercase">🛒 Ferramenta Gratuita 2026</span>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
+        Simulador de Tributos<br>para E-commerce
+      </h1>
+      <p class="text-lg text-white/70 max-w-xl mx-auto mb-6">
+        Descubra quanto sua loja online paga de imposto e qual regime tributário é mais vantajoso para você em 2026.
+      </p>
+      <div class="flex justify-center gap-3 flex-wrap">
+        <span class="tag-plataforma" style="background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.2)">Mercado Livre</span>
+        <span class="tag-plataforma" style="background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.2)">Shopee</span>
+        <span class="tag-plataforma" style="background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.2)">Nuvemshop</span>
+        <span class="tag-plataforma" style="background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.2)">Amazon</span>
+        <span class="tag-plataforma" style="background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.2)">Loja Própria</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMULÁRIO -->
+  <div class="max-w-3xl mx-auto px-4 -mt-6 pb-16">
+
+    <div class="card p-8 mb-6">
+      <h2 class="text-xl font-bold text-sol-dark mb-6 flex items-center gap-2">
+        <span>📊</span> Dados da sua loja
+      </h2>
+
+      <div class="space-y-6">
+
+        <!-- Faturamento -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">1</div>
+            <label style="margin:0">Faturamento mensal médio da loja</label>
+          </div>
+          <div class="relative">
+            <span style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#64748b;font-weight:600;font-size:15px;">R$</span>
+            <input type="text" id="faturamento" class="input-field" style="padding-left:44px;" placeholder="ex: 8.000,00" oninput="formatarMoeda(this)">
+          </div>
+          <p class="tooltip">💡 Coloque a média dos últimos meses de vendas</p>
+        </div>
+
+        <!-- Tipo de operação -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">2</div>
+            <label style="margin:0">Tipo de operação</label>
+          </div>
+          <select id="operacao" class="select-field">
+            <option value="revenda">Revenda de produtos (compra e vende)</option>
+            <option value="producao">Produção própria / artesanal</option>
+            <option value="dropshipping">Dropshipping</option>
+            <option value="servico_digital">Serviços digitais / infoprodutos</option>
+          </select>
+          <p class="tooltip">💡 Isso determina em qual anexo do Simples Nacional você se enquadra</p>
+        </div>
+
+        <!-- Situação atual -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">3</div>
+            <label style="margin:0">Situação atual</label>
+          </div>
+          <select id="situacao" class="select-field">
+            <option value="mei">Sou MEI</option>
+            <option value="informal">Vendo sem CNPJ (informal)</option>
+            <option value="me">Tenho ME / LTDA</option>
+            <option value="abrindo">Vou abrir agora</option>
+          </select>
+        </div>
+
+        <!-- Funcionários -->
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="step-number">4</div>
+            <label style="margin:0">Tem ou pretende ter funcionários?</label>
+          </div>
+          <select id="funcionarios" class="select-field">
+            <option value="nao">Não, trabalho sozinho</option>
+            <option value="um">Sim, 1 funcionário</option>
+            <option value="mais">Sim, 2 ou mais</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button class="btn-simular mt-8" onclick="simular()">
+        🔍 Simular agora — é gratuito
+      </button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="resultado-section">
+
+      <!-- Resumo -->
+      <div class="card p-6 mb-4">
+        <p class="text-sm font-semibold text-sol-blue mb-1">📈 Resultado da simulação</p>
+        <h3 class="text-2xl font-bold text-sol-dark mb-1" id="titulo-resultado">–</h3>
+        <p class="text-gray-500 text-sm" id="subtitulo-resultado">–</p>
+      </div>
+
+      <!-- Cards dos regimes -->
+      <div class="grid gap-4 mb-4" id="cards-regimes"></div>
+
+      <!-- Barra comparativa -->
+      <div class="card p-6 mb-4" id="bloco-comparativo">
+        <h4 class="font-bold text-sol-dark mb-4">📊 Comparativo visual de carga tributária</h4>
+        <div id="barras-comparativas"></div>
+      </div>
+
+      <!-- O que inclui -->
+      <div class="card p-6 mb-4">
+        <h4 class="font-bold text-sol-dark mb-3">ℹ️ O que está incluído nesta estimativa</h4>
+        <ul class="space-y-2 text-sm text-gray-600" id="lista-inclui">
+        </ul>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer mb-6">
+        <p class="text-sm text-amber-800">
+          <strong>⚠️ Valores estimados:</strong> esta simulação usa alíquotas médias de 2026 e é uma referência inicial. O cálculo exato depende do seu faturamento acumulado dos últimos 12 meses, atividade específica e situação cadastral. <strong>Consulte um contador para confirmar.</strong>
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-box">
+        <p class="text-sol-gold font-bold text-sm uppercase tracking-wider mb-2 relative z-10">🎯 Próximo passo</p>
+        <h3 class="text-2xl font-bold text-white mb-3 relative z-10">Confirme grátis com um especialista</h3>
+        <p class="text-white/70 mb-6 relative z-10 max-w-md mx-auto">
+          A Sol Contábil é especialista em e-commerce. Analisamos seu caso real e te mostramos exatamente quanto você pode economizar.
+        </p>
+        <a href="https://wa.me/5519982003732" target="_blank" class="btn-whatsapp relative z-10">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.123 1.528 5.855L.057 23.886a.5.5 0 0 0 .611.611l6.031-1.471A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.523-5.183-1.43l-.371-.221-3.836.935.952-3.836-.241-.383A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Falar com contador agora
+        </a>
+        <p class="text-white/40 text-xs mt-4 relative z-10">Atendimento em Limeira e região • Resposta em minutos</p>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="bg-sol-dark text-white py-6">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+      <p class="text-white/50 text-sm">&copy; 2026 Sol Contábil LTDA • CRC-1SP353033/O-5 • Limeira, SP</p>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // TABELAS SIMPLES NACIONAL 2026
+    // Anexo I — Comércio (revenda, dropshipping)
+    // Anexo III — Serviços (infoprodutos, serviços digitais)
+    // Faixas por RBT12 anual
+    // ============================================================
+    const ANEXO_I = [
+      { limite: 180000,   aliquota: 0.0400, deducao: 0 },
+      { limite: 360000,   aliquota: 0.0738, deducao: 5940 },
+      { limite: 720000,   aliquota: 0.0820, deducao: 11940 },
+      { limite: 1800000,  aliquota: 0.0950, deducao: 21240 },
+      { limite: 3600000,  aliquota: 0.1025, deducao: 33240 },
+      { limite: 4800000,  aliquota: 0.1257, deducao: 107640 },
+    ];
+
+    const ANEXO_III = [
+      { limite: 180000,   aliquota: 0.0600, deducao: 0 },
+      { limite: 360000,   aliquota: 0.1123, deducao: 9360 },
+      { limite: 720000,   aliquota: 0.1350, deducao: 17640 },
+      { limite: 1800000,  aliquota: 0.1600, deducao: 35640 },
+      { limite: 3600000,  aliquota: 0.2100, deducao: 125640 },
+      { limite: 4800000,  aliquota: 0.3300, deducao: 648000 },
+    ];
+
+    // MEI 2026: limite R$ 81.000/ano = R$ 6.750/mês
+    const MEI_LIMITE_MENSAL = 6750;
+    const MEI_DAS_COMERCIO = 76.90; // valor fixo aproximado 2026
+
+    function calcularSimples(rbt12anual, tabela) {
+      for (const faixa of tabela) {
+        if (rbt12anual <= faixa.limite) {
+          const aliquotaEfetiva = (rbt12anual * faixa.aliquota - faixa.deducao) / rbt12anual;
+          return Math.max(aliquotaEfetiva, 0);
+        }
+      }
+      return tabela[tabela.length - 1].aliquota;
+    }
+
+    function formatarMoeda(input) {
+      let v = input.value.replace(/\D/g, '');
+      v = (parseInt(v) / 100).toFixed(2);
+      input.value = isNaN(v) ? '' : Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    }
+
+    function parseMoeda(str) {
+      return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    function formatBRL(v) {
+      return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function simular() {
+      const faturamentoMensal = parseMoeda(document.getElementById('faturamento').value);
+      const operacao = document.getElementById('operacao').value;
+      const situacao = document.getElementById('situacao').value;
+      const funcionarios = document.getElementById('funcionarios').value;
+
+      if (!faturamentoMensal || faturamentoMensal <= 0) {
+        alert('Por favor, informe o faturamento mensal da sua loja.');
+        return;
+      }
+
+      const rbt12 = faturamentoMensal * 12;
+      const tabela = (operacao === 'servico_digital') ? ANEXO_III : ANEXO_I;
+      const anexo = (operacao === 'servico_digital') ? 'III' : 'I';
+
+      // ---- MEI ----
+      const podeSerMEI = faturamentoMensal <= MEI_LIMITE_MENSAL && funcionarios === 'nao';
+      const impostoMEI = podeSerMEI ? MEI_DAS_COMERCIO : null;
+      const aliquotaMEI = podeSerMEI ? (MEI_DAS_COMERCIO / faturamentoMensal * 100) : null;
+
+      // ---- Simples Nacional (ME) ----
+      const podeSimples = rbt12 <= 4800000;
+      let impostoSimples = null;
+      let aliquotaSimples = null;
+      if (podeSimples) {
+        aliquotaSimples = calcularSimples(rbt12, tabela) * 100;
+        impostoSimples = faturamentoMensal * (aliquotaSimples / 100);
+      }
+
+      // ---- Lucro Presumido ----
+      // Presunção: 8% (comércio) ou 32% (serviços) sobre faturamento → IRPJ 15% + CSLL 9% + PIS 0.65% + COFINS 3%
+      const presuncao = (operacao === 'servico_digital') ? 0.32 : 0.08;
+      const irpj = faturamentoMensal * presuncao * 0.15;
+      const csll = faturamentoMensal * presuncao * 0.09;
+      const pis = faturamentoMensal * 0.0065;
+      const cofins = faturamentoMensal * 0.03;
+      const impostoLucroPresumido = irpj + csll + pis + cofins;
+      const aliquotaLucroPresumido = (impostoLucroPresumido / faturamentoMensal) * 100;
+
+      // ---- Decide o melhor regime ----
+      const opcoes = [];
+      if (podeSerMEI) opcoes.push({ regime: 'MEI', imposto: impostoMEI, aliquota: aliquotaMEI });
+      if (podeSimples) opcoes.push({ regime: 'Simples Nacional (ME/LTDA)', imposto: impostoSimples, aliquota: aliquotaSimples });
+      opcoes.push({ regime: 'Lucro Presumido', imposto: impostoLucroPresumido, aliquota: aliquotaLucroPresumido });
+
+      const melhor = opcoes.reduce((a, b) => a.imposto < b.imposto ? a : b);
+
+      // ---- Renderiza resultado ----
+      document.getElementById('titulo-resultado').textContent =
+        `Faturamento de ${formatBRL(faturamentoMensal)}/mês`;
+      document.getElementById('subtitulo-resultado').textContent =
+        `Regime recomendado: ${melhor.regime} • Faturamento anual estimado: ${formatBRL(rbt12)}`;
+
+      // Cards
+      const cardsEl = document.getElementById('cards-regimes');
+      cardsEl.innerHTML = '';
+
+      const regimes = [
+        {
+          nome: 'MEI',
+          descricao: 'Microempreendedor Individual',
+          imposto: impostoMEI,
+          aliquota: aliquotaMEI,
+          disponivel: podeSerMEI,
+          indisponivel_msg: faturamentoMensal > MEI_LIMITE_MENSAL
+            ? `Faturamento acima do limite MEI (R$ 6.750/mês). Você precisa migrar para ME.`
+            : `MEI não pode ter funcionários CLT (exceto 1 com salário mínimo).`,
+          detalhes: podeSerMEI ? [
+            `✅ DAS fixo de apenas ${formatBRL(MEI_DAS_COMERCIO)}/mês`,
+            '✅ Emissão de nota fiscal',
+            '✅ INSS para aposentadoria incluído',
+            `⚠️ Limite: R$ 81.000/ano (${formatBRL(MEI_LIMITE_MENSAL)}/mês)`,
+          ] : [],
+        },
+        {
+          nome: 'Simples Nacional',
+          descricao: `ME ou LTDA • Anexo ${anexo}`,
+          imposto: impostoSimples,
+          aliquota: aliquotaSimples,
+          disponivel: podeSimples,
+          indisponivel_msg: 'Faturamento acima do limite do Simples Nacional (R$ 4,8M/ano).',
+          detalhes: podeSimples ? [
+            `✅ Alíquota efetiva de ${aliquotaSimples?.toFixed(2)}% sobre o faturamento`,
+            '✅ Pagamento unificado (DAS)',
+            '✅ Sem limite de funcionários',
+            funcionarios !== 'nao' ? '✅ Permite contratação CLT' : '',
+          ].filter(Boolean) : [],
+        },
+        {
+          nome: 'Lucro Presumido',
+          descricao: 'LTDA ou SLU • Para faturamentos maiores',
+          imposto: impostoLucroPresumido,
+          aliquota: aliquotaLucroPresumido,
+          disponivel: true,
+          detalhes: [
+            `✅ Alíquota efetiva de ${aliquotaLucroPresumido.toFixed(2)}%`,
+            '⚠️ Contabilidade mais complexa',
+            '✅ Vantajoso acima de R$ 3,6M/ano',
+            '✅ Sem limite de faturamento',
+          ],
+        },
+      ];
+
+      regimes.forEach(r => {
+        const isMelhor = r.disponivel && r.nome === melhor.regime.split(' ')[0];
+        const card = document.createElement('div');
+        card.className = `resultado-card ${!r.disponivel ? 'bloqueado' : isMelhor ? 'melhor' : 'normal'}`;
+
+        const corTexto = isMelhor ? 'text-white' : 'text-sol-dark';
+        const corSub = isMelhor ? 'text-white/70' : 'text-gray-500';
+        const corValor = isMelhor ? 'text-white' : 'text-sol-blue';
+        const corDetalhe = isMelhor ? 'text-white/80' : 'text-gray-600';
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              ${isMelhor ? '<span class="badge-melhor mb-2 inline-block">⭐ Melhor opção</span><br>' : ''}
+              <h4 class="text-lg font-bold ${corTexto}">${r.nome}</h4>
+              <p class="text-sm ${corSub}">${r.descricao}</p>
+            </div>
+            ${!r.disponivel ? '<span style="font-size:24px">🚫</span>' : ''}
+          </div>
+          ${r.disponivel ? `
+            <div class="mb-3">
+              <p class="text-sm ${corSub} mb-1">Imposto estimado por mês</p>
+              <p class="text-3xl font-bold ${corValor} valor-imposto">${formatBRL(r.imposto)}</p>
+              <p class="text-sm ${corSub}">${r.aliquota?.toFixed(2)}% de alíquota efetiva</p>
+            </div>
+            <ul class="space-y-1">
+              ${r.detalhes.map(d => `<li class="text-sm ${corDetalhe}">${d}</li>`).join('')}
+            </ul>
+          ` : `
+            <p class="text-sm text-red-600 font-semibold">❌ Não disponível para seu perfil</p>
+            <p class="text-sm text-red-500 mt-1">${r.indisponivel_msg}</p>
+          `}
+        `;
+        cardsEl.appendChild(card);
+      });
+
+      // Barras comparativas
+      const barrasEl = document.getElementById('barras-comparativas');
+      barrasEl.innerHTML = '';
+      const disponiveisComValor = regimes.filter(r => r.disponivel);
+      const maxImposto = Math.max(...disponiveisComValor.map(r => r.imposto));
+
+      disponiveisComValor.forEach(r => {
+        const pct = Math.round((r.imposto / maxImposto) * 100);
+        const cor = r.nome === melhor.regime.split(' ')[0] ? '#1a6fc4' : '#94a3b8';
+        barrasEl.innerHTML += `
+          <div class="mb-4">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-semibold text-sol-dark">${r.nome}</span>
+              <span class="font-mono font-bold text-sol-blue">${formatBRL(r.imposto)}/mês</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${pct}%;background:${cor};"></div>
+            </div>
+          </div>
+        `;
+      });
+
+      // O que inclui
+      const incluiEl = document.getElementById('lista-inclui');
+      const incluiItems = [
+        operacao === 'servico_digital'
+          ? '📌 Simples Nacional calculado pelo Anexo III (serviços)'
+          : '📌 Simples Nacional calculado pelo Anexo I (comércio)',
+        '📌 Lucro Presumido inclui IRPJ, CSLL, PIS e COFINS',
+        '📌 MEI considera DAS fixo de 2026',
+        '📌 Não inclui: ISS/ICMS municipal, folha de pagamento, pró-labore',
+        '📌 Alíquota do Simples baseada no faturamento anual estimado (12x o mensal)',
+      ];
+      incluiEl.innerHTML = incluiItems.map(i => `<li class="flex gap-2"><span>${i}</span></li>`).join('');
+
+      // Exibe resultado
+      const resultadoEl = document.getElementById('resultado');
+      resultadoEl.classList.add('show');
+      setTimeout(() => resultadoEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
+  </script>
+
+</body>
+</html>
